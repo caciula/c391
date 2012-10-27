@@ -5,13 +5,33 @@
  http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
  version="2.4">
 
+    <!-- Backing servlets for jsp/html pages and actions -->
     <servlet>
-        <servlet-name>Sample</servlet-name>
-        <servlet-class>Sample</servlet-class>
+        <servlet-name>UploadImage</servlet-name>
+        <servlet-class>UploadImage</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Sample</servlet-name>
-        <url-pattern>/Sample</url-pattern>
+        <servlet-name>UploadImage</servlet-name>
+        <url-pattern>/UploadImage</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ViewImage</servlet-name>
+        <servlet-class>ViewImage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ViewImage</servlet-name>
+        <url-pattern>/ViewImage</url-pattern>
+    </servlet-mapping>
+
+    <!-- Servlets to obtain specific page objects -->
+    <servlet>
+        <servlet-name>GetFullImage</servlet-name>
+        <servlet-class>GetFullImage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetFullImage</servlet-name>
+        <url-pattern>/GetFullImage</url-pattern>
     </servlet-mapping>
 
 </web-app>
