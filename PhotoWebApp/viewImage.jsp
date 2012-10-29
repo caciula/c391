@@ -15,7 +15,7 @@
     <br>
     Place: ${place}
     <br>
-    Timing: ${timing}
+    Date: ${timing}
     <br>
     Description: ${description}
 </body>
