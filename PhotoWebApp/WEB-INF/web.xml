@@ -8,7 +8,7 @@
     <!-- Backing servlets for jsp/html pages and actions -->
     <servlet>
         <servlet-name>UploadImage</servlet-name>
-        <servlet-class>UploadImage</servlet-class>
+        <servlet-class>main.web.UploadImage</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UploadImage</servlet-name>
@@ -17,7 +17,7 @@
 
     <servlet>
         <servlet-name>ViewImage</servlet-name>
-        <servlet-class>ViewImage</servlet-class>
+        <servlet-class>main.web.ViewImage</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ViewImage</servlet-name>
@@ -27,7 +27,7 @@
     <!-- Servlets to obtain specific page objects -->
     <servlet>
         <servlet-name>GetFullImage</servlet-name>
-        <servlet-class>GetFullImage</servlet-class>
+        <servlet-class>main.web.GetFullImage</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GetFullImage</servlet-name>

@@ -1,3 +1,5 @@
+package main.web;
+
 /***
  *  Copyright 2007 COMPUT 391 Team, CS, UofA                             
  *  Author:  Fan Deng
@@ -18,6 +20,7 @@
  *  Modified by Tim Phillips, 2012
  *
  ***/
+import main.util.DBConnectionUtil;
 
 import java.io.*;
 import javax.servlet.*;
@@ -62,7 +65,7 @@ public class UploadImage extends HttpServlet {
         
         Connection conn = null;
         try {
-            conn = getConnected();
+            conn = DBConnectionUtil.getConnection();
             // Obtain the form info from the request
             ServletFileUpload upload = new ServletFileUpload();
             response.setContentType("text/plain"); 
@@ -132,19 +135,6 @@ public class UploadImage extends HttpServlet {
 	
         // Redirect to the ViewImage servlet to view the uploaded image
         response.sendRedirect("/PhotoWebApp/ViewImage?" + photoId);
-    }
-
-    /* To connect to the specified database */
-    private static Connection getConnected() throws Exception {
-        String username = "tdphilli";
-        String password = "********";
-        String driverName = "oracle.jdbc.driver.OracleDriver";
-        String dbstring ="jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
-	
-        // Connect to the database
-        Class drvClass = Class.forName(driverName); 
-        DriverManager.registerDriver((Driver) drvClass.newInstance());
-        return(DriverManager.getConnection(dbstring,username,password));
     }
 
     /* Shrink image by a factor of n, and return the shrinked image */

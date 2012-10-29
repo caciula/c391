@@ -1,3 +1,6 @@
+package main.web;
+
+import main.util.DBConnectionUtil;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -24,7 +27,7 @@ public class GetFullImage extends HttpServlet {
         Connection conn = null;
         try {
             // Execute the query
-            conn = getConnected();
+            conn = DBConnectionUtil.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rset = stmt.executeQuery(query);
             if (rset.next()) {
@@ -50,19 +53,5 @@ public class GetFullImage extends HttpServlet {
             }
         }
     }
-
-    /*
-     *  Connect to the specified database
-     */
-    private Connection getConnected() throws Exception {
-        String username = "tdphilli";
-        String password = "********";
-        String driverName = "oracle.jdbc.driver.OracleDriver";
-        String dbstring ="jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
-
-        // Connect to the database
-        Class drvClass = Class.forName(driverName); 
-        DriverManager.registerDriver((Driver) drvClass.newInstance());
-        return( DriverManager.getConnection(dbstring,username,password) );
-    }
+    
 }
