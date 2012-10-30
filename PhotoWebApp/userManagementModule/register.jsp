@@ -33,7 +33,7 @@ try {
 
 try {
 	//establish the connection 
-	connection = DriverManager.getConnection(dbstring,"caciula","c391rulez");
+	connection = DriverManager.getConnection(dbstring,"caciula","PASSWORD");
 	connection.setAutoCommit(false);
 } catch (Exception ex) {
 	out.println("<hr>" + ex.getMessage() + "<hr>");
