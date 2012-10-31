@@ -57,9 +57,9 @@ public class UploadImage extends HttpServlet {
         throws ServletException, IOException {
         
         Integer photoId = null;
-        String subject = "";
-        String place = "";
-        String description = "";
+        String subject = null;
+        String place = null;
+        String description = null;
         BufferedImage img = null;
         BufferedImage thumbNail = null;
         

@@ -34,8 +34,8 @@ public class ViewImage extends HttpServlet {
                 request.setAttribute("ownerName", rset.getString("owner_name"));
                 request.setAttribute("subject", rset.getString("subject"));
                 request.setAttribute("place", rset.getString("place"));
-                request.setAttribute("timing", rset.getDate("timing").toString());
                 request.setAttribute("description", rset.getString("description"));
+                request.setAttribute("timing", rset.getDate("timing").toString());
             } 
             else {
                 // TODO: handle no result

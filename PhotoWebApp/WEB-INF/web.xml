@@ -24,6 +24,15 @@
         <url-pattern>/ViewImage</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>EditImage</servlet-name>
+        <servlet-class>main.web.EditImage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditImage</servlet-name>
+        <url-pattern>/EditImage</url-pattern>
+    </servlet-mapping>
+
     <!-- Servlets to obtain specific page objects -->
     <servlet>
         <servlet-name>GetFullImage</servlet-name>

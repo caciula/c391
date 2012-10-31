@@ -2,14 +2,17 @@
 <html>
 
 <head>
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
-<title>Upload Image</title> 
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+    <title>Upload Image</title> 
 </head>
 
-<body> 
+<body>
+    <p><b>Upload Image</b></p>
+        
+    <hr>
+    
     <form name="uploadImage" method="POST" enctype="multipart/form-data" action="/PhotoWebApp/UploadImage">
         <table>
-            <tbody>
             <tr>
                 <th>File path: </th>
                 <td><input name="imagePath" size="30" type="file"></td>
@@ -36,5 +39,6 @@
             </tbody>
          </table>
     </form>
+    
 </body>
 </html>
