@@ -33,6 +33,15 @@
         <url-pattern>/EditImage</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>main.web.Login</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+
     <!-- Servlets to obtain specific page objects -->
     <servlet>
         <servlet-name>GetFullImage</servlet-name>
