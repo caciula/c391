@@ -3,11 +3,24 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
-    <title>Upload Image</title> 
+    <title>Upload Image</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
+    <script type="text/javascript">
+    $(function() {
+        $('.date-picker').datepicker( {
+            changeMonth: true,
+            changeYear: true,
+        });
+    });
+    </script>
 </head>
 
 <body>
     <p><b>Upload Image</b></p>
+        
+    <font color="red">${error}</font>
         
     <hr>
     
@@ -27,7 +40,7 @@
             </tr>
             <tr>
                 <th>Date: </th>
-                <td>TODO</td>
+                <td><input name="date" id="date" class="date-picker" maxlength="10"/></td>
             </tr>
             <tr>
                 <th>Description: </th>

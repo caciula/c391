@@ -3,13 +3,26 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
-    <title>Edit Image</title> 
+    <title>Edit Image</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
+	<script type="text/javascript">
+	$(function() {
+	    $('.date-picker').datepicker( {
+	        changeMonth: true,
+	        changeYear: true,
+	    });
+	});
+	</script>
 </head>
 
 <body> 
     <p><b>Edit Image</b></p>
             
-    <p><a href="ViewImage?${picId}">View Image</a> | <a href="uploadImage.html" >Upload New Image</a></p>
+    <p><a href="ViewImage?${picId}">View Image</a> | <a href="uploadImage.jsp" >Upload New Image</a></p>
+    
+    ${errorMessage}
     
     <hr>
     
@@ -17,19 +30,19 @@
         <table>
             <tbody>
             <tr>
-                <th>Subject: </th>
+                <th>Subject:</th>
                 <td><input name="subject" size="50" maxlength="128" type="text" value="${subject}"></td>
             </tr>
             <tr>
-                <th>Place: </th>
+                <th>Place:</th>
                 <td><input name="place" size="50" maxlength="128" type="text" value="${place}"></td>
             </tr>
             <tr>
-                <th>Date: </th>
-                <td>TODO</td>
+                <th>Date:</th>
+                <td><input name="date" id="date" class="date-picker" maxlength="10" value="${date}"/></td>
             </tr>
             <tr>
-                <th>Description: </th>
+                <th>Description:</th>
                 <td><textarea name="description" rows="4" cols="57" maxlength="2048">${description}</textarea></td>
             </tr>
             <tr>
@@ -40,6 +53,5 @@
     </form>
     
     <p><img src ="/PhotoWebApp/GetFullImage?${picId}"></p>
-    
 </body>
 </html>

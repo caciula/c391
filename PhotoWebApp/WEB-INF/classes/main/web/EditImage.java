@@ -1,10 +1,15 @@
 package main.web;  
 
-import main.util.DBConnectionUtil;
+import main.util.DBConnection;
+import main.util.SQLQueries;
+
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Backing servlet for the Edit Image screen (editImage.jsp)
@@ -12,6 +17,7 @@ import java.sql.*;
  *  @author Tim Phillips
  */
 public class EditImage extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     /**
      *  GET command for editImage.jsp
@@ -20,22 +26,25 @@ public class EditImage extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 	
+        // Obtain the image id from the user's QueryString
         String picId  = request.getQueryString();
-        String query = "select * from images where photo_id=" + picId;
 	
-        Connection conn = null;
+        DBConnection connection = null;
         try {
-            conn = DBConnectionUtil.getConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rset = stmt.executeQuery(query);
+            // Obtain the image from the database, based on the image's id
+            connection = new DBConnection();
+            PreparedStatement preparedStatement = connection.getPreparedStatement(SQLQueries.GET_IMAGE_BY_ID);
+            preparedStatement.setString(1, picId);
+            ResultSet rset = preparedStatement.executeQuery();
             if (rset.next() ) {
                 // Add the image info to the request result
                 request.setAttribute("picId", picId);
                 request.setAttribute("ownerName", rset.getString("owner_name"));
                 request.setAttribute("subject", rset.getString("subject"));
                 request.setAttribute("place", rset.getString("place"));
+                DateFormat formatter= new SimpleDateFormat("dd/MM/yyyy");
+                request.setAttribute("date", formatter.format(rset.getDate("timing")));
                 request.setAttribute("description", rset.getString("description"));
-                request.setAttribute("timing", rset.getDate("timing").toString());
             } 
             else {
                 // TODO: handle no result
@@ -45,14 +54,14 @@ public class EditImage extends HttpServlet {
         } finally {
             // Close the connection
             try {
-                conn.close();
+                connection.closeConnection();
             } catch ( SQLException ex) {
                 // TODO: handle error
             }
         }
 		
-        // Redirect to the editImage.jsp
-        RequestDispatcher dispatcher =request.getRequestDispatcher("/editImage.jsp");
+        // Redirect to editImage.jsp
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/editImage.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -64,23 +73,26 @@ public class EditImage extends HttpServlet {
         throws ServletException, IOException {
     
         String picId  = request.getQueryString();
-        String sql = "update images set subject=? , place=?, timing=?, description=? where photo_id=" + picId;
 
-        Connection connection = null;
+        DBConnection connection = null;
         try {
-            connection = DBConnectionUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            // Update the image based on the user's input
+            connection = new DBConnection();
+            PreparedStatement preparedStatement = connection.getPreparedStatement(SQLQueries.UPDATE_IMG_DETAILS_BY_ID);
             preparedStatement.setString(1, request.getParameter("subject"));
             preparedStatement.setString(2, request.getParameter("place"));
-            preparedStatement.setString(3, request.getParameter("timing"));
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = formatter.parse(request.getParameter("date")); 
+            preparedStatement.setTimestamp(3, new Timestamp(date.getTime()));
             preparedStatement.setString(4, request.getParameter("description"));
+            preparedStatement.setString(5, picId);
             preparedStatement.executeUpdate();
         } catch(Exception ex) {
             // TODO: handle error
         } finally {
             // Close the connection
             try {
-                connection.close();
+                connection.closeConnection();
             } catch (SQLException ex) {
                 // TODO: handle error
             }

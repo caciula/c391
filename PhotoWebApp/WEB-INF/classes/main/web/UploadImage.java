@@ -20,24 +20,19 @@ package main.web;
  *  Modified by Tim Phillips, 2012
  *
  ***/
-import main.util.DBConnectionUtil;
+import main.util.DBConnection;
 
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
-import java.util.*;
 import oracle.sql.*;
 import oracle.jdbc.*;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 
@@ -47,6 +42,7 @@ import org.apache.commons.fileupload.util.Streams;
  *  @author Tim Phillips
  */
 public class UploadImage extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     /**
      *  Called when the "Upload" button is clicked on uploadImage.html
@@ -55,17 +51,17 @@ public class UploadImage extends HttpServlet {
      */
     public void doPost(HttpServletRequest request,HttpServletResponse response)
         throws ServletException, IOException {
-        
         Integer photoId = null;
         String subject = null;
         String place = null;
         String description = null;
+        String date = null;
         BufferedImage img = null;
         BufferedImage thumbNail = null;
         
-        Connection conn = null;
+        DBConnection connection = null;
         try {
-            conn = DBConnectionUtil.getConnection();
+            connection = new DBConnection();
             // Obtain the form info from the request
             ServletFileUpload upload = new ServletFileUpload();
             response.setContentType("text/plain"); 
@@ -78,10 +74,12 @@ public class UploadImage extends HttpServlet {
                 if (item.isFormField()) {
                     if (item.getFieldName().equals("subject")){
                         subject = Streams.asString(stream);
-                    } else if (item.getFieldName().equals("description")){
-                        description = Streams.asString(stream);
                     } else if (item.getFieldName().equals("place")){
                         place = Streams.asString(stream);
+                    } else if (item.getFieldName().equals("description")){
+                        description = Streams.asString(stream);
+                    } else if (item.getFieldName().equals("date")){
+                        date = Streams.asString(stream);
                     }
                 // Item is the uploaded image
                 } else{
@@ -90,23 +88,20 @@ public class UploadImage extends HttpServlet {
                 }
                 stream.close();
             }
-            
-            // Connect to the database
-            Statement stmt = conn.createStatement();
-        
+
             // First, generate a unique photo_id using the SQL sequence
-            ResultSet rset1 = stmt.executeQuery("SELECT pic_id_sequence.nextval from dual");
+            ResultSet rset1 = connection.executeQuery("SELECT pic_id_sequence.nextval from dual");
             rset1.next();
             photoId = rset1.getInt(1);
           
             // Create the image record (with empty blobs for the image and thumbnail)
-            stmt.execute("INSERT INTO images VALUES(" + photoId + "," + null +
-                ",'1','" + subject +"','" + place + "',TO_DATE('12.03.2006', 'DD.MM.YYYY'),'" +
+            connection.executeQuery("INSERT INTO images VALUES(" + photoId + "," + null +
+                ",'1','" + subject +"','" + place + "',TO_DATE('" + date + "', 'DD/MM/YYYY'),'" +
                 description + "',empty_blob(), empty_blob())");
 
             // Write both the full image and the thumbnail image
             String cmd = "SELECT * FROM images WHERE photo_id = " + photoId + " FOR UPDATE";
-            ResultSet rset = stmt.executeQuery(cmd);
+            ResultSet rset = connection.executeQuery(cmd);
             rset.next();
             BLOB fullBlob = ((OracleResultSet)rset).getBLOB(9);
             BLOB thumbNailBlob = ((OracleResultSet)rset).getBLOB(8);
@@ -120,16 +115,21 @@ public class UploadImage extends HttpServlet {
             fullOutstream.close();
             thumbnailOutstream.close();
   
-            stmt.executeUpdate("commit");
-            conn.close();
-        } catch( Exception ex ) {
-            // TODO: handle error
+            connection.executeQuery("commit");
+        } catch(Exception ex) {
+            request.setAttribute("error", "Error uploading file. Please try again.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/uploadImage.jsp");
+            dispatcher.forward(request, response);
+            return;
         } finally {
             // Close the connection
             try {
-                conn.close();
-            } catch ( SQLException ex) {
-                // TODO: handle error
+                connection.closeConnection();
+            } catch (Exception ex) {
+                request.setAttribute("error", "Error uploading file. Please try again.");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/uploadImage.jsp");
+                dispatcher.forward(request, response);
+                return;
             }
         }
 	

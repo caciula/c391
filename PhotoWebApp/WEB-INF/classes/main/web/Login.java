@@ -1,6 +1,8 @@
 package main.web;
 
 import java.io.IOException;
+import java.sql.ResultSet;
+
 import main.util.*;
 
 import javax.servlet.ServletException;
@@ -24,10 +26,10 @@ public class Login extends HttpServlet {
     	
     	try {
 			DBConnection database = new DBConnection();
-			database.executeQuery(sqlStatement);
+			ResultSet resultSet = database.executeQuery(sqlStatement);
 			
-			while(database.resultSet != null && database.resultSet.next()) {
-				if (database.resultSet.getInt(1) == 1) {
+			while(resultSet != null && resultSet.next()) {
+				if (resultSet.getInt(1) == 1) {
 					output = "Successfully logged in";
 				} else {
 					output = "Invalid username/password";

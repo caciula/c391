@@ -9,7 +9,7 @@
 <body> 
     <p><b>View Image</b></p>
     
-    <p><a href="/PhotoWebApp/EditImage?${picId}" >Edit Image</a> | <a href="uploadImage.html" >Upload New Image</a> </p>
+    <p><a href="/PhotoWebApp/EditImage?${picId}" >Edit Image</a> | <a href="uploadImage.jsp" >Upload New Image</a> </p>
     
     <hr>
     
@@ -29,11 +29,11 @@
 	    </tr>
 	    <tr>
 	        <th>Date: </th>
-	        <td>TODO</td>
+	        <td>${date}</td>
 	    </tr>
 	    <tr>
 	        <th>Description: </th>
-	        <td>${description}</textarea></td>
+	        <td>${description}</td>
 	    </tr>
 	    </tbody>
 	 </table>

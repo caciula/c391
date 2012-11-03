@@ -1,0 +1,34 @@
+
+alias updateDBConnectionClass="\cp ~/workspace/PhotoWebApp/build/classes/main/util/DBConnection.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/util/DBConnection.class"
+alias updateDBConnectionJava="\cp ~/workspace/PhotoWebApp/src/main/util/DBConnection.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/util/DBConnection.java"
+alias updateDBConnection="updateDBConnectionClass;updateDBConnectionJava"
+
+alias updateLoginClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/Login.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/Login.class"
+alias updateLoginJava="\cp ~/workspace/PhotoWebApp/src/main/web/Login.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/Login.java"
+alias updateLogin="updateLoginClass;updateLoginJava"
+
+alias updateUploadImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/UploadImage.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/UploadImage.class"
+alias updateUploadImageJava="\cp ~/workspace/PhotoWebApp/src/main/web/UploadImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/UploadImage.java"
+alias updateUploadImage="updateUploadImageClass;updateUploadImageJava"
+
+alias updateViewImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/ViewImage.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/ViewImage.class"
+alias updateViewImageJava="\cp ~/workspace/PhotoWebApp/src/main/web/ViewImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/ViewImage.java"
+alias updateViewImage="updateViewImageClass;updateViewImageJava"
+
+alias updateEditImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/EditImage.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/EditImage.class"
+alias updateEditImageJava="\cp ~/workspace/PhotoWebApp/src/main/web/EditImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/EditImage.java"
+alias updateEditImage="updateEditImageClass;updateEditImageJava"
+
+alias updateGetFullImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/resource/GetFullImage.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/resource/GetFullImage.class"
+alias updateGetFullImageJava="\cp ~/workspace/PhotoWebApp/src/main/resource/GetFullImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/resource/GetFullImage.java"
+alias updateGetFullImage="updateGetFullImageClass;updateGetFullImageJava"
+
+alias updateGetThumbnailImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/resource/GetThumbnailImage.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/resource/GetThumbnailImage.class"
+alias updateGetThumbnailImageJava="\cp ~/workspace/PhotoWebApp/src/main/resource/GetThumbnailImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/resource/GetThumbnailImage.java"
+alias updateGetThumbnailImage="updateGetThumbnailImageClass;updateGetThumbnailImageJava"
+
+alias updateSQLQueriesClass="\cp ~/workspace/PhotoWebApp/build/classes/main/util/SQLQueries.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/util/SQLQueries.class"
+alias updateSQLQueriesJava="\cp ~/workspace/PhotoWebApp/src/main/util/SQLQueries.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/util/SQLQueries.java"
+alias updateSQLQueries="updateSQLQueriesClass;updateSQLQueriesJava"
+
+alias updatePhotoWebApp="updateDBConnection;updateLogin;updateUploadImage;updateViewImage;updateEditImage; updateGetFullImage; updateGetThumbnailImage"
