@@ -116,25 +116,26 @@ public class UploadImage extends HttpServlet {
             thumbnailOutstream.close();
   
             connection.executeQuery("commit");
+            // Redirect to the ViewImage servlet to view the uploaded image
+            response.sendRedirect("/PhotoWebApp/ViewImage?" + photoId);
         } catch(Exception ex) {
-            request.setAttribute("error", "Error uploading file. Please try again.");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/uploadImage.jsp");
-            dispatcher.forward(request, response);
+            System.out.println("An error occured while uploading a photo: " + ex);
+            request.setAttribute("errorMessage", "An error occured while uploading the file. Please click back and try again.");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/uploadImage.jsp");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
             return;
         } finally {
             // Close the connection
             try {
                 connection.closeConnection();
             } catch (Exception ex) {
-                request.setAttribute("error", "Error uploading file. Please try again.");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/uploadImage.jsp");
-                dispatcher.forward(request, response);
+                System.out.println("An error occured while uploading a photo: " + ex);
+                request.setAttribute("errorMessage", "An error occured while uploading the file. Please click back and try again.");
+                request.setAttribute("errorBackLink", "/PhotoWebApp/uploadImage.jsp");
+                request.getRequestDispatcher("/error.jsp").forward(request, response);
                 return;
             }
         }
-	
-        // Redirect to the ViewImage servlet to view the uploaded image
-        response.sendRedirect("/PhotoWebApp/ViewImage?" + photoId);
     }
 
     /* Shrink image by a factor of n, and return the shrinked image */

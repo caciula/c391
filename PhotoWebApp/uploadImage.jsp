@@ -20,8 +20,6 @@
 <body>
     <p><b>Upload Image</b></p>
         
-    <font color="red">${error}</font>
-        
     <hr>
     
     <form name="uploadImage" method="POST" enctype="multipart/form-data" action="/PhotoWebApp/UploadImage">

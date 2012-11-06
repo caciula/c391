@@ -34,30 +34,41 @@ public class ViewImage extends HttpServlet {
             PreparedStatement preparedStatement = connection.getPreparedStatement(SQLQueries.GET_IMAGE_BY_ID);
             preparedStatement.setString(1, picId);
             ResultSet rset = preparedStatement.executeQuery();
-            if (rset.next() ) {
+            if (rset.next()) {
                 // Add the image info to the request result
                 request.setAttribute("picId", picId);
                 request.setAttribute("ownerName", rset.getString("owner_name"));
                 request.setAttribute("subject", rset.getString("subject"));
                 request.setAttribute("place", rset.getString("place"));
                 request.setAttribute("description", rset.getString("description"));
-                DateFormat formatter= new SimpleDateFormat("dd/MM/yyyy");
-                request.setAttribute("date", formatter.format(rset.getDate("timing")));
-            } 
+//                int permission = rset.getInt("permitted");
+//                // check that the user has permission to see the image
+//                PreparedStatement getGroupsStatement = connection.getPreparedStatement(SQLQueries.GET_IMAGE_BY_ID);
+//                ResultSet allGroups = preparedStatement.executeQuery();
+                if (rset.getDate("timing") != null) {
+                    DateFormat formatter= new SimpleDateFormat("dd/MM/yyyy");
+                    request.setAttribute("date", formatter.format(rset.getDate("timing")));
+                }
+            }
             else {
-                // TODO: handle no result
+                // Handle no result
+                request.setAttribute("errorMessage", "No result found for the provided photo id.");
+                request.setAttribute("errorBackLink", "/PhotoWebApp/home.jsp");
+                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                return;
             }
-        } catch( Exception ex ) {
-            // TODO: handle error
-        } finally {
-            // Close the connection
-            try {
-                connection.closeConnection();
-            } catch (SQLException ex) {
-                // TODO: handle error
-            }
+            
+            connection.closeConnection();
+            
+        } catch(Exception ex) {
+            // Handle error
+            System.out.println("An error occurred while obtaining a photo to view:" + ex);
+            request.setAttribute("errorMessage", "An error occurred while obtaining the photo.");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/home.jsp");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            return;
         }
-		
+        
         // Redirect to viewImage.jsp
         RequestDispatcher dispatcher = request.getRequestDispatcher("/viewImage.jsp");
         dispatcher.forward(request, response);
