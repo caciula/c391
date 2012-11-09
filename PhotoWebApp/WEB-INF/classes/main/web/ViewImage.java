@@ -27,11 +27,11 @@ public class ViewImage extends HttpServlet {
         // Obtain the image id from the user's QueryString
         String picId  = request.getQueryString();
 	
-        DBConnection connection = null;
+        Connection connection = null;
         try { 
             // Obtain the image from the database, based on the image's id
-            connection = new DBConnection();
-            PreparedStatement preparedStatement = connection.getPreparedStatement(SQLQueries.GET_IMAGE_BY_ID);
+            connection = DBConnection.createConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.GET_IMAGE_BY_ID);
             preparedStatement.setString(1, picId);
             ResultSet rset = preparedStatement.executeQuery();
             if (rset.next()) {
@@ -42,7 +42,7 @@ public class ViewImage extends HttpServlet {
                 request.setAttribute("place", rset.getString("place"));
                 request.setAttribute("description", rset.getString("description"));
                 // TODO: check that the user has permission to see the image
-                PreparedStatement getGroupStatement = connection.getPreparedStatement(SQLQueries.GET_GROUP_BY_ID);
+                PreparedStatement getGroupStatement = connection.prepareStatement(SQLQueries.GET_GROUP_BY_ID);
                 getGroupStatement.setInt(1, rset.getInt("permitted"));
                 ResultSet groupResult = getGroupStatement.executeQuery();
                 if (groupResult.next()) {
@@ -61,7 +61,7 @@ public class ViewImage extends HttpServlet {
                 return;
             }
             
-            connection.closeConnection();
+            connection.close();
             
         } catch(Exception ex) {
             // Handle error

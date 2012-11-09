@@ -9,7 +9,7 @@
 <body> 
     <p><b>View Image</b></p>
     
-    <p><a href="/PhotoWebApp/EditImage?${picId}" >Edit Image</a> | <a href="UploadImage" >Upload New Image</a> </p>
+    <p><a href="/PhotoWebApp/EditImage?${picId}" >Edit Image</a> | <a href="UploadImage">Upload New Image</a> | <a href="ViewUserImages?${ownerName}" >View All ${ownerName}'s Images</a></p>
     
     <hr>
     

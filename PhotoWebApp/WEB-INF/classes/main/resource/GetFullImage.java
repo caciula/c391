@@ -25,11 +25,11 @@ public class GetFullImage extends HttpServlet {
         String picId = request.getQueryString();
         ServletOutputStream out = response.getOutputStream();
 
-        DBConnection connection = null;
+        Connection connection = null;
         try {
          // Obtain the full image from the database
-            connection = new DBConnection();
-            PreparedStatement preparedStatement = connection.getPreparedStatement(SQLQueries.GET_PHOTO_ONLY_BY_ID);
+            connection = DBConnection.createConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.GET_PHOTO_ONLY_BY_ID);
             preparedStatement.setString(1, picId);
             ResultSet rset = preparedStatement.executeQuery();
             if (rset.next()) {
@@ -49,7 +49,7 @@ public class GetFullImage extends HttpServlet {
         } finally {
             // Close the connection
             try {
-                connection.closeConnection();
+                connection.close();
             } catch ( SQLException ex) {
                 // TODO: handle exception
             }

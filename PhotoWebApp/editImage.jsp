@@ -21,7 +21,7 @@
 <body> 
     <p><b>Edit Image</b></p>
             
-    <p><a href="ViewImage?${picId}">View Image</a> | <a href="UploadImage" >Upload New Image</a></p>
+    <p><a href="ViewImage?${picId}">View Image</a> | <a href="UploadImage">Upload New Image</a></p>
     
     ${errorMessage}
     
