@@ -17,58 +17,65 @@
 </head>
 
 <body> 
-    <p class="pageTitle">Edit Image</p>
-            
-    <p><a href="ViewImage?${picId}">View Image</a> | <a href="UploadImage">Upload New Image</a></p>
+
+    <jsp:include page="resources/includes/header.jsp" />
     
-    ${errorMessage}
-    
-    <hr>
-    
-    <form name="editImage" method="POST" action="/PhotoWebApp/EditImage?${picId}">
-        <table>
-            <tbody>
-            <tr>
-                <th>Subject:</th>
-                <td><input name="subject" size="50" maxlength="128" type="text" value="${subject}"></td>
-            </tr>
-            <tr>
-                <th>Place:</th>
-                <td><input name="place" size="50" maxlength="128" type="text" value="${place}"></td>
-            </tr>
-            <tr>
-                <th>Date:</th>
-                <td><input name="date" id="date" class="date-picker" maxlength="10" value="${date}"/> 
-                <span class="formHintText">(dd/MM/yyyy)</span>
-                </td>
-            </tr>
-            <tr>
-                <th>Time:</th>
-                <td><input name="time" maxlength="5" value="${time}"/>
-                <span class="formHintText">(hh:mm)</span>
-                </td>
-            </tr>
-            <tr>
-                <th>Description:</th>
-                <td><textarea name="description" rows="4" cols="57" maxlength="2048">${description}</textarea></td>
-            </tr>
-            <tr>
-                <th>Access: <span class="requiredField">*</span></th>
-                <td>
-	                <select name="access">
-	                    <c:forEach items="${groups}" var="group">
-	                        <option value="${group[1]}">${group[0]}</option>
-	                    </c:forEach>
-	                </select>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="CENTER"><input name=".submit" value="Save" type="submit"></td>
-            </tr>
-            </tbody>
-         </table>
-    </form>
-    
-    <p><img src ="/PhotoWebApp/GetFullImage?${picId}"></p>
+    <div class="content">
+
+	    <p class="pageTitle">Edit Image</p>
+	            
+	    <p><a href="ViewImage?${picId}">View Image</a> | <a href="UploadImage">Upload New Image</a></p>
+	    
+	    ${errorMessage}
+	    
+	    <hr>
+	    
+	    <form name="editImage" method="POST" action="/PhotoWebApp/EditImage?${picId}">
+	        <table>
+	            <tbody>
+	            <tr>
+	                <th>Subject:</th>
+	                <td><input name="subject" size="50" maxlength="128" type="text" value="${subject}"></td>
+	            </tr>
+	            <tr>
+	                <th>Place:</th>
+	                <td><input name="place" size="50" maxlength="128" type="text" value="${place}"></td>
+	            </tr>
+	            <tr>
+	                <th>Date:</th>
+	                <td><input name="date" id="date" class="date-picker" maxlength="10" value="${date}"/> 
+	                <span class="formHintText">(dd/MM/yyyy)</span>
+	                </td>
+	            </tr>
+	            <tr>
+	                <th>Time:</th>
+	                <td><input name="time" maxlength="5" value="${time}"/>
+	                <span class="formHintText">(hh:mm)</span>
+	                </td>
+	            </tr>
+	            <tr>
+	                <th>Description:</th>
+	                <td><textarea name="description" rows="4" cols="57" maxlength="2048">${description}</textarea></td>
+	            </tr>
+	            <tr>
+	                <th>Access: <span class="requiredField">*</span></th>
+	                <td>
+		                <select name="access">
+		                    <c:forEach items="${groups}" var="group">
+		                        <option value="${group[1]}">${group[0]}</option>
+		                    </c:forEach>
+		                </select>
+	                </td>
+	            </tr>
+	            <tr>
+	                <th></th>
+	                <td><br><input name=".submit" value="Save" type="submit"></td>
+	            </tr>
+	            </tbody>
+	         </table>
+	    </form>
+	    
+	    <p><img src ="/PhotoWebApp/GetFullImage?${picId}"></p>
+    </div>
 </body>
 </html>

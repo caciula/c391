@@ -8,42 +8,46 @@
 </head>
 
 <body> 
-    <p class="pageTitle">View Image</p>
-    
-    <p><a href="/PhotoWebApp/EditImage?${picId}" >Edit Image</a> | <a href="UploadImage">Upload New Image</a> | <a href="ViewUserImages?${ownerName}" >View All ${ownerName}'s Images</a></p>
-    
-    <hr>
-    
-	<table>
-	    <tbody>
-	    <tr>
-	        <th>Owner: </th>
-	        <td><a href="/PhotoWebApp/ViewUserImages?${ownerName}">${ownerName}</a></td>
-	    </tr>
-	    <tr>
-	        <th>Subject: </th>
-	        <td>${subject}</td>
-	    </tr>
-	    <tr>
-	        <th>Place: </th>
-	        <td>${place}</td>
-	    </tr>
-	    <tr>
-	        <th>Date / Time: </th>
-	        <td>${date}</td>
-	    </tr>
-	    <tr>
-	        <th>Description: </th>
-	        <td>${description}</td>
-	    </tr>
-	    <tr>
-            <th>Access: </th>
-            <td>${access}</td>
-        </tr>
-	    </tbody>
-	 </table>
+
+    <jsp:include page="resources/includes/header.jsp" />
+
+    <div class="content">
+	    <p class="pageTitle">View Image</p>
 	    
-    <img src ="/PhotoWebApp/GetFullImage?${picId}">
-    
+	    <p><a href="/PhotoWebApp/EditImage?${picId}" >Edit Image</a> | <a href="UploadImage">Upload New Image</a> | <a href="ViewUserImages?${ownerName}" >View All ${ownerName}'s Images</a></p>
+	    
+	    <hr>
+	    
+		<table>
+		    <tbody>
+		    <tr>
+		        <th>Owner: </th>
+		        <td><a href="/PhotoWebApp/ViewUserImages?${ownerName}">${ownerName}</a></td>
+		    </tr>
+		    <tr>
+		        <th>Subject: </th>
+		        <td>${subject}</td>
+		    </tr>
+		    <tr>
+		        <th>Place: </th>
+		        <td>${place}</td>
+		    </tr>
+		    <tr>
+		        <th>Date / Time: </th>
+		        <td>${date}</td>
+		    </tr>
+		    <tr>
+		        <th>Description: </th>
+		        <td>${description}</td>
+		    </tr>
+		    <tr>
+	            <th>Access: </th>
+	            <td>${access}</td>
+	        </tr>
+		    </tbody>
+		 </table>
+		    
+	    <img src ="/PhotoWebApp/GetFullImage?${picId}">
+    </div>
 </body>
 </html>

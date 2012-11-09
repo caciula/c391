@@ -9,21 +9,25 @@
 </head>
 
 <body> 
-    <p class="pageTitle">View Album (${userFirstName} ${userLastName} - ${userName})</p>
+
+    <jsp:include page="resources/includes/header.jsp" />
     
-    <p><a href="UploadImage">Upload New Image</a></p>
-    
-    <hr>
-    
-	<table>
-	    <tbody>
-	    <tr>
-	    <c:forEach items="${imageIds}" var="imageId">
-	       <a href="/PhotoWebApp/ViewImage?${imageId}"><img src ="/PhotoWebApp/GetThumbnailImage?${imageId}"></a>
-	    </c:forEach>
-	    </tr>
-	    </tbody>
-	 </table>
-	 
+    <div class="content">
+	    <p class="pageTitle">View Album (${userFirstName} ${userLastName} - ${userName})</p>
+	    
+	    <p><a href="UploadImage">Upload New Image</a></p>
+	    
+	    <hr>
+	    
+		<table>
+		    <tbody>
+		    <tr>
+		    <c:forEach items="${imageIds}" var="imageId">
+		       <a href="/PhotoWebApp/ViewImage?${imageId}"><img src ="/PhotoWebApp/GetThumbnailImage?${imageId}"></a>
+		    </c:forEach>
+		    </tr>
+		    </tbody>
+		 </table>
+	 </div>
 </body>
 </html>

@@ -19,58 +19,63 @@
 </head>
 
 <body>
-    <p class="pageTitle">Upload Image</p>
-        
-    <hr>
+
+    <jsp:include page="resources/includes/header.jsp" />
     
-    <form name="uploadImage" method="POST" enctype="multipart/form-data" action="/PhotoWebApp/UploadImage">
-        <table>
-            <tr>
-                <th>File path: <span class="requiredField">*</span></th> 
-                <td><input name="imagePath" size="30" type="file"></td>
-            </tr>
-            <tr>
-                <th>Subject: </th>
-                <td><input name="subject" size="50" maxlength="128" type="text"></td>
-            </tr>
-            <tr>
-                <th>Place: </th>
-                <td><input name="place" size="50" maxlength="128" type="text"></td>
-            </tr>
-            <tr>
-                <th>Date: </th>
-                <td>
-                <input name="date" id="date" class="date-picker" maxlength="10"/>
-                <span class="formHintText">(dd/MM/yyyy)</span>
-                </td>
-            </tr>
-            <tr>
-                <th>Time: </th>
-                <td>
-                <input name="time" id="time" maxlength="5"/>
-                <span class="formHintText">(hh:mm)</span>
-                </td>
-            </tr>
-            <tr>
-                <th>Description: </th>
-                <td><textarea name="description" rows="4" cols="57" maxlength="2048"></textarea></td>
-            </tr>
-            <tr>
-                <th>Access: <span class="requiredField">*</span></th>
-                <td>
-	                <select name="access">
-	                    <c:forEach items="${groups}" var="group">
-	                        <option value="${group[1]}">${group[0]}</option>
-	                    </c:forEach>
-	                </select>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="CENTER"><input name=".submit" value="Upload" type="submit"></td>
-            </tr>
-            </tbody>
-         </table>
-    </form>
-    
+    <div class="content">
+	    <p class="pageTitle">Upload Image</p>
+	        
+	    <hr>
+	    
+	    <form name="uploadImage" method="POST" enctype="multipart/form-data" action="/PhotoWebApp/UploadImage">
+	        <table>
+	            <tr>
+	                <th>File path: <span class="requiredField">*</span></th> 
+	                <td><input name="imagePath" size="30" type="file"></td>
+	            </tr>
+	            <tr>
+	                <th>Subject: </th>
+	                <td><input name="subject" size="50" maxlength="128" type="text"></td>
+	            </tr>
+	            <tr>
+	                <th>Place: </th>
+	                <td><input name="place" size="50" maxlength="128" type="text"></td>
+	            </tr>
+	            <tr>
+	                <th>Date: </th>
+	                <td>
+	                <input name="date" id="date" class="date-picker" maxlength="10"/>
+	                <span class="formHintText">(dd/MM/yyyy)</span>
+	                </td>
+	            </tr>
+	            <tr>
+	                <th>Time: </th>
+	                <td>
+	                <input name="time" id="time" maxlength="5"/>
+	                <span class="formHintText">(hh:mm)</span>
+	                </td>
+	            </tr>
+	            <tr>
+	                <th>Description: </th>
+	                <td><textarea name="description" rows="4" cols="57" maxlength="2048"></textarea></td>
+	            </tr>
+	            <tr>
+	                <th>Access: <span class="requiredField">*</span></th>
+	                <td>
+		                <select name="access">
+		                    <c:forEach items="${groups}" var="group">
+		                        <option value="${group[1]}">${group[0]}</option>
+		                    </c:forEach>
+		                </select>
+	                </td>
+	            </tr>
+	            <tr>
+	                <th></th>
+	                <td><br><input name=".submit" value="Upload" type="submit"></td>
+	            </tr>
+	            </tbody>
+	         </table>
+	    </form>
+    </div>
 </body>
 </html>

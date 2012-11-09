@@ -8,14 +8,18 @@
 </head>
 
 <body> 
-    <p class="pageTitle">Error</p>
+
+    <jsp:include page="resources/includes/header.jsp" />
     
-    <hr/>
-    <font color="red">${errorMessage}</font>
-    
-    <br><br>
-    
-    <a href="${errorBackLink}">Back</a>
-    
+    <div class="content">
+	    <p class="pageTitle">Error</p>
+	    
+	    <hr/>
+	    <font color="red">${errorMessage}</font>
+	    
+	    <br><br>
+	    
+	    <a href="${errorBackLink}">Back</a>
+    </div>
 </body>
 </html>
