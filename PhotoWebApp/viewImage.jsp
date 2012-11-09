@@ -47,7 +47,7 @@
 		    </tbody>
 		 </table>
 		    
-	    <img src ="/PhotoWebApp/GetFullImage?${picId}">
+	    <a href="/PhotoWebApp/GetFullImage?${picId}" target="_blank"><img src ="/PhotoWebApp/GetFullImage?${picId}" ></a>
     </div>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
     <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
-    <title>Error</title> 
+    <title>Home</title> 
 </head>
 
 <body> 

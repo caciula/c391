@@ -62,20 +62,30 @@
 	                <td>
 		                <select name="access">
 		                    <c:forEach items="${groups}" var="group">
-		                        <option value="${group[1]}">${group[0]}</option>
-		                    </c:forEach>
+	                             <c:choose>
+	                                  <c:when test="${access == group[1]}">
+	                                      <option value="${group[1]}" selected=true>${group[0]}</option>
+	                                  </c:when>
+	                                  <c:otherwise>
+	                                      <option value="${group[1]}">${group[0]}</option>
+	                                  </c:otherwise>
+	                             </c:choose>
+	                        </c:forEach>
 		                </select>
 	                </td>
 	            </tr>
 	            <tr>
 	                <th></th>
-	                <td><br><input name=".submit" value="Save" type="submit"></td>
+	                <td>
+	                    <br><input name=".submit" value="Save" type="submit">
+	                    <input value="Cancel" type="button" onclick="location.href='ViewImage?${picId}'">
+	                </td>
 	            </tr>
 	            </tbody>
 	         </table>
 	    </form>
 	    
-	    <p><img src ="/PhotoWebApp/GetFullImage?${picId}"></p>
+	    <p><a href="/PhotoWebApp/GetFullImage?${picId}" target="_blank"><img src ="/PhotoWebApp/GetFullImage?${picId}" ></a></p>
     </div>
 </body>
 </html>
