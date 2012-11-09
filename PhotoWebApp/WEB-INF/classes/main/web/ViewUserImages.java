@@ -67,6 +67,7 @@ public class ViewUserImages extends HttpServlet {
                 request.setAttribute("errorMessage", "An error occured while obtaining the user's images.");
                 request.setAttribute("errorBackLink", "/PhotoWebApp/temp.jsp");
                 request.getRequestDispatcher("/error.jsp").forward(request, response);
+                return;
             }
         }
 		

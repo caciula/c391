@@ -4,11 +4,12 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+    <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
     <title>View Album (${userFirstName} ${userLastName} - ${userName})</title> 
 </head>
 
 <body> 
-    <p><b>View Album (${userFirstName} ${userLastName} - ${userName})</b></p>
+    <p class="pageTitle">View Album (${userFirstName} ${userLastName} - ${userName})</p>
     
     <p><a href="UploadImage">Upload New Image</a></p>
     

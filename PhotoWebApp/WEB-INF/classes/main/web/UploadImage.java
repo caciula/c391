@@ -98,6 +98,7 @@ public class UploadImage extends HttpServlet {
         String place = null;
         String description = null;
         String date = null;
+        String time = null;
         String access = null;
         BufferedImage img = null;
         BufferedImage thumbNail = null;
@@ -125,6 +126,8 @@ public class UploadImage extends HttpServlet {
                         access = Streams.asString(stream);
                     } else if (item.getFieldName().equals("date")){
                         date = Streams.asString(stream);
+                    } else if (item.getFieldName().equals("time")){
+                        time = Streams.asString(stream);
                     }
                 // Item is the uploaded image
                 } else{
@@ -139,9 +142,12 @@ public class UploadImage extends HttpServlet {
             rset1.next();
             photoId = rset1.getInt(1);
           
+            // TODO: Ensure that the date and the time have proper formatting
+            String dateTime = date + " " + time;
+            
             // Create the image record (with empty blobs for the image and thumbnail)
             DBConnection.executeQuery(connection, "INSERT INTO images VALUES(" + photoId + ",'tim'," + access + ",'"
-                    + subject +"','" + place + "',TO_DATE('" + date + "', 'DD/MM/YYYY'),'" +
+                    + subject +"','" + place + "',TO_DATE('" + dateTime + "', 'DD/MM/YYYY HH24:MI'),'" +
                     description + "',empty_blob(), empty_blob())");
 
             // Write both the full image and the thumbnail image

@@ -45,8 +45,10 @@ public class EditImage extends HttpServlet {
                 request.setAttribute("place", rset.getString("place"));
                 request.setAttribute("access", rset.getString("permitted"));
                 if (rset.getDate("timing") != null) {
-                    DateFormat formatter= new SimpleDateFormat("dd/MM/yyyy");
-                    request.setAttribute("date", formatter.format(rset.getDate("timing")));
+                    DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+                    DateFormat timeFormatter = new SimpleDateFormat("k:mm");
+                    request.setAttribute("date", dateFormatter.format(rset.getTimestamp("timing")));
+                    request.setAttribute("time", timeFormatter.format(rset.getTimestamp("timing")));
                 }
                 request.setAttribute("description", rset.getString("description"));
                 // TODO: check that the user has permission to edit this image
@@ -113,9 +115,10 @@ public class EditImage extends HttpServlet {
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.UPDATE_IMG_DETAILS_BY_ID);
             preparedStatement.setString(1, request.getParameter("subject"));
             preparedStatement.setString(2, request.getParameter("place"));
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy k:mm");
             if (!request.getParameter("date").equals("")) {
-                Date date = formatter.parse(request.getParameter("date")); 
+                String inputDateTime = request.getParameter("date") + " " +  request.getParameter("time");
+                Date date = formatter.parse(inputDateTime);
                 preparedStatement.setTimestamp(3, new Timestamp(date.getTime()));
             } else {
                 preparedStatement.setTimestamp(3, null);

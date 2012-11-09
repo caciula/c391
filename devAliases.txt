@@ -7,6 +7,10 @@ alias updateLoginClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/Login
 alias updateLoginJava="\cp ~/workspace/PhotoWebApp/src/main/web/Login.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/Login.java"
 alias updateLogin="updateLoginClass;updateLoginJava"
 
+alias updateRegisterClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/Register.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/Register.class"
+alias updateRegisterJava="\cp ~/workspace/PhotoWebApp/src/main/web/Register.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/Register.java"
+alias updateRegister="updateRegisterClass;updateRegisterJava"
+
 alias updateUploadImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/UploadImage.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/UploadImage.class"
 alias updateUploadImageJava="\cp ~/workspace/PhotoWebApp/src/main/web/UploadImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/UploadImage.java"
 alias updateUploadImage="updateUploadImageClass;updateUploadImageJava"
@@ -35,4 +39,4 @@ alias updateSQLQueriesClass="\cp ~/workspace/PhotoWebApp/build/classes/main/util
 alias updateSQLQueriesJava="\cp ~/workspace/PhotoWebApp/src/main/util/SQLQueries.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/util/SQLQueries.java"
 alias updateSQLQueries="updateSQLQueriesClass;updateSQLQueriesJava"
 
-alias updatePhotoWebApp="updateDBConnection;updateLogin;updateUploadImage;updateViewImage; updateViewUserImages; updateEditImage; updateGetFullImage; updateGetThumbnailImage; updateSQLQueries"
+alias updatePhotoWebApp="updateDBConnection;updateLogin;updateUploadImage;updateViewImage; updateViewUserImages; updateEditImage; updateGetFullImage; updateGetThumbnailImage; updateSQLQueries; updateRegister;"

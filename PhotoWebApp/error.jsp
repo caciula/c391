@@ -2,12 +2,13 @@
 <html>
 
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
     <title>Error</title> 
 </head>
 
 <body> 
-    <p><b>Error</b></p>
+    <p class="pageTitle">Error</p>
     
     <hr/>
     <font color="red">${errorMessage}</font>

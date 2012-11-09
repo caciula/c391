@@ -4,22 +4,20 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+    <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
     <title>Edit Image</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
 	<script type="text/javascript">
-	$(function() {
-	    $('.date-picker').datepicker( {
-	        changeMonth: true,
-	        changeYear: true,
-	    });
-	});
+	     $(function(){
+	          $("#date").datepicker({dateFormat:"dd/mm/yy"});
+	     });
 	</script>
 </head>
 
 <body> 
-    <p><b>Edit Image</b></p>
+    <p class="pageTitle">Edit Image</p>
             
     <p><a href="ViewImage?${picId}">View Image</a> | <a href="UploadImage">Upload New Image</a></p>
     
@@ -40,14 +38,22 @@
             </tr>
             <tr>
                 <th>Date:</th>
-                <td><input name="date" id="date" class="date-picker" maxlength="10" value="${date}"/></td>
+                <td><input name="date" id="date" class="date-picker" maxlength="10" value="${date}"/> 
+                <span class="formHintText">(dd/MM/yyyy)</span>
+                </td>
+            </tr>
+            <tr>
+                <th>Time:</th>
+                <td><input name="time" maxlength="5" value="${time}"/>
+                <span class="formHintText">(hh:mm)</span>
+                </td>
             </tr>
             <tr>
                 <th>Description:</th>
                 <td><textarea name="description" rows="4" cols="57" maxlength="2048">${description}</textarea></td>
             </tr>
             <tr>
-                <th>Access:</th>
+                <th>Access: <span class="requiredField">*</span></th>
                 <td>
 	                <select name="access">
 	                    <c:forEach items="${groups}" var="group">

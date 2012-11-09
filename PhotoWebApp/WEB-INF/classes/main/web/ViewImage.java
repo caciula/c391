@@ -7,7 +7,6 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
@@ -49,8 +48,8 @@ public class ViewImage extends HttpServlet {
                     request.setAttribute("access", groupResult.getString("group_name"));
                 }
                 if (rset.getDate("timing") != null) {
-                    DateFormat formatter= new SimpleDateFormat("dd/MM/yyyy");
-                    request.setAttribute("date", formatter.format(rset.getDate("timing")));
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy k:mm");
+                    request.setAttribute("date", formatter.format(rset.getTimestamp("timing")));
                 }
             }
             else {

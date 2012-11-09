@@ -3,11 +3,12 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+    <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
     <title>View Image</title> 
 </head>
 
 <body> 
-    <p><b>View Image</b></p>
+    <p class="pageTitle">View Image</p>
     
     <p><a href="/PhotoWebApp/EditImage?${picId}" >Edit Image</a> | <a href="UploadImage">Upload New Image</a> | <a href="ViewUserImages?${ownerName}" >View All ${ownerName}'s Images</a></p>
     
@@ -17,7 +18,7 @@
 	    <tbody>
 	    <tr>
 	        <th>Owner: </th>
-	        <td>${ownerName}</td>
+	        <td><a href="/PhotoWebApp/ViewUserImages?${ownerName}">${ownerName}</a></td>
 	    </tr>
 	    <tr>
 	        <th>Subject: </th>
@@ -28,7 +29,7 @@
 	        <td>${place}</td>
 	    </tr>
 	    <tr>
-	        <th>Date: </th>
+	        <th>Date / Time: </th>
 	        <td>${date}</td>
 	    </tr>
 	    <tr>

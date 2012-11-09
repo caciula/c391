@@ -4,29 +4,29 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+    <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
     <title>Upload Image</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
     <script type="text/javascript">
     $(function() {
-        $('.date-picker').datepicker( {
-            changeMonth: true,
-            changeYear: true,
+        $(function(){
+            $("#date").datepicker({dateFormat:"dd/mm/yy"});
         });
     });
     </script>
 </head>
 
 <body>
-    <p><b>Upload Image</b></p>
+    <p class="pageTitle">Upload Image</p>
         
     <hr>
     
     <form name="uploadImage" method="POST" enctype="multipart/form-data" action="/PhotoWebApp/UploadImage">
         <table>
             <tr>
-                <th>File path: </th>
+                <th>File path: <span class="requiredField">*</span></th> 
                 <td><input name="imagePath" size="30" type="file"></td>
             </tr>
             <tr>
@@ -39,14 +39,24 @@
             </tr>
             <tr>
                 <th>Date: </th>
-                <td><input name="date" id="date" class="date-picker" maxlength="10"/></td>
+                <td>
+                <input name="date" id="date" class="date-picker" maxlength="10"/>
+                <span class="formHintText">(dd/MM/yyyy)</span>
+                </td>
+            </tr>
+            <tr>
+                <th>Time: </th>
+                <td>
+                <input name="time" id="time" maxlength="5"/>
+                <span class="formHintText">(hh:mm)</span>
+                </td>
             </tr>
             <tr>
                 <th>Description: </th>
                 <td><textarea name="description" rows="4" cols="57" maxlength="2048"></textarea></td>
             </tr>
             <tr>
-                <th>Access:</th>
+                <th>Access: <span class="requiredField">*</span></th>
                 <td>
 	                <select name="access">
 	                    <c:forEach items="${groups}" var="group">
