@@ -9,6 +9,7 @@ import javax.servlet.http.*;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -42,11 +43,13 @@ public class EditImage extends HttpServlet {
                 request.setAttribute("ownerName", rset.getString("owner_name"));
                 request.setAttribute("subject", rset.getString("subject"));
                 request.setAttribute("place", rset.getString("place"));
+                request.setAttribute("access", rset.getString("permitted"));
                 if (rset.getDate("timing") != null) {
                     DateFormat formatter= new SimpleDateFormat("dd/MM/yyyy");
                     request.setAttribute("date", formatter.format(rset.getDate("timing")));
                 }
                 request.setAttribute("description", rset.getString("description"));
+                // TODO: check that the user has permission to edit this image
             } 
             else {
                 // Handle no result
@@ -55,6 +58,22 @@ public class EditImage extends HttpServlet {
                 request.getRequestDispatcher("/error.jsp").forward(request, response);
                 return;
             }
+            
+            // Get the groups for the permission drop down
+            ArrayList<String[]> groups = new ArrayList<String[]>();
+            PreparedStatement getAllGroups = connection.getPreparedStatement(SQLQueries.GET_ALL_GROUPS);
+            ResultSet allGroups = getAllGroups.executeQuery();
+            
+            while (allGroups.next()) {
+                String[] group = new String[2];
+
+                group[0] = allGroups.getString("group_name");
+                group[1] = Integer.toString((allGroups.getInt("group_id")));
+                System.out.println("Adding group: " + group[0] + group[1]);
+                groups.add(group);
+            }
+            request.setAttribute("groups", groups);
+            
         } catch( Exception ex ) {
             // Handle error
             System.out.println("An error occurred while obtaining a photo to edit:" + ex);
@@ -105,7 +124,8 @@ public class EditImage extends HttpServlet {
                 preparedStatement.setTimestamp(3, null);
             }
             preparedStatement.setString(4, request.getParameter("description"));
-            preparedStatement.setString(5, picId);
+            preparedStatement.setString(5, request.getParameter("access"));
+            preparedStatement.setString(6, picId);
             preparedStatement.executeUpdate();
         } catch(Exception ex) {
             // Handle error

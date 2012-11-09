@@ -21,13 +21,20 @@ package main.web;
  *
  ***/
 import main.util.DBConnection;
+import main.util.SQLQueries;
 
 import java.io.*;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import oracle.sql.*;
 import oracle.jdbc.*;
+
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -37,13 +44,48 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 
 /**
- * Backing servlet for the Upload Image screen (uploadImage.html)
+ * Backing servlet for the Upload Image screen (uploadImage.jsp)
  * 
  *  @author Tim Phillips
  */
 public class UploadImage extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    /**
+     *  GET command for uploadImage.jsp
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+ 
+        DBConnection connection = null;
+        try {
+            connection = new DBConnection();
+            PreparedStatement preparedStatement = connection.getPreparedStatement(SQLQueries.GET_ALL_GROUPS);
+            ResultSet allGroups = preparedStatement.executeQuery();
+            ArrayList<String[]> groups = new ArrayList<String[]>();
+            
+            while (allGroups.next()) {
+                String[] group = new String[2];
+                group[0] = allGroups.getString("group_name");
+                group[1] = Integer.toString((allGroups.getInt("group_id")));
+                groups.add(group);
+            }
+            
+            request.setAttribute("groups", groups);
+            connection.closeConnection();
+        } catch(Exception ex) {
+            System.out.println("An error occured while obtaining all the groups: " + ex);
+            request.setAttribute("errorMessage", "An error occured while obtaining all the groups.");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/temp.jsp");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            return;
+        }
+        
+        // Redirect to viewImage.jsp
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/uploadImage.jsp");
+        dispatcher.forward(request, response);
+    }
+    
     /**
      *  Called when the "Upload" button is clicked on uploadImage.html
      *  Uploads an image and stores the provided image details in the database
@@ -56,6 +98,7 @@ public class UploadImage extends HttpServlet {
         String place = null;
         String description = null;
         String date = null;
+        String access = null;
         BufferedImage img = null;
         BufferedImage thumbNail = null;
         
@@ -64,7 +107,7 @@ public class UploadImage extends HttpServlet {
             connection = new DBConnection();
             // Obtain the form info from the request
             ServletFileUpload upload = new ServletFileUpload();
-            response.setContentType("text/plain"); 
+            response.setContentType("text/plain");
             FileItemIterator iterator = upload.getItemIterator(request);
 
             while (iterator.hasNext()) {
@@ -78,6 +121,8 @@ public class UploadImage extends HttpServlet {
                         place = Streams.asString(stream);
                     } else if (item.getFieldName().equals("description")){
                         description = Streams.asString(stream);
+                    } else if (item.getFieldName().equals("access")){
+                        access = Streams.asString(stream);
                     } else if (item.getFieldName().equals("date")){
                         date = Streams.asString(stream);
                     }
@@ -95,9 +140,9 @@ public class UploadImage extends HttpServlet {
             photoId = rset1.getInt(1);
           
             // Create the image record (with empty blobs for the image and thumbnail)
-            connection.executeQuery("INSERT INTO images VALUES(" + photoId + "," + null +
-                ",'1','" + subject +"','" + place + "',TO_DATE('" + date + "', 'DD/MM/YYYY'),'" +
-                description + "',empty_blob(), empty_blob())");
+            connection.executeQuery("INSERT INTO images VALUES(" + photoId + ",'tim'," + access + ",'"
+                    + subject +"','" + place + "',TO_DATE('" + date + "', 'DD/MM/YYYY'),'" +
+                    description + "',empty_blob(), empty_blob())");
 
             // Write both the full image and the thumbnail image
             String cmd = "SELECT * FROM images WHERE photo_id = " + photoId + " FOR UPDATE";
@@ -121,7 +166,7 @@ public class UploadImage extends HttpServlet {
         } catch(Exception ex) {
             System.out.println("An error occured while uploading a photo: " + ex);
             request.setAttribute("errorMessage", "An error occured while uploading the file. Please click back and try again.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/uploadImage.jsp");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImage");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
             return;
         } finally {
@@ -131,7 +176,7 @@ public class UploadImage extends HttpServlet {
             } catch (Exception ex) {
                 System.out.println("An error occured while uploading a photo: " + ex);
                 request.setAttribute("errorMessage", "An error occured while uploading the file. Please click back and try again.");
-                request.setAttribute("errorBackLink", "/PhotoWebApp/uploadImage.jsp");
+                request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImage");
                 request.getRequestDispatcher("/error.jsp").forward(request, response);
                 return;
             }
@@ -152,5 +197,10 @@ public class UploadImage extends HttpServlet {
             }
         }
         return shrunkImage;
+    }
+    
+    public class Group{
+        String name;
+        int id;
     }
 }

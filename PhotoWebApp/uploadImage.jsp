@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
 <head>
@@ -43,6 +44,16 @@
             <tr>
                 <th>Description: </th>
                 <td><textarea name="description" rows="4" cols="57" maxlength="2048"></textarea></td>
+            </tr>
+            <tr>
+                <th>Access:</th>
+                <td>
+	                <select name="access">
+	                    <c:forEach items="${groups}" var="group">
+	                        <option value="${group[1]}">${group[0]}</option>
+	                    </c:forEach>
+	                </select>
+                </td>
             </tr>
             <tr>
                 <td colspan="2" align="CENTER"><input name=".submit" value="Upload" type="submit"></td>
