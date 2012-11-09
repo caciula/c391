@@ -42,6 +42,15 @@
         <url-pattern>/Login</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>Register</servlet-name>
+        <servlet-class>main.web.Register</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/Register</url-pattern>
+    </servlet-mapping>
+
     <!-- Servlets to obtain specific page resources -->
     <servlet>
         <servlet-name>GetFullImage</servlet-name>

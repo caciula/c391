@@ -15,6 +15,8 @@ public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
 		request.getRequestDispatcher("/Login.jsp").forward(request, response);
 	}
 	
@@ -25,23 +27,27 @@ public class Login extends HttpServlet {
     	
     	String output = "";
     	
-    	try {
-			Connection connection = DBConnection.createConnection();
-			ResultSet resultSet = DBConnection.executeQuery(connection, query);
-			
-			while(resultSet != null && resultSet.next()) {
-				if (resultSet.getInt(1) == 1) {
-					output = "Successfully logged in";
-				} else {
-					output = "Invalid username/password";
+    	if (inputUsername.isEmpty()||inputPassword.isEmpty()) {
+    		output = "error: one or more fields are empty";
+    	} else {
+	    	try {
+				Connection connection = DBConnection.createConnection();
+				ResultSet resultSet = DBConnection.executeQuery(connection, query);
+				
+				if (resultSet != null && resultSet.next()) {
+					if (resultSet.getInt(1) == 1) {
+						output = "Successfully logged in";
+					} else {
+						output = "Invalid username/password";
+					}
 				}
+				
+				connection.close();
+			} catch (Exception e) {
+				output = "error: couldn't complete request";
 			}
-			
-			DBConnection.closeConnection(connection);
-		} catch (Exception e) {
-			output = "error: couldn't complete request";
-		}
-        
+    	}
+	    
 		request.setAttribute("output", output);
 		request.getRequestDispatcher("/Login.jsp").forward(request, response);
 	}
