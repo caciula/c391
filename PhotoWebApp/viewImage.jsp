@@ -9,7 +9,7 @@
 <body> 
     <p><b>View Image</b></p>
     
-    <p><a href="/PhotoWebApp/EditImage?${picId}" >Edit Image</a> | <a href="uploadImage.jsp" >Upload New Image</a> </p>
+    <p><a href="/PhotoWebApp/EditImage?${picId}" >Edit Image</a> | <a href="UploadImage">Upload New Image</a> | <a href="ViewUserImages?${ownerName}" >View All ${ownerName}'s Images</a></p>
     
     <hr>
     
@@ -17,7 +17,7 @@
 	    <tbody>
 	    <tr>
 	        <th>Owner: </th>
-	        <td>TODO</td>
+	        <td>${ownerName}</td>
 	    </tr>
 	    <tr>
 	        <th>Subject: </th>
@@ -35,6 +35,10 @@
 	        <th>Description: </th>
 	        <td>${description}</td>
 	    </tr>
+	    <tr>
+            <th>Access: </th>
+            <td>${access}</td>
+        </tr>
 	    </tbody>
 	 </table>
 	    

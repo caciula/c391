@@ -26,11 +26,11 @@ public class GetThumbnailImage extends HttpServlet {
         String picId  = request.getQueryString();
         ServletOutputStream out = response.getOutputStream();
 
-        DBConnection connection = null;
+        Connection connection = null;
         try {
             // Obtain the thumbnail image from the database
-            connection = new DBConnection();
-            PreparedStatement preparedStatement = connection.getPreparedStatement(SQLQueries.GET_THUMBNAIL_ONLY_BY_ID);
+            connection = DBConnection.createConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.GET_THUMBNAIL_ONLY_BY_ID);
             preparedStatement.setString(1, picId);
             ResultSet rset = preparedStatement.executeQuery();
             if (rset.next()) {
@@ -50,7 +50,7 @@ public class GetThumbnailImage extends HttpServlet {
         } finally {
             // Close the connection
             try {
-                connection.closeConnection();
+                connection.close();
             } catch ( SQLException ex) {
                 // TODO: handle exception
             }

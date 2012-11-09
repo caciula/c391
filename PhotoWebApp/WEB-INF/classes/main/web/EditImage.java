@@ -9,6 +9,7 @@ import javax.servlet.http.*;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -29,11 +30,11 @@ public class EditImage extends HttpServlet {
         // Obtain the image id from the user's QueryString
         String picId  = request.getQueryString();
 	
-        DBConnection connection = null;
+        Connection connection = null;
         try {
             // Obtain the image from the database, based on the image's id
-            connection = new DBConnection();
-            PreparedStatement preparedStatement = connection.getPreparedStatement(SQLQueries.GET_IMAGE_BY_ID);
+            connection = DBConnection.createConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.GET_IMAGE_BY_ID);
             preparedStatement.setString(1, picId);
             ResultSet rset = preparedStatement.executeQuery();
             if (rset.next() ) {
@@ -42,11 +43,13 @@ public class EditImage extends HttpServlet {
                 request.setAttribute("ownerName", rset.getString("owner_name"));
                 request.setAttribute("subject", rset.getString("subject"));
                 request.setAttribute("place", rset.getString("place"));
+                request.setAttribute("access", rset.getString("permitted"));
                 if (rset.getDate("timing") != null) {
                     DateFormat formatter= new SimpleDateFormat("dd/MM/yyyy");
                     request.setAttribute("date", formatter.format(rset.getDate("timing")));
                 }
                 request.setAttribute("description", rset.getString("description"));
+                // TODO: check that the user has permission to edit this image
             } 
             else {
                 // Handle no result
@@ -55,6 +58,19 @@ public class EditImage extends HttpServlet {
                 request.getRequestDispatcher("/error.jsp").forward(request, response);
                 return;
             }
+            
+            // Get the groups for the 'Access' drop down
+            ArrayList<String[]> groups = new ArrayList<String[]>();
+            PreparedStatement getAllGroups = connection.prepareStatement(SQLQueries.GET_ALL_GROUPS);
+            ResultSet allGroups = getAllGroups.executeQuery();
+            while (allGroups.next()) {
+                String[] group = new String[2];
+                group[0] = allGroups.getString("group_name");
+                group[1] = Integer.toString((allGroups.getInt("group_id")));
+                groups.add(group);
+            }
+            request.setAttribute("groups", groups);
+            
         } catch( Exception ex ) {
             // Handle error
             System.out.println("An error occurred while obtaining a photo to edit:" + ex);
@@ -65,7 +81,7 @@ public class EditImage extends HttpServlet {
         } finally {
             // Close the connection
             try {
-                connection.closeConnection();
+                connection.close();
             } catch ( SQLException ex) {
                 // Handle error
                 System.out.println("An error occurred while obtaining a photo to edit:" + ex);
@@ -90,11 +106,11 @@ public class EditImage extends HttpServlet {
     
         String picId  = request.getQueryString();
 
-        DBConnection connection = null;
+        Connection connection = null;
         try {
             // Update the image based on the user's input
-            connection = new DBConnection();
-            PreparedStatement preparedStatement = connection.getPreparedStatement(SQLQueries.UPDATE_IMG_DETAILS_BY_ID);
+            connection = DBConnection.createConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.UPDATE_IMG_DETAILS_BY_ID);
             preparedStatement.setString(1, request.getParameter("subject"));
             preparedStatement.setString(2, request.getParameter("place"));
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -105,9 +121,10 @@ public class EditImage extends HttpServlet {
                 preparedStatement.setTimestamp(3, null);
             }
             preparedStatement.setString(4, request.getParameter("description"));
-            preparedStatement.setString(5, picId);
+            preparedStatement.setString(5, request.getParameter("access"));
+            preparedStatement.setString(6, picId);
             preparedStatement.executeUpdate();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             // Handle error
             System.out.println("An error occurred while updating a photo: " + ex);
             request.setAttribute("errorMessage", "An error occurred while updating the photo.");
@@ -117,7 +134,7 @@ public class EditImage extends HttpServlet {
         } finally {
             // Close the connection
             try {
-                connection.closeConnection();
+                connection.close();
             } catch (SQLException ex) {
                 // Handle error
                 System.out.println("An error occurred while updating a photo: " + ex);

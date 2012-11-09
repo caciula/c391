@@ -25,6 +25,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>ViewUserImages</servlet-name>
+        <servlet-class>main.web.ViewUserImages</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ViewUserImages</servlet-name>
+        <url-pattern>/ViewUserImages</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>EditImage</servlet-name>
         <servlet-class>main.web.EditImage</servlet-class>
     </servlet>

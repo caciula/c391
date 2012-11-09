@@ -15,6 +15,10 @@ alias updateViewImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/V
 alias updateViewImageJava="\cp ~/workspace/PhotoWebApp/src/main/web/ViewImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/ViewImage.java"
 alias updateViewImage="updateViewImageClass;updateViewImageJava"
 
+alias updateViewUserImagesClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/ViewUserImages.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/ViewUserImages.class"
+alias updateViewUserImagesJava="\cp ~/workspace/PhotoWebApp/src/main/web/ViewUserImages.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/ViewUserImages.java"
+alias updateViewUserImages="updateViewUserImagesClass;updateViewUserImagesJava"
+
 alias updateEditImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/EditImage.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/EditImage.class"
 alias updateEditImageJava="\cp ~/workspace/PhotoWebApp/src/main/web/EditImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/EditImage.java"
 alias updateEditImage="updateEditImageClass;updateEditImageJava"
@@ -31,4 +35,4 @@ alias updateSQLQueriesClass="\cp ~/workspace/PhotoWebApp/build/classes/main/util
 alias updateSQLQueriesJava="\cp ~/workspace/PhotoWebApp/src/main/util/SQLQueries.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/util/SQLQueries.java"
 alias updateSQLQueries="updateSQLQueriesClass;updateSQLQueriesJava"
 
-alias updatePhotoWebApp="updateDBConnection;updateLogin;updateUploadImage;updateViewImage;updateEditImage; updateGetFullImage; updateGetThumbnailImage; updateSQLQueries"
+alias updatePhotoWebApp="updateDBConnection;updateLogin;updateUploadImage;updateViewImage; updateViewUserImages; updateEditImage; updateGetFullImage; updateGetThumbnailImage; updateSQLQueries"

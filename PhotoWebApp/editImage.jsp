@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
 <head>
@@ -20,7 +21,7 @@
 <body> 
     <p><b>Edit Image</b></p>
             
-    <p><a href="ViewImage?${picId}">View Image</a> | <a href="uploadImage.jsp" >Upload New Image</a></p>
+    <p><a href="ViewImage?${picId}">View Image</a> | <a href="UploadImage">Upload New Image</a></p>
     
     ${errorMessage}
     
@@ -44,6 +45,16 @@
             <tr>
                 <th>Description:</th>
                 <td><textarea name="description" rows="4" cols="57" maxlength="2048">${description}</textarea></td>
+            </tr>
+            <tr>
+                <th>Access:</th>
+                <td>
+	                <select name="access">
+	                    <c:forEach items="${groups}" var="group">
+	                        <option value="${group[1]}">${group[0]}</option>
+	                    </c:forEach>
+	                </select>
+                </td>
             </tr>
             <tr>
                 <td colspan="2" align="CENTER"><input name=".submit" value="Save" type="submit"></td>
