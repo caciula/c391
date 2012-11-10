@@ -138,13 +138,6 @@ public class UploadImage extends HttpServlet {
             
             // Ensure that the date and the time have been entered correctly
             String dateTime = null;
-            if (date.equals("")) {
-
-                System.out.println("Date: " + date);
-        
-            } else {
-                System.out.println("Date not null " + date);
-            }
             if (!date.equals("") && time.equals("")) {
                 dateTime = "TO_DATE('" + date + "12:00"+ "', 'DD/MM/YYYY HH24:MI')";
             } else if (!date.equals("") && !time.equals("")) {
@@ -157,9 +150,6 @@ public class UploadImage extends HttpServlet {
             photoId = rset1.getInt(1);
             
             // Create the image record (with empty blobs for the image and thumbnail)
-            System.out.println("SQL: " + "INSERT INTO images VALUES(" + photoId + ",'tim'," + access + ",'"
-                    + subject +"','" + place + "'," + dateTime + ",'" + 
-                    description + "',empty_blob(), empty_blob())");
             DBConnection.executeQuery(connection, "INSERT INTO images VALUES(" + photoId + ",'tim'," + access + ",'"
                     + subject +"','" + place + "'," + dateTime + ",'" + 
                     description + "',empty_blob(), empty_blob())");
