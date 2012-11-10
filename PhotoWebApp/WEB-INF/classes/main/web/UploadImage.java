@@ -52,7 +52,6 @@ public class UploadImage extends HttpServlet {
 
     /**
      *  GET command for uploadImage.jsp
-     *
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -136,18 +135,33 @@ public class UploadImage extends HttpServlet {
                 }
                 stream.close();
             }
+            
+            // Ensure that the date and the time have been entered correctly
+            String dateTime = null;
+            if (date.equals("")) {
+
+                System.out.println("Date: " + date);
+        
+            } else {
+                System.out.println("Date not null " + date);
+            }
+            if (!date.equals("") && time.equals("")) {
+                dateTime = "TO_DATE('" + date + "12:00"+ "', 'DD/MM/YYYY HH24:MI')";
+            } else if (!date.equals("") && !time.equals("")) {
+                dateTime = "TO_DATE('" + date + time + "', 'DD/MM/YYYY HH24:MI')";
+            }
 
             // First, generate a unique photo_id using the SQL sequence
             ResultSet rset1 = DBConnection.executeQuery(connection, "SELECT pic_id_sequence.nextval from dual");
             rset1.next();
             photoId = rset1.getInt(1);
-          
-            // TODO: Ensure that the date and the time have proper formatting
-            String dateTime = date + " " + time;
             
             // Create the image record (with empty blobs for the image and thumbnail)
+            System.out.println("SQL: " + "INSERT INTO images VALUES(" + photoId + ",'tim'," + access + ",'"
+                    + subject +"','" + place + "'," + dateTime + ",'" + 
+                    description + "',empty_blob(), empty_blob())");
             DBConnection.executeQuery(connection, "INSERT INTO images VALUES(" + photoId + ",'tim'," + access + ",'"
-                    + subject +"','" + place + "',TO_DATE('" + dateTime + "', 'DD/MM/YYYY HH24:MI'),'" +
+                    + subject +"','" + place + "'," + dateTime + ",'" + 
                     description + "',empty_blob(), empty_blob())");
 
             // Write both the full image and the thumbnail image
@@ -171,18 +185,19 @@ public class UploadImage extends HttpServlet {
             response.sendRedirect("/PhotoWebApp/ViewImage?" + photoId);
         } catch(Exception ex) {
             System.out.println("An error occured while uploading a photo: " + ex);
-            request.setAttribute("errorMessage", "An error occured while uploading the file. Please click back and try again.");
+            request.setAttribute("errorMessage", "An error occured while uploading the file. Please ensure a .jpg or .gif file is selected and " +
+            		"all fields have been entered correctly.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImage");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
-            return;
+            return; 
         } finally {
             // Close the connection
             try {
                 connection.close();
             } catch (Exception ex) {
                 System.out.println("An error occured while uploading a photo: " + ex);
-                request.setAttribute("errorMessage", "An error occured while uploading the file. Please click back and try again.");
-                request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImage");
+                request.setAttribute("errorMessage", "An error occured while uploading the file. Please ensure a .jpg or .gif file is selected and " +
+                        "all fields have been entered correctly.");
                 request.getRequestDispatcher("/error.jsp").forward(request, response);
                 return;
             }
@@ -190,7 +205,7 @@ public class UploadImage extends HttpServlet {
     }
 
     /* Shrink image by a factor of n, and return the shrinked image */
-    public static BufferedImage shrink(BufferedImage image, int n) {
+    private static BufferedImage shrink(BufferedImage image, int n) {
 
         int w = image.getWidth() / n;
         int h = image.getHeight() / n;

@@ -22,7 +22,7 @@ public class EditImage extends HttpServlet {
 
     /**
      *  GET command for editImage.jsp
-     *  Displays the image details.
+     *  Obtains the image details for the user to edit.
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -117,7 +117,11 @@ public class EditImage extends HttpServlet {
             preparedStatement.setString(2, request.getParameter("place"));
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy k:mm");
             if (!request.getParameter("date").equals("")) {
-                String inputDateTime = request.getParameter("date") + " " +  request.getParameter("time");
+                String time = request.getParameter("time");
+                if (time.equals("")) {
+                    time = "12:00";
+                }
+                String inputDateTime = request.getParameter("date") + " " + time;
                 Date date = formatter.parse(inputDateTime);
                 preparedStatement.setTimestamp(3, new Timestamp(date.getTime()));
             } else {
@@ -130,7 +134,7 @@ public class EditImage extends HttpServlet {
         } catch (Exception ex) {
             // Handle error
             System.out.println("An error occurred while updating a photo: " + ex);
-            request.setAttribute("errorMessage", "An error occurred while updating the photo.");
+            request.setAttribute("errorMessage", "An error occurred while updating the photo. Please click back and try again.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/EditImage?" + picId);
             request.getRequestDispatcher("/error.jsp").forward(request, response);
             return;
@@ -141,7 +145,7 @@ public class EditImage extends HttpServlet {
             } catch (SQLException ex) {
                 // Handle error
                 System.out.println("An error occurred while updating a photo: " + ex);
-                request.setAttribute("errorMessage", "An error occurred while updating the photo.");
+                request.setAttribute("errorMessage", "An error occurred while updating the photo. Please click back and try again.");
                 request.setAttribute("errorBackLink", "/PhotoWebApp/EditImage?" + picId);
                 request.getRequestDispatcher("/error.jsp").forward(request, response);
                 return;

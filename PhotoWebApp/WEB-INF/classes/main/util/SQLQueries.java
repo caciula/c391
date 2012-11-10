@@ -15,7 +15,7 @@ public class SQLQueries {
     public static final String GET_GROUP_BY_ID = "select * from groups where group_id=?";
     
     // Image management queries
-    public static final String GET_IMAGES_BY_USER_ID = "select * from images where owner_name=?";
+    public static final String GET_IMAGES_BY_USER_ID = "select * from images where owner_name=? ORDER BY timing DESC";
     public static final String GET_IMAGE_BY_ID = "select * from images where photo_id=?";
     public static final String GET_PHOTO_ONLY_BY_ID = "select photo from images where photo_id=?";
     public static final String GET_THUMBNAIL_ONLY_BY_ID = "select thumbnail from images where photo_id=?";
