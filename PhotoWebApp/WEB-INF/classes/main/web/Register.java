@@ -39,11 +39,9 @@ public class Register extends HttpServlet {
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
         
         String output = "";
-        String redirection = "";
         
         if (inputUsername.isEmpty()||inputPassword.isEmpty()||inputFirstname.isEmpty()||inputLastname.isEmpty()||inputAddress.isEmpty()||inputEmail.isEmpty()||inputPhonenumber.isEmpty()) {
         	output = "error: one or more empty fields";
-        	redirection = "/Register.jsp";
         } else {
 	        try {
 	        	Connection connection = DBConnection.createConnection();
@@ -60,12 +58,10 @@ public class Register extends HttpServlet {
 				if (resultSet1 != null && resultSet1.next()) {
 					if (resultSet1.getInt(1) == 1) {
 						output = "error: user already exists";
-						redirection = "/Register.jsp";
 					} else {
 						if (resultSet2 != null && resultSet2.next()) {
 							if (resultSet2.getInt(1) == 1) {
 								output = "error: email already exists";
-								redirection = "/Register.jsp";
 							} else {
 								PreparedStatement query3 = connection.prepareStatement("insert into users values(?, ?, ?)");
 								query3.setString(1, inputUsername);
@@ -86,7 +82,6 @@ public class Register extends HttpServlet {
 								connection.commit();
 								
 								output = "";
-								redirection = "/PhotoWebApp/Login";
 							}
 						}
 					}
@@ -95,12 +90,11 @@ public class Register extends HttpServlet {
 				connection.close();
 	        } catch (Exception e) {
 	        	output = "error: couldn't complete request";
-	        	redirection = "/Register.jsp";
 	        }
         }
         
         if (output.isEmpty()) {
-        	response.sendRedirect(redirection);
+        	response.sendRedirect("/PhotoWebApp/Login");
         } else {
         	request.setAttribute("username", inputUsername);
     		request.setAttribute("password", inputPassword);
@@ -110,7 +104,7 @@ public class Register extends HttpServlet {
     		request.setAttribute("email", inputEmail);
     		request.setAttribute("phonenumber", inputPhonenumber);
         	request.setAttribute("output", output);
-        	request.getRequestDispatcher(redirection).forward(request, response);
+        	request.getRequestDispatcher("/Register.jsp").forward(request, response);
         }
 	}
 }

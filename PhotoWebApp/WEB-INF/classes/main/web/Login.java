@@ -25,11 +25,9 @@ public class Login extends HttpServlet {
         String inputPassword = (request.getParameter("password")).trim();
         
     	String output = "";
-    	String redirection = "";
     	
     	if (inputUsername.isEmpty()||inputPassword.isEmpty()) {
     		output = "error: one or more fields are empty";
-    		redirection = "/Login.jsp";
     	} else {
 			try {
 				Connection connection = DBConnection.createConnection();
@@ -45,25 +43,22 @@ public class Login extends HttpServlet {
 						HttpSession session = request.getSession();
 						session.setAttribute("username", inputUsername);
 						output = "";
-						redirection = "/PhotoWebApp/home.jsp";
 					} else {
 						output = "Invalid username/password";
-						redirection = "/Login.jsp";
 					}
 				}
 				
 				connection.close();
 			} catch (Exception e) {
 				output = "error: couldn't complete request";
-				redirection = "/Login.jsp";
 			}
     	}
 	
     	if (output.isEmpty()) {
-    		response.sendRedirect(redirection);
+    		response.sendRedirect("/PhotoWebApp/Home.jsp");
     	} else {
 	    	request.setAttribute("output", output);
-	    	request.getRequestDispatcher(redirection).forward(request, response);
+	    	request.getRequestDispatcher("/Login.jsp").forward(request, response);
     	}
 	}
 }

@@ -18,10 +18,6 @@
 	    
         Home screen - to be updated.
         
-        <p><a href="/PhotoWebApp/Login" >Log In</a></p>
-        
-        <p><a href="/PhotoWebApp/Register" >Register</a></p>
-        
         <p>Display an upload link if a user is logged in? (<a href="/PhotoWebApp/UploadImage" >Upload Image</a>)</p>
         
         <p>Search</p>
@@ -29,5 +25,13 @@
         <p>Also need to display the top 5 images here?</p>
 
     </div>
+
+	<form method="link" action="CreateGroup">
+		<input type="submit" value="Click here to create a group">
+	</form>
+
+        <form method="link" action="AddUserToGroup">
+                <input type="submit" value="Click here to add a user to a group">
+        </form>
 </body>
 </html>
