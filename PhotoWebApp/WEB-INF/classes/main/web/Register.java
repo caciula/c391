@@ -15,11 +15,14 @@ public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (session.getAttribute("username") == null) {
-			response.sendRedirect("/PhotoWebApp/Login");
-		} else {
-			request.getRequestDispatcher("/Register.jsp").forward(request, response);
-		}
+		request.setAttribute("username", "");
+		request.setAttribute("password", "");
+		request.setAttribute("firstname", "");
+		request.setAttribute("lastname", "");
+		request.setAttribute("address", "");
+		request.setAttribute("email", "");
+		request.setAttribute("phonenumber", "");
+		request.getRequestDispatcher("/Register.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -82,6 +85,13 @@ public class Register extends HttpServlet {
         if (output.isEmpty()) {
         	response.sendRedirect(redirection);
         } else {
+        	request.setAttribute("username", inputUsername);
+    		request.setAttribute("password", inputPassword);
+    		request.setAttribute("firstname", inputFirstname);
+    		request.setAttribute("lastname", inputLastname);
+    		request.setAttribute("address", inputAddress);
+    		request.setAttribute("email", inputEmail);
+    		request.setAttribute("phonenumber", inputPhonenumber);
         	request.setAttribute("output", output);
         	request.getRequestDispatcher(redirection).forward(request, response);
         }
