@@ -18,8 +18,4 @@ public class DBConnection {
          Statement statement = connection.createStatement();
          return statement.executeQuery(query);
     }
-	
-    public static PreparedStatement getPreparedStatement(Connection connection, String query) throws SQLException {
-        return connection.prepareStatement(query);
-    }
 }

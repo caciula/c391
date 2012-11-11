@@ -2,6 +2,7 @@ package main.web;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
@@ -36,13 +37,7 @@ public class Register extends HttpServlet {
         
         java.util.Date utilDate = new java.util.Date();
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-        String currentDate = sqlDate.toString();
         
-        String query1 = "select count(*) from users where user_name = '"+inputUsername+"'";
-        String query2 = "select count(*) from persons where email = '"+inputEmail+"'";
-        String query3 = "insert into users values('"+inputUsername+"', '"+inputPassword+"', TO_DATE('"+currentDate+"', 'YYYY-MM-DD'))";
-        String query4 = "insert into persons values('"+inputUsername+"', '"+inputFirstname+"', '"+inputLastname+"', '"+inputAddress+"', '"+inputEmail+"', '"+inputPhonenumber+"')";
-
         String output = "";
         String redirection = "";
         
@@ -52,8 +47,15 @@ public class Register extends HttpServlet {
         } else {
 	        try {
 	        	Connection connection = DBConnection.createConnection();
-				ResultSet resultSet1 = DBConnection.executeQuery(connection, query1);
-				ResultSet resultSet2 = DBConnection.executeQuery(connection, query2);
+	        	
+	        	PreparedStatement query1 = connection.prepareStatement("select count(*) from users where user_name = ?");
+	        	query1.setString(1, inputUsername);
+	        	
+	        	PreparedStatement query2 = connection.prepareStatement("select count(*) from persons where email = ?");
+	        	query2.setString(1, inputEmail);
+	        	
+				ResultSet resultSet1 = query1.executeQuery();
+				ResultSet resultSet2 = query2.executeQuery();
 				
 				if (resultSet1 != null && resultSet1.next()) {
 					if (resultSet1.getInt(1) == 1) {
@@ -65,9 +67,24 @@ public class Register extends HttpServlet {
 								output = "error: email already exists";
 								redirection = "/Register.jsp";
 							} else {
-								DBConnection.executeQuery(connection, query3);
-								DBConnection.executeQuery(connection, query4);
+								PreparedStatement query3 = connection.prepareStatement("insert into users values(?, ?, ?)");
+								query3.setString(1, inputUsername);
+								query3.setString(2, inputPassword);
+								query3.setDate(3, sqlDate);
+								
+								PreparedStatement query4 = connection.prepareStatement("insert into persons values(?, ?, ?, ?, ?, ?)");
+								query4.setString(1, inputUsername);
+								query4.setString(2, inputFirstname);
+								query4.setString(3, inputLastname);
+								query4.setString(4, inputAddress);
+								query4.setString(5, inputEmail);
+								query4.setString(6, inputPhonenumber);
+								
+								query3.executeUpdate();
+								query4.executeUpdate();
+								
 								connection.commit();
+								
 								output = "";
 								redirection = "/PhotoWebApp/Login";
 							}

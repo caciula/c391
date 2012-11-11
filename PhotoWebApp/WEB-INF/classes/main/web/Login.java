@@ -2,6 +2,7 @@ package main.web;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
@@ -22,8 +23,7 @@ public class Login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String inputUsername = (request.getParameter("username")).trim();
         String inputPassword = (request.getParameter("password")).trim();
-        String query = "select count(*) from users where user_name = '"+inputUsername+"' and password = '"+inputPassword+"'";
-    	
+        
     	String output = "";
     	String redirection = "";
     	
@@ -33,7 +33,12 @@ public class Login extends HttpServlet {
     	} else {
 			try {
 				Connection connection = DBConnection.createConnection();
-				ResultSet resultSet = DBConnection.executeQuery(connection, query);
+				
+				PreparedStatement query = connection.prepareStatement("select count(*) from users where user_name = ? and password = ?");
+				query.setString(1, inputUsername);
+				query.setString(2, inputPassword);
+				
+				ResultSet resultSet = query.executeQuery();
 				
 				if (resultSet != null && resultSet.next()) {
 					if (resultSet.getInt(1) == 1) {
