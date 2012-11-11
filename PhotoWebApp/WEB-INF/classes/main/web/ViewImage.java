@@ -23,6 +23,10 @@ public class ViewImage extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         
+        HttpSession session = request.getSession();
+        String userName = (String) session.getAttribute("username");
+        request.setAttribute("loggedInUser", userName);
+        
         // Obtain the image id from the user's QueryString
         String picId  = request.getQueryString();
 	
@@ -36,17 +40,42 @@ public class ViewImage extends HttpServlet {
             if (rset.next()) {
                 // Add the image info to the request result
                 request.setAttribute("picId", picId);
-                request.setAttribute("ownerName", rset.getString("owner_name"));
+                String ownerName = rset.getString("owner_name");
+                request.setAttribute("ownerName", ownerName);
                 request.setAttribute("subject", rset.getString("subject"));
                 request.setAttribute("place", rset.getString("place"));
                 request.setAttribute("description", rset.getString("description"));
-                // TODO: check that the user has permission to see the image
+
+                int permission =  rset.getInt("permitted");
                 PreparedStatement getGroupStatement = connection.prepareStatement(SQLQueries.GET_GROUP_BY_ID);
-                getGroupStatement.setInt(1, rset.getInt("permitted"));
+                getGroupStatement.setInt(1, permission);
                 ResultSet groupResult = getGroupStatement.executeQuery();
-                if (groupResult.next()) {
+                if (groupResult.next()){
                     request.setAttribute("access", groupResult.getString("group_name"));
                 }
+                
+                // Ensure that the user is allowed to view this image.
+                if (permission == 1 || ownerName.equals(userName)) {
+                    // The image is public - the user has permission to view it.
+                } else if (permission == 2) {
+                    // The image is private - the user cannot view it if they're not the owner.
+                    request.setAttribute("errorMessage", "You do not have permission to view this image.");
+                    request.setAttribute("errorBackLink", "/PhotoWebApp/home.jsp");
+                    request.getRequestDispatcher("/error.jsp").forward(request, response);
+                    return;
+                } else {
+//                    NOT DONE YET!
+//                    System.out.println("Gets here2");
+//                    PreparedStatement getMembersStatement = connection.prepareStatement(SQLQueries.GET_MEMBERS_BY_GROUP_ID);
+//                    getMembersStatement.setInt(1, permission);
+//                    ResultSet membersResult = getMembersStatement.executeQuery();
+//                    System.out.println("Doing query with " + permission);
+//                    if(membersResult.next()) {
+//                        System.out.println("Result");
+//                        System.out.println("Member: " +membersResult.getString("friend_id"));
+//                    }
+                }
+                
                 if (rset.getDate("timing") != null) {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy k:mm");
                     request.setAttribute("date", formatter.format(rset.getTimestamp("timing")));

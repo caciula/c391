@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
 <head>
@@ -13,9 +14,11 @@
 
     <div class="content">
 	    <p class="pageTitle">View Image</p>
-	    
-	    <p><a href="/PhotoWebApp/EditImage?${picId}" >Edit Image</a> | <a href="UploadImage">Upload New Image</a> | <a href="ViewUserImages?${ownerName}" >View All ${ownerName}'s Images</a></p>
-	    
+
+	    <p><c:if test='${ownerName==loggedInUser}'><a href="/PhotoWebApp/EditImage?${picId}">Edit Image</a> |</c:if>
+	        <a href="UploadImage">Upload New Image</a> | 
+	        <a href="ViewUserImages?${ownerName}" >View ${ownerName}'s Album</a>
+	    </p>
 	    <hr>
 	    
 		<table>

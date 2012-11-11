@@ -26,7 +26,10 @@ public class EditImage extends HttpServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-	
+        // Obtain the logged-in user
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("username");
+        
         // Obtain the image id from the user's QueryString
         String picId  = request.getQueryString();
 	
@@ -38,6 +41,15 @@ public class EditImage extends HttpServlet {
             preparedStatement.setString(1, picId);
             ResultSet rset = preparedStatement.executeQuery();
             if (rset.next() ) {
+                // Ensure that the logged-in user has permission to edit this image
+                String owner = rset.getString("owner_name");
+                if (!owner.equals(username)) {
+                    request.setAttribute("errorMessage", "You must be the owner of the image to edit it.");
+                    request.setAttribute("errorBackLink", "/PhotoWebApp/ViewImage?" + picId);
+                    request.getRequestDispatcher("/error.jsp").forward(request, response);
+                    return;
+                }
+                
                 // Add the image info to the request result
                 request.setAttribute("picId", picId);
                 request.setAttribute("ownerName", rset.getString("owner_name"));
@@ -51,7 +63,6 @@ public class EditImage extends HttpServlet {
                     request.setAttribute("time", timeFormatter.format(rset.getTimestamp("timing")));
                 }
                 request.setAttribute("description", rset.getString("description"));
-                // TODO: check that the user has permission to edit this image
             } 
             else {
                 // Handle no result

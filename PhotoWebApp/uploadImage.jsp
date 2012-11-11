@@ -64,7 +64,7 @@
 	                <td>
 		                <select name="access">
 		                    <c:forEach items="${groups}" var="group">
-		                        <option value="${group[1]}">${group[0]}</option>
+		                        <option value="${group[1]}" <c:if test="${group[1]==2}">selected=true</c:if> >${group[0]}</option>
 		                    </c:forEach>
 		                </select>
 	                </td>

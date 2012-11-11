@@ -12,7 +12,7 @@ th {
 }
 
 img {
-    padding: 10px;
+    padding: 40px;
 }
 
 /*********************************************** Header */
@@ -24,16 +24,17 @@ div.header {
     height: 30px;
     font-size: 15px;
     padding: 5px 0px 0px 10px;
+    color: white;
 }
 
 .header a {
     color: white;
-    text-decoration:none;
 }
 
 .headerTitle {
     font-size: 20px;
     font-weight: bold;
+    text-decoration:none;
 }
 
 .headerAlignRight {

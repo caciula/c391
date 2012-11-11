@@ -13,6 +13,7 @@ public class SQLQueries {
     // Group management queries
     public static final String GET_ALL_GROUPS = "select * from groups";
     public static final String GET_GROUP_BY_ID = "select * from groups where group_id=?";
+    public static final String GET_MEMBERS_BY_GROUP_ID = "select * from group_lists where group_id=?";
     
     // Image management queries
     public static final String GET_IMAGES_BY_USER_ID = "select * from images where owner_name=? ORDER BY timing DESC";

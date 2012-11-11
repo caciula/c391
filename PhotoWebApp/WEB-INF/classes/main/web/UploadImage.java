@@ -55,6 +55,17 @@ public class UploadImage extends HttpServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+        
+        // Ensure that the user is logged in to access this screen
+        HttpSession session = request.getSession();
+        if (session.getAttribute("username") == null) {
+            request.setAttribute("errorMessage", "You must be logged in to view this screen.");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/home.jsp");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            return;
+        } else {
+            System.out.println("Logged in: " + session.getAttribute("username"));
+        }
  
         Connection connection = null;
         try {
@@ -92,6 +103,8 @@ public class UploadImage extends HttpServlet {
      */
     public void doPost(HttpServletRequest request,HttpServletResponse response)
         throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String userName = (String)session.getAttribute("username");
         Integer photoId = null;
         String subject = null;
         String place = null;
@@ -150,7 +163,7 @@ public class UploadImage extends HttpServlet {
             photoId = rset1.getInt(1);
             
             // Create the image record (with empty blobs for the image and thumbnail)
-            DBConnection.executeQuery(connection, "INSERT INTO images VALUES(" + photoId + ",'tim'," + access + ",'"
+            DBConnection.executeQuery(connection, "INSERT INTO images VALUES(" + photoId + ",'" + userName + "'," + access + ",'"
                     + subject +"','" + place + "'," + dateTime + ",'" + 
                     description + "',empty_blob(), empty_blob())");
 

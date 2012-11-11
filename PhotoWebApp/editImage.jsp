@@ -26,8 +26,6 @@
 	            
 	    <p><a href="ViewImage?${picId}">View Image</a> | <a href="UploadImage">Upload New Image</a></p>
 	    
-	    ${errorMessage}
-	    
 	    <hr>
 	    
 	    <form name="editImage" method="POST" action="/PhotoWebApp/EditImage?${picId}">
