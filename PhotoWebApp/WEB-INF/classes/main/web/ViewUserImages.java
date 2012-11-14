@@ -29,7 +29,18 @@ public class ViewUserImages extends HttpServlet {
         
         // Obtain the user name from the QueryString
         String userName  = request.getQueryString();
-                
+        // Obtain the logged in user
+        HttpSession session = request.getSession();
+        String loggedInUser = (String) session.getAttribute("username");
+        
+        // Ensure that the user can only see their own profile
+        if (!userName.equals(loggedInUser)) {
+            request.setAttribute("errorMessage", "You cannot view another user's profile.");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
+            return;
+        }
+        
         Connection connection = null;
         try {
             // Obtain the images from the database, based on the user
@@ -52,7 +63,6 @@ public class ViewUserImages extends HttpServlet {
                 request.setAttribute("userFirstName", userResult.getString("first_name"));
                 request.setAttribute("email", userResult.getString("email"));
                 request.setAttribute("phone", userResult.getString("phone"));
-                request.setAttribute("address", userResult.getString("address"));
                 request.setAttribute("address", userResult.getString("address"));
             }
             

@@ -4,8 +4,8 @@
     <a href="Home.jsp" class="headerTitle">PhotoWeb</a>
     <span class="headerAlignRight">
         <c:if test='${username != null && username != ""}'>
-            You are logged in as <a href="/PhotoWebApp/ViewUserImages?${username}">${username}</a>
-        </c:if> | 
+            You are logged in as <a href="/PhotoWebApp/ViewUserImages?${username}">${username}</a> |
+        </c:if>
         <a href="resources/help/index.html" target="_blank">Help</a>
     </span>
 </div>

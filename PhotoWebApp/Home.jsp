@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
 <head>
@@ -16,26 +17,22 @@
 	    
 	    <hr/>
 	    
-        Home screen - to be updated.
-
-        <p><a href="/PhotoWebApp/Login" >Log In</a></p>
-
-        <p><a href="/PhotoWebApp/Register" >Register</a></p>
+        <p>Welcome to PhotoWeb!</p>
         
-        <p>Display an upload link if a user is logged in? (<a href="/PhotoWebApp/UploadImage" >Upload Image</a>)</p>
-        
-        <p>Search</p>
+        <ul> 
+            <c:if test='${username != null && username != ""}'>
+                <li>
+                You are already logged in as ${username}.
+                Click <a href="/PhotoWebApp/ViewUserImages?${username}">here</a> to view your profile, manage your groups, and upload images.
+                </li>
+            </c:if>
+            <li><p><a href="/PhotoWebApp/Login">Log In</a></p></li>
+            <li><p><a href="/PhotoWebApp/Register">Register</a></p></li>
+            <li><p><a href="/PhotoWebApp/Search">Search</a></p></li>
+        </ul> 
         
         <p>Also need to display the top 5 images here?</p>
 
     </div>
-
-	<form method="link" action="CreateGroup">
-		<input type="submit" value="Click here to create a group">
-	</form>
-
-        <form method="link" action="AddUserToGroup">
-                <input type="submit" value="Click here to add a user to a group">
-        </form>
 </body>
 </html>

@@ -19,7 +19,9 @@ public class CreateGroup extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		if (session.getAttribute("username") == null) {
-			response.sendRedirect("/PhotoWebApp/Login");
+            request.setAttribute("errorMessage", "You must be logged in to view this screen.");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Login.jsp");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
 		} else {
 			request.getRequestDispatcher("/CreateGroup.jsp").forward(request, response);
 		}
@@ -34,10 +36,10 @@ public class CreateGroup extends HttpServlet {
 		java.util.Date utilDate = new java.util.Date();
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
         
-        String output = "";
+        String errorMessage = "";
         
         if (inputGroupname.isEmpty()) {
-        	output = "error: one or more empty fields";
+            errorMessage = "The Group Name field cannot be empty.";
         } else {
 	        try {
 	        	Connection connection = DBConnection.createConnection();
@@ -50,7 +52,7 @@ public class CreateGroup extends HttpServlet {
 	        	
 	        	if (resultSet1 != null && resultSet1.next()) {
 					if (resultSet1.getInt(1) == 1) {
-						output = "error: multiple groups with the same name cannot be created by the same user";
+					    errorMessage = "Multiple groups with the same name cannot be created by the same user.";
 					} else {
 						PreparedStatement query2 = connection.prepareStatement("select max(group_id) from groups");
 						
@@ -68,23 +70,23 @@ public class CreateGroup extends HttpServlet {
 							
 							query3.executeUpdate();
 							connection.commit();
-							
-							output = "";
 						}
 					}
 				}
 	        	
 	        	connection.close();
 	        } catch (Exception e) {
-	        	output = "error: couldn't complete request";
+                System.out.println("An error occured while creating a group: " + e);
+	            errorMessage = "An error occurred while creating the group.";
 	        }
         }
         
-        if (output.isEmpty()) {
-        	response.sendRedirect("/PhotoWebApp/Home.jsp");
+        if (errorMessage.isEmpty()) {
+        	response.sendRedirect("/PhotoWebApp/ViewUserImages?" + username);
         } else {
-        	request.setAttribute("output", output);
-        	request.getRequestDispatcher("/CreateGroup.jsp").forward(request, response);
+            request.setAttribute("errorMessage", errorMessage);
+            request.setAttribute("errorBackLink", "/PhotoWebApp/CreateGroup");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
         }
 	}
 }

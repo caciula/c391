@@ -13,9 +13,7 @@
     <jsp:include page="resources/includes/header.jsp" />
     
     <div class="content">
-	    <p class="pageTitle">View User (${userName})</p>
-	    
-        <p><a href="UploadImage">Upload New Image</a></p>
+	    <p class="pageTitle">My Profile</p>
         
         <hr>
 	    
@@ -37,10 +35,24 @@
                 <th>Email: </th>
                 <td>${email}</td>
             </tr>
+            <tr>
+                <th>Address: </th>
+                <td>${address}</td>
+            </tr>
             </tbody>
         </table>
+
+        <p class="pageTitle">Groups:</p>
+        
+        <a href="/PhotoWebApp/CreateGroup">Create a new group</a> 
+        <br>
+        <a href="/PhotoWebApp/AddUserToGroup">Add a user to a group</a>
+	    
+	    <p>TODO: Display a table of the user's groups?</p>
 	    
 	    <p class="pageTitle">Images:</p>
+        
+        <p><a href="UploadImage">Upload New Image</a></p>
 	    
 		<table>
 		    <tbody>

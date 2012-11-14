@@ -29,6 +29,8 @@ public class ViewImage extends HttpServlet {
         
         // Obtain the image id from the user's QueryString
         String picId  = request.getQueryString();
+        
+        String errorMessage = "";
 	
         Connection connection = null;
         try { 
@@ -55,25 +57,25 @@ public class ViewImage extends HttpServlet {
                 }
                 
                 // Ensure that the user is allowed to view this image.
-                if (permission == 1 || ownerName.equals(userName)) {
+                if (permission == 1 || ownerName.equals(userName) || ownerName.equals("admin")) {
                     // The image is public - the user has permission to view it.
                 } else if (permission == 2) {
                     // The image is private - the user cannot view it if they're not the owner.
-                    request.setAttribute("errorMessage", "You do not have permission to view this image.");
-                    request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
-                    request.getRequestDispatcher("/Error.jsp").forward(request, response);
-                    return;
+                    errorMessage = "You do not have permission to view this image.";
                 } else {
-//                    NOT DONE YET!
-//                    System.out.println("Gets here2");
-//                    PreparedStatement getMembersStatement = connection.prepareStatement(SQLQueries.GET_MEMBERS_BY_GROUP_ID);
-//                    getMembersStatement.setInt(1, permission);
-//                    ResultSet membersResult = getMembersStatement.executeQuery();
-//                    System.out.println("Doing query with " + permission);
-//                    if(membersResult.next()) {
-//                        System.out.println("Result");
-//                        System.out.println("Member: " +membersResult.getString("friend_id"));
-//                    }
+                    PreparedStatement getMembersStatement = connection.prepareStatement(SQLQueries.GET_MEMBERS_BY_GROUP_ID);
+                    getMembersStatement.setInt(1, permission);
+                    ResultSet membersResult = getMembersStatement.executeQuery();
+                    boolean allowedToSeeImage = false;
+                    while(membersResult.next()) {
+                        if (membersResult.getString("friend_id").equals(userName)) {
+                            allowedToSeeImage = true;
+                            break;
+                        }
+                    }
+                    if (allowedToSeeImage == false) {
+                        errorMessage = "You do not have permission to view this image.";
+                    }
                 }
                 
                 if (rset.getDate("timing") != null) {
@@ -83,10 +85,7 @@ public class ViewImage extends HttpServlet {
             }
             else {
                 // Handle no result
-                request.setAttribute("errorMessage", "No result found for the provided photo id.");
-                request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
-                request.getRequestDispatcher("/Error.jsp").forward(request, response);
-                return;
+                errorMessage = "No result found for the provided photo id.";
             }
             
             connection.close();
@@ -94,7 +93,12 @@ public class ViewImage extends HttpServlet {
         } catch(Exception ex) {
             // Handle error
             System.out.println("An error occurred while obtaining a photo to view:" + ex);
-            request.setAttribute("errorMessage", "An error occurred while obtaining the photo.");
+            errorMessage = "An error occurred while obtaining the photo.";
+        }
+        
+        // If an error occurred: redirect to the error page
+        if (!errorMessage.isEmpty()) {
+            request.setAttribute("errorMessage", errorMessage);
             request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;

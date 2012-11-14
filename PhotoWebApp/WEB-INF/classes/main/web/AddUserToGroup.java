@@ -17,25 +17,30 @@ import main.util.DBConnection;
 public class AddUserToGroup extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String output = "";
-		ArrayList<String[]> groups;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ArrayList<String[]> groups;
 		
-		HttpSession session = request.getSession();
-		if (session.getAttribute("username") == null) {
-			response.sendRedirect("/PhotoWebApp/Login");
-		} else {
-			try {
-				groups = getListOfGroups(request);
-				request.setAttribute("groups", groups);
-			} catch (Exception e) {
-				output = "error: couldn't complete request";
-			}
-		}
+        HttpSession session = request.getSession();
+        if (session.getAttribute("username") == null) {
+            request.setAttribute("errorMessage", "You must be logged in to view this screen.");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Login.jsp");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
+            return;
+        } else {
+            try {
+                groups = getListOfGroups(request);
+                request.setAttribute("groups", groups);
+            } catch (Exception e) {
+                System.out.println("An error occured while obtaining all the groups: " + e);
+                request.setAttribute("errorMessage", "An error occured while obtaining all the groups to display.");
+                request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
+	            return;
+            }
+        }
 		
-		request.setAttribute("output", output);
-		request.getRequestDispatcher("/AddUserToGroup.jsp").forward(request, response);
-	}
+        request.getRequestDispatcher("/AddUserToGroup.jsp").forward(request, response);
+    }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int inputGroupID = Integer.parseInt(request.getParameter("groups"));
@@ -47,10 +52,10 @@ public class AddUserToGroup extends HttpServlet {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		
-		String output = "";
+		String errorMessage = "";
 		
 		if (inputUsername.isEmpty()) {
-			output = "error: couldn't complete request";
+			errorMessage = "A username must be entered.";
 		} else {
 			try {
 				Connection connection = DBConnection.createConnection();
@@ -71,33 +76,24 @@ public class AddUserToGroup extends HttpServlet {
 						
 						query2.execute();
 						connection.commit();
-						
-						output = "";
 					} else {
-						output = "error: invalid user";
+					    errorMessage = "An invalid user was entered.";
 					}
 				}
 				
 				connection.close();
 			} catch (Exception e) {
-				output = "error: couldn't complete request";
+	            System.out.println("An error occured while adding a user to a group: " + e);
+	            errorMessage = "An error occured while adding a user to a group.";
 			}
 		}
 		
-		if (output.isEmpty()) {
-			response.sendRedirect("/PhotoWebApp/Home.jsp");
+		if (errorMessage.isEmpty()) {
+			response.sendRedirect("/PhotoWebApp/ViewUserImages?" + username);
 		} else {
-			ArrayList<String[]> groups;
-			
-			try {
-				groups = getListOfGroups(request);
-				request.setAttribute("groups", groups);
-			} catch (Exception e) {
-				output = "error: couldn't complete request";
-			}
-			
-			request.setAttribute("output", output);
-			request.getRequestDispatcher("/AddUserToGroup.jsp").forward(request, response);
+			request.setAttribute("errorMessage", errorMessage);
+            request.setAttribute("errorBackLink", "/PhotoWebApp/AddUserToGroup");
+			request.getRequestDispatcher("/Error.jsp").forward(request, response);
 		}
 	}
 	
