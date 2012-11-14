@@ -63,8 +63,6 @@ public class UploadImage extends HttpServlet {
             request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
-        } else {
-            System.out.println("Logged in: " + session.getAttribute("username"));
         }
  
         Connection connection = null;

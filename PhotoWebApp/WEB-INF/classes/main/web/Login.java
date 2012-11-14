@@ -54,7 +54,7 @@ public class Login extends HttpServlet {
     	}
 	
     	if (errorMessage.isEmpty()) {
-    	    response.sendRedirect("Home.jsp");
+    	    response.sendRedirect("ViewUserImages?" + inputUsername);
     	} else {
 	    	request.setAttribute("errorMessage", errorMessage);
 	    	request.setAttribute("errorBackLink", "/PhotoWebApp/Login");

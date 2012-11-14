@@ -5,7 +5,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
     <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
-    <title>View Album (${userFirstName} ${userLastName} - ${userName})</title> 
+    <title>View User (${userFirstName} ${userLastName} - ${userName})</title> 
 </head>
 
 <body> 
@@ -13,11 +13,34 @@
     <jsp:include page="resources/includes/header.jsp" />
     
     <div class="content">
-	    <p class="pageTitle">View Album (${userFirstName} ${userLastName} - ${userName})</p>
+	    <p class="pageTitle">View User (${userName})</p>
 	    
-	    <p><a href="UploadImage">Upload New Image</a></p>
+        <p><a href="UploadImage">Upload New Image</a></p>
+        
+        <hr>
 	    
-	    <hr>
+        <table>
+            <tbody>
+            <tr>
+                <th>Username: </th>
+                <td>${userName}</td>
+            </tr>
+            <tr>
+                <th>Name: </th>
+                <td>${userFirstName} ${userLastName}</td>
+            </tr>
+            <tr>
+                <th>Phone number: </th>
+                <td>${phone}</td>
+            </tr>
+            <tr>
+                <th>Email: </th>
+                <td>${email}</td>
+            </tr>
+            </tbody>
+        </table>
+	    
+	    <p class="pageTitle">Images:</p>
 	    
 		<table>
 		    <tbody>

@@ -50,6 +50,10 @@ public class ViewUserImages extends HttpServlet {
             if (userResult.next()) {
                 request.setAttribute("userLastName", userResult.getString("last_name"));
                 request.setAttribute("userFirstName", userResult.getString("first_name"));
+                request.setAttribute("email", userResult.getString("email"));
+                request.setAttribute("phone", userResult.getString("phone"));
+                request.setAttribute("address", userResult.getString("address"));
+                request.setAttribute("address", userResult.getString("address"));
             }
             
         } catch( Exception ex ) {
