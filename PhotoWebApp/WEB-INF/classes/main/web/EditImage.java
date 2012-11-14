@@ -46,7 +46,7 @@ public class EditImage extends HttpServlet {
                 if (!owner.equals(username)) {
                     request.setAttribute("errorMessage", "You must be the owner of the image to edit it.");
                     request.setAttribute("errorBackLink", "/PhotoWebApp/ViewImage?" + picId);
-                    request.getRequestDispatcher("/error.jsp").forward(request, response);
+                    request.getRequestDispatcher("/Error.jsp").forward(request, response);
                     return;
                 }
                 
@@ -67,8 +67,8 @@ public class EditImage extends HttpServlet {
             else {
                 // Handle no result
                 request.setAttribute("errorMessage", "No result found for the provided photo id.");
-                request.setAttribute("errorBackLink", "/PhotoWebApp/temp.jsp");
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
                 return;
             }
             
@@ -89,7 +89,7 @@ public class EditImage extends HttpServlet {
             System.out.println("An error occurred while obtaining a photo to edit:" + ex);
             request.setAttribute("errorMessage", "An error occurred while obtaining the photo to edit.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/ViewImage?" + picId);
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         } finally {
             // Close the connection
@@ -100,13 +100,13 @@ public class EditImage extends HttpServlet {
                 System.out.println("An error occurred while obtaining a photo to edit:" + ex);
                 request.setAttribute("errorMessage", "An error occurred while obtaining the photo to edit.");
                 request.setAttribute("errorBackLink", "/PhotoWebApp/ViewImage?" + picId);
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
                 return;
             }
         }
 		
         // Redirect to editImage.jsp
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/editImage.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/EditImage.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -147,7 +147,7 @@ public class EditImage extends HttpServlet {
             System.out.println("An error occurred while updating a photo: " + ex);
             request.setAttribute("errorMessage", "An error occurred while updating the photo. Please click back and try again.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/EditImage?" + picId);
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         } finally {
             // Close the connection
@@ -158,7 +158,7 @@ public class EditImage extends HttpServlet {
                 System.out.println("An error occurred while updating a photo: " + ex);
                 request.setAttribute("errorMessage", "An error occurred while updating the photo. Please click back and try again.");
                 request.setAttribute("errorBackLink", "/PhotoWebApp/EditImage?" + picId);
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
                 return;
             }
         }

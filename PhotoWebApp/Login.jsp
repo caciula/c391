@@ -14,6 +14,8 @@
         <p class="pageTitle">Login</p>
         
         <hr>
+        
+        <p class="successMessage">${successMessage}</p>
     
         <form name="Login" action="Login" method="post">
             <table>
@@ -38,7 +40,6 @@
             </table>
         </form>
         <br>
-  ${output}
    </div>
 
 </body>

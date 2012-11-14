@@ -22,7 +22,7 @@ public class ViewUserImages extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
-     *  GET command for viewUserImages.jsp
+     *  GET command for ViewUserImages.jsp
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -55,8 +55,8 @@ public class ViewUserImages extends HttpServlet {
         } catch( Exception ex ) {
             System.out.println("An error occured while obtaining a user's (username:" + userName + ") images: " + ex);
             request.setAttribute("errorMessage", "An error occured while obtaining the user's images.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/temp.jsp");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         } finally {
             // Close the connection
@@ -65,15 +65,15 @@ public class ViewUserImages extends HttpServlet {
             } catch (SQLException ex) {
                 System.out.println("An error occured while obtaining a user's (username:" + userName + ") images: " + ex);
                 request.setAttribute("errorMessage", "An error occured while obtaining the user's images.");
-                request.setAttribute("errorBackLink", "/PhotoWebApp/temp.jsp");
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
                 return;
             }
         }
 		
-        // Redirect to viewImage.jsp
+        // Redirect to ViewUserImages.jsp
         request.setAttribute("userName", userName);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/viewUserImages.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/ViewUserImages.jsp");
         dispatcher.forward(request, response);
     }
 }

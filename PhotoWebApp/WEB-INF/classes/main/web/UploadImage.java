@@ -60,8 +60,8 @@ public class UploadImage extends HttpServlet {
         HttpSession session = request.getSession();
         if (session.getAttribute("username") == null) {
             request.setAttribute("errorMessage", "You must be logged in to view this screen.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/home.jsp");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         } else {
             System.out.println("Logged in: " + session.getAttribute("username"));
@@ -86,13 +86,13 @@ public class UploadImage extends HttpServlet {
         } catch(Exception ex) {
             System.out.println("An error occured while obtaining all the groups: " + ex);
             request.setAttribute("errorMessage", "An error occured while obtaining all the groups.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/temp.jsp");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         }
         
         // Redirect to uploadImage.jsp
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/uploadImage.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/UploadImage.jsp");
         dispatcher.forward(request, response);
     }
     
@@ -191,7 +191,7 @@ public class UploadImage extends HttpServlet {
             request.setAttribute("errorMessage", "An error occured while uploading the file. Please ensure a .jpg or .gif file is selected and " +
             		"all fields have been entered correctly.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImage");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return; 
         } finally {
             // Close the connection
@@ -201,7 +201,7 @@ public class UploadImage extends HttpServlet {
                 System.out.println("An error occured while uploading a photo: " + ex);
                 request.setAttribute("errorMessage", "An error occured while uploading the file. Please ensure a .jpg or .gif file is selected and " +
                         "all fields have been entered correctly.");
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
                 return;
             }
         }

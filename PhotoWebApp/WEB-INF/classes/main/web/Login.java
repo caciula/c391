@@ -24,10 +24,10 @@ public class Login extends HttpServlet {
     	String inputUsername = (request.getParameter("username")).trim();
         String inputPassword = (request.getParameter("password")).trim();
         
-    	String output = "";
+    	String errorMessage = "";
     	
     	if (inputUsername.isEmpty()||inputPassword.isEmpty()) {
-    		output = "error: one or more fields are empty";
+    		errorMessage = "One or more fields are empty.";
     	} else {
 			try {
 				Connection connection = DBConnection.createConnection();
@@ -42,23 +42,23 @@ public class Login extends HttpServlet {
 					if (resultSet.getInt(1) == 1) {
 						HttpSession session = request.getSession();
 						session.setAttribute("username", inputUsername);
-						output = "";
 					} else {
-						output = "Invalid username/password";
+						errorMessage = "Invalid username or password.";
 					}
 				}
 				
 				connection.close();
 			} catch (Exception e) {
-				output = "error: couldn't complete request";
+			    errorMessage = "An error occurred while logging in. Please try again.";
 			}
     	}
 	
-    	if (output.isEmpty()) {
-    		response.sendRedirect("/PhotoWebApp/Home.jsp");
+    	if (errorMessage.isEmpty()) {
+    	    response.sendRedirect("Home.jsp");
     	} else {
-	    	request.setAttribute("output", output);
-	    	request.getRequestDispatcher("/Login.jsp").forward(request, response);
+	    	request.setAttribute("errorMessage", errorMessage);
+	    	request.setAttribute("errorBackLink", "/PhotoWebApp/Login");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
     	}
 	}
 }

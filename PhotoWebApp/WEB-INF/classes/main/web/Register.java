@@ -38,10 +38,10 @@ public class Register extends HttpServlet {
         java.util.Date utilDate = new java.util.Date();
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
         
-        String output = "";
+        String errorMessage = "";
         
         if (inputUsername.isEmpty()||inputPassword.isEmpty()||inputFirstname.isEmpty()||inputLastname.isEmpty()||inputAddress.isEmpty()||inputEmail.isEmpty()||inputPhonenumber.isEmpty()) {
-        	output = "error: one or more empty fields";
+            errorMessage = "One or more fields are empty.";
         } else {
 	        try {
 	        	Connection connection = DBConnection.createConnection();
@@ -57,11 +57,11 @@ public class Register extends HttpServlet {
 				
 				if (resultSet1 != null && resultSet1.next()) {
 					if (resultSet1.getInt(1) == 1) {
-						output = "error: user already exists";
+					    errorMessage = "User already exists. Please try again.";
 					} else {
 						if (resultSet2 != null && resultSet2.next()) {
 							if (resultSet2.getInt(1) == 1) {
-								output = "error: email already exists";
+							    errorMessage = "Email already exists. Please try again.";
 							} else {
 								PreparedStatement query3 = connection.prepareStatement("insert into users values(?, ?, ?)");
 								query3.setString(1, inputUsername);
@@ -80,8 +80,6 @@ public class Register extends HttpServlet {
 								query4.executeUpdate();
 								
 								connection.commit();
-								
-								output = "";
 							}
 						}
 					}
@@ -89,22 +87,17 @@ public class Register extends HttpServlet {
 				
 				connection.close();
 	        } catch (Exception e) {
-	        	output = "error: couldn't complete request";
+	            errorMessage = "An error occurred while creating a new user. Please try again.";
 	        }
         }
         
-        if (output.isEmpty()) {
-        	response.sendRedirect("/PhotoWebApp/Login");
+        if (errorMessage.isEmpty()) {
+            request.setAttribute("successMessage", "User successfully registered.");
+            request.getRequestDispatcher("/Login.jsp").forward(request, response);
         } else {
-        	request.setAttribute("username", inputUsername);
-    		request.setAttribute("password", inputPassword);
-    		request.setAttribute("firstname", inputFirstname);
-    		request.setAttribute("lastname", inputLastname);
-    		request.setAttribute("address", inputAddress);
-    		request.setAttribute("email", inputEmail);
-    		request.setAttribute("phonenumber", inputPhonenumber);
-        	request.setAttribute("output", output);
-        	request.getRequestDispatcher("/Register.jsp").forward(request, response);
+            request.setAttribute("errorMessage", errorMessage);
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Register");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
         }
 	}
 }

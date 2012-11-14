@@ -15,6 +15,14 @@ img {
     padding: 40px;
 }
 
+p.successMessage {
+	color: green;
+}
+
+p.errorMessage {
+	color: red;
+}
+
 /*********************************************** Header */
 
 div.header {

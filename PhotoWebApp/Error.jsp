@@ -15,10 +15,7 @@
 	    <p class="pageTitle">Error</p>
 	    
 	    <hr/>
-	    <font color="red">${errorMessage}</font>
-	    
-	    <br><br>
-	    
+	    <p class="errorMessage">${errorMessage}</p>
 	    <a href="${errorBackLink}">Back</a>
     </div>
 </body>

@@ -17,6 +17,10 @@
 	    <hr/>
 	    
         Home screen - to be updated.
+
+        <p><a href="/PhotoWebApp/Login" >Log In</a></p>
+
+        <p><a href="/PhotoWebApp/Register" >Register</a></p>
         
         <p>Display an upload link if a user is logged in? (<a href="/PhotoWebApp/UploadImage" >Upload Image</a>)</p>
         

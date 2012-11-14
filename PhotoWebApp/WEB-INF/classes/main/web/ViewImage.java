@@ -60,8 +60,8 @@ public class ViewImage extends HttpServlet {
                 } else if (permission == 2) {
                     // The image is private - the user cannot view it if they're not the owner.
                     request.setAttribute("errorMessage", "You do not have permission to view this image.");
-                    request.setAttribute("errorBackLink", "/PhotoWebApp/home.jsp");
-                    request.getRequestDispatcher("/error.jsp").forward(request, response);
+                    request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+                    request.getRequestDispatcher("/Error.jsp").forward(request, response);
                     return;
                 } else {
 //                    NOT DONE YET!
@@ -84,8 +84,8 @@ public class ViewImage extends HttpServlet {
             else {
                 // Handle no result
                 request.setAttribute("errorMessage", "No result found for the provided photo id.");
-                request.setAttribute("errorBackLink", "/PhotoWebApp/home.jsp");
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
                 return;
             }
             
@@ -95,13 +95,13 @@ public class ViewImage extends HttpServlet {
             // Handle error
             System.out.println("An error occurred while obtaining a photo to view:" + ex);
             request.setAttribute("errorMessage", "An error occurred while obtaining the photo.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/home.jsp");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         }
         
         // Redirect to viewImage.jsp
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/viewImage.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/ViewImage.jsp");
         dispatcher.forward(request, response);
     }
 }
