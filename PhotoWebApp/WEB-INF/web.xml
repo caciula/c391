@@ -77,6 +77,15 @@
         <servlet-name>AddUserToGroup</servlet-name>
         <url-pattern>/AddUserToGroup</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Search</servlet-name>
+        <servlet-class>main.web.Search</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Search</servlet-name>
+        <url-pattern>/Search</url-pattern>
+    </servlet-mapping>
 
     <!-- Servlets to obtain specific page resources -->
     <servlet>
@@ -96,5 +105,7 @@
         <servlet-name>GetThumbnailImage</servlet-name>
         <url-pattern>/GetThumbnailImage</url-pattern>
     </servlet-mapping>
+    
+    
 
 </web-app>

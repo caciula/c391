@@ -20,3 +20,6 @@ Login.class: WEB-INF/classes/main/web/Login.java
 
 Register.class: WEB-INF/classes/main/web/Register.java
 	${JC} ${JFLAGS} WEB-INF/classes/main/web/Register.java
+
+Search.class: WEB-INF/classes/main/web/Search.java
+	${JC} ${JFLAGS} WEB-INF/classes/main/web/Search.java
