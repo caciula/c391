@@ -44,16 +44,15 @@
 
         <p class="pageTitle">Groups:</p>
         
-        <a href="/PhotoWebApp/CreateGroup">Create a new group</a> 
-        <br>
-        <a href="/PhotoWebApp/AddUserToGroup">Add a user to a group</a>
+        <a href="/PhotoWebApp/CreateGroup">Create a new group</a> | <a href="/PhotoWebApp/AddUserToGroup">Add a user to a group</a>
 	    
 	    <p>TODO: Display a table of the user's groups?</p>
 	    
 	    <p class="pageTitle">Images:</p>
         
-        <p><a href="UploadImage">Upload New Image</a></p>
-	    
+        <a href="UploadImage">Upload Single Image</a> |
+        <a href="UploadImagesFromDir">Upload Multiple Images</a>
+	    <br><br>
 		<table>
 		    <tbody>
 		    <tr>

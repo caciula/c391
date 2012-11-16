@@ -199,6 +199,7 @@ public class UploadImage extends HttpServlet {
                 System.out.println("An error occured while uploading a photo: " + ex);
                 request.setAttribute("errorMessage", "An error occured while uploading the file. Please ensure a .jpg or .gif file is selected and " +
                         "all fields have been entered correctly.");
+                request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImage");
                 request.getRequestDispatcher("/Error.jsp").forward(request, response);
                 return;
             }

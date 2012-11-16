@@ -15,6 +15,9 @@ EditImage.class: WEB-INF/classes/main/web/EditImage.java
 UploadImage.class: WEB-INF/classes/main/web/UploadImage.java
 	${JC} ${JFLAGS} WEB-INF/classes/main/web/UploadImage.java
 
+UploadImagesFromDir.class: WEB-INF/classes/main/web/UploadImagesFromDir.java
+	${JC} ${JFLAGS} WEB-INF/classes/main/web/UploadImagesFromDir.java
+
 Login.class: WEB-INF/classes/main/web/Login.java
 	${JC} ${JFLAGS} WEB-INF/classes/main/web/Login.java
 
