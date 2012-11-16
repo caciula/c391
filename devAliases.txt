@@ -15,6 +15,10 @@ alias updateUploadImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web
 alias updateUploadImageJava="\cp ~/workspace/PhotoWebApp/src/main/web/UploadImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/UploadImage.java"
 alias updateUploadImage="updateUploadImageClass;updateUploadImageJava"
 
+alias updateUploadImagesFromDirClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/UploadImagesFromDir.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/UploadImagesFromDir.class"
+alias updateUploadImagesFromDirJava="\cp ~/workspace/PhotoWebApp/src/main/web/UploadImagesFromDir.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/UploadImagesFromDir.java"
+alias updateUploadImagesFromDir="updateUploadImagesFromDirClass;updateUploadImagesFromDirJava"
+
 alias updateViewImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/ViewImage.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/ViewImage.class"
 alias updateViewImageJava="\cp ~/workspace/PhotoWebApp/src/main/web/ViewImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/ViewImage.java"
 alias updateViewImage="updateViewImageClass;updateViewImageJava"
@@ -39,4 +43,16 @@ alias updateSQLQueriesClass="\cp ~/workspace/PhotoWebApp/build/classes/main/util
 alias updateSQLQueriesJava="\cp ~/workspace/PhotoWebApp/src/main/util/SQLQueries.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/util/SQLQueries.java"
 alias updateSQLQueries="updateSQLQueriesClass;updateSQLQueriesJava"
 
-alias updatePhotoWebApp="updateDBConnection;updateLogin;updateUploadImage;updateViewImage; updateViewUserImages; updateEditImage; updateGetFullImage; updateGetThumbnailImage; updateSQLQueries; updateRegister;"
+alias updateAddUserToGroupClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/AddUserToGroup.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/AddUserToGroup.class"
+alias updateAddUserToGroupJava="\cp ~/workspace/PhotoWebApp/src/main/web/AddUserToGroup.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/AddUserToGroup.java"
+alias updateAddUserToGroup="updateAddUserToGroupClass;updateAddUserToGroupJava"
+
+alias updateCreateGroupClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/CreateGroup.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/CreateGroup.class"
+alias updateCreateGroupJava="\cp ~/workspace/PhotoWebApp/src/main/web/CreateGroup.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/CreateGroup.java"
+alias updateCreateGroup="updateCreateGroupClass;updateCreateGroupJava"
+
+alias updateSearchClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/Search.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/Search.class"
+alias updateSearchJava="\cp ~/workspace/PhotoWebApp/src/main/web/Search.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/Search.java"
+alias updateSearch="updateSearchClass;updateSearchJava"
+
+alias updatePhotoWebApp="updateDBConnection;updateLogin;updateUploadImage;updateViewImage; updateViewUserImages; updateEditImage; updateGetFullImage; updateGetThumbnailImage; updateSQLQueries; updateRegister;updateUploadImagesFromDir;updateAddUserToGroup;updateCreateGroup;updateSearch;"

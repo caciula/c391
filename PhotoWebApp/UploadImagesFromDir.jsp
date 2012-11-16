@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Upload Image</title>
+    <title>Upload Images</title>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
     <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
@@ -15,6 +15,11 @@
             $("#date").datepicker({dateFormat:"dd/mm/yy"});
         });
     });
+
+    function updateImageDetails(var1) {
+        document.getElementById('imageIds').value= var1;
+        document.uploadImages.submit();
+    }
     </script>
 </head>
 
@@ -23,21 +28,16 @@
     <jsp:include page="resources/includes/header.jsp" />
     
     <div class="content">
-	    <p class="pageTitle">Upload Image</p>
-
+	    <p class="pageTitle">Upload Multiple Images</p>
+	    
 	    <p>
         <a href="ViewUserImages?${username}">View My Profile</a> |
-        <a href="UploadImagesFromDir">Upload Multiple Images</a>
+        <a href="UploadImage">Upload Single Image</a>
         </p>
-        
+	        
 	    <hr>
-	    
-	    <form name="uploadImage" method="POST" enctype="multipart/form-data" action="/PhotoWebApp/UploadImage">
+	    <form name="uploadImages" id="uploadImages" method="POST" enctype="multipart/form-data" action="/PhotoWebApp/UploadImagesFromDir">
 	        <table>
-	            <tr>
-	                <th>File path: <span class="requiredField">*</span></th> 
-	                <td><input name="imagePath" size="30" type="file"></td>
-	            </tr>
 	            <tr>
 	                <th>Subject: </th>
 	                <td><input name="subject" size="50" maxlength="128" type="text"></td>
@@ -69,18 +69,27 @@
 	                <td>
 		                <select name="access">
 		                    <c:forEach items="${groups}" var="group">
-		                        <option value="${group[1]}" <c:if test="${group[1]==2}">selected=true</c:if> >${group[0]}</option>
+		                        <option value="${group[1]}" <c:if test="${group[1]==2}">selected=true</c:if>>${group[0]}</option>
 		                    </c:forEach>
 		                </select>
 	                </td>
 	            </tr>
-	            <tr>
-	                <th></th>
-	                <td><br><input name=".submit" value="Upload" type="submit"></td>
-	            </tr>
+	            <input type="hidden" name="imageIds" id="imageIds" value="">
+                <input type="hidden" name="updateDetails" value="true">
 	            </tbody>
 	         </table>
 	    </form>
+	    
+        <applet code="applet-basic_files/wjhk.JUploadApplet" name="JUpload" archive="applet-basic_files/wjhk.jar" mayscript="true" height="300" width="640">
+            <param name="CODE" value="wjhk.jupload2.JUploadApplet">
+            <param name="ARCHIVE" value="wjhk.jupload.jar">
+            <param name="postURL" value="http://ui02.cs.ualberta.ca:16090/PhotoWebApp/UploadImagesFromDir">
+            <param name="afterUploadURL" value="javascript:updateImageDetails('%body%')">
+            <param name="stringUploadSuccess" value="">
+            <param name="nbFilesPerRequest" value="2">
+            Java 1.4 or higher plugin required.
+        </applet>
+	    
     </div>
 </body>
 </html>

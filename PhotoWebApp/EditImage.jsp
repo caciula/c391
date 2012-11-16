@@ -25,9 +25,8 @@
 	    <p class="pageTitle">Edit Image</p>
 	            
 	    <p>
-	    <a href="ViewUserImages?${ownerName}">View My Profile</a> |
-	    <a href="ViewImage?${picId}">View Image</a> | 
-	    <a href="UploadImage">Upload New Image</a>
+	       <a href="ViewUserImages?${ownerName}">View My Profile</a> |
+	       <a href="ViewImage?${picId}">View Image</a>
 	    </p>
 	    
 	    <hr>

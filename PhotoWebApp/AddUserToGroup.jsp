@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>AddUserToGroup</title>
+  <title>Add User To Group</title>
   <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
 </head>
 
@@ -45,7 +45,6 @@
 	                </tbody>
                </table>
 			</form>
-			${output}
 		</div>
 </body>
 

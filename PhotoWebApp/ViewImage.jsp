@@ -15,19 +15,20 @@
     <div class="content">
 	    <p class="pageTitle">View Image</p>
 
-	    <p><c:if test='${ownerName==loggedInUser}'>
-            <a href="ViewUserImages?${ownerName}">View My Profile</a> |
-            <a href="EditImage?${picId}">Edit Image</a> |
-	        <a href="UploadImage">Upload New Image</a>
+	    <p>
+	        <c:if test='${ownerName==loggedInUser}'>
+                <a href="ViewUserImages?${ownerName}">View My Profile</a> |
+                <a href="EditImage?${picId}">Edit Image</a>
 	        </c:if>
 	    </p>
+	    
 	    <hr>
 	    
 		<table>
 		    <tbody>
 		    <tr>
 		        <th>Owner: </th>
-		        <td><a href="/PhotoWebApp/ViewUserImages?${ownerName}">${ownerName}</a></td>
+		        <td>${ownerName}</td>
 		    </tr>
 		    <tr>
 		        <th>Subject: </th>
