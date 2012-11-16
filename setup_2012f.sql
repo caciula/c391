@@ -4,6 +4,10 @@
  *              Fall, 2012
  *  Author:     Prof. Li-Yan Yuan
  */
+DROP INDEX description_index;
+DROP INDEX subject_index;
+DROP INDEX place_index;
+
 DROP TABLE images;
 DROP TABLE group_lists;
 DROP TABLE groups;
@@ -72,3 +76,8 @@ CREATE TABLE images (
 );
 
 CREATE SEQUENCE pic_id_sequence;
+
+CREATE INDEX description_index on images(description) INDEXTYPE IS CTXSYS.CONTEXT PARAMETERS ('SYNC ( ON COMMIT)');
+CREATE INDEX subject_index on images(subject) INDEXTYPE IS CTXSYS.CONTEXT PARAMETERS ('SYNC ( ON COMMIT)');
+CREATE INDEX place_index on images(place) INDEXTYPE IS CTXSYS.CONTEXT PARAMETERS ('SYNC ( ON COMMIT)');
+
