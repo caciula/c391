@@ -1,7 +1,7 @@
 JFLAGS = -g
 JC = javac
 
-default: EditImage.class ViewImage.class ViewUserImages.class UploadImage.class Login.class Register.class
+default: EditImage.class ViewImage.class ViewUserImages.class UploadImage.class Login.class Register.class Search.class
 
 ViewImage.class: WEB-INF/classes/main/web/ViewImage.java
 	${JC} ${JFLAGS} WEB-INF/classes/main/web/ViewImage.java

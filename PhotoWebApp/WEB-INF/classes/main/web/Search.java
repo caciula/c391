@@ -11,6 +11,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import main.util.DBConnection;
+import main.util.Filter;
 
 public class Search extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -26,17 +27,17 @@ public class Search extends HttpServlet {
          String toDate = request.getParameter("toDate");
          String sort = request.getParameter("SortBy");
 
-         String query = "SELECT photo_id FROM images";
+         String query = "SELECT * FROM images";
       
          if(!keywords.isEmpty()){
-        	 query += " WHERE CONTAINS(subject, " + keywords +", 1) > 0 OR CONTAINS(place, " + keywords +", 2) > 0 OR CONTAINS(description, " + keywords +", 3) > 0 ";
+        	 query += " WHERE CONTAINS(subject, ?, 1) > 0 OR CONTAINS(place, ?, 2) > 0 OR CONTAINS(description, ?, 3) > 0 ";
          }
          
          if(!fromDate.isEmpty()){
-                 query += " AND when >=  " + fromDate +" ";
+                 query += " AND when >=  ? ";
          }
          if(!toDate.isEmpty()){
-                 query += " AND when <=  " + toDate + " ";
+                 query += " AND when <=  ? ";
          }
 
          if(sort.equals("Rank")){
@@ -52,9 +53,31 @@ public class Search extends HttpServlet {
         	 	myConn = DBConnection.createConnection();
         	 	ArrayList<String> matchingIds = new ArrayList<String>();
         	 	PreparedStatement myQuery = myConn.prepareStatement(query);
+        	 	int n = 1;
+        	 	if(!keywords.isEmpty()){
+        	 		myQuery.setString(n, keywords);
+        	 		n++;
+    				myQuery.setString(n, keywords);
+    				n++;
+    				myQuery.setString(n, keywords);
+    				n++;
+        	 	}
+        	 	if(!fromDate.isEmpty()){
+        	 		myQuery.setString(n, fromDate);
+    				n++;
+        	 	}
+        	 	if(!toDate.isEmpty()){
+        	 		myQuery.setString(n, toDate);
+    				n++;
+        	 	}
         	 	ResultSet results = myQuery.executeQuery();
+        		HttpSession session = request.getSession();
+                String currentUser = (String) session.getAttribute("username");
         	 	while (results.next()) {
-        	 		matchingIds.add(Integer.toString(results.getInt(1)));
+        	 		String foundId = Integer.toString(results.getInt("photo_id"));
+        	 		if(Filter.isViewable(currentUser, foundId)){
+        	 			matchingIds.add(foundId);
+        	 		}
         	 	}
         	 	request.setAttribute("matchingIds", matchingIds);
                 myQuery.close();
@@ -67,7 +90,6 @@ public class Search extends HttpServlet {
             	 System.err.println("Exception: " + ex.getMessage());
              }
          }
-         
          request.getRequestDispatcher("/SearchResults.jsp").forward(request, response);
     }
 }

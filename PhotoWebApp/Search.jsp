@@ -17,15 +17,15 @@
 	</tr>
   <tr>
     <th>Keyword(s): </th>
-    <td><input name="keywords" type="textfield" size="30" value="Keyword(s)"></input></td>
+    <td><input name="keywords" type="textfield" size="30" ></input></td>
   </tr>
   <tr>
     <th>From Date(Optional): </th>
-    <td><input name="fromDate" type="textfield" size="30" value="FromDate"></input></td>
+    <td><input name="fromDate" type="textfield" size="30" ></input></td>
   </tr>
   <tr>
     <th>To Date(Optional): </th>
-    <td><input name="toDate" type="textfield" size="30" value="ToDate"></input></td>
+    <td><input name="toDate" type="textfield" size="30" ></input></td>
   </tr>
   <tr>
     <th>Sort By: </th>
