@@ -30,6 +30,8 @@ CREATE TABLE persons (
    FOREIGN KEY (user_name) REFERENCES users
 );
 
+INSERT INTO users values('admin','admin',sysdate);
+INSERT INTO persons values('admin',null,null,null,null,null);
 
 CREATE TABLE groups (
    group_id   int,
