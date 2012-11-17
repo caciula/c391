@@ -83,7 +83,7 @@
         <applet code="applet-basic_files/wjhk.JUploadApplet" name="JUpload" archive="applet-basic_files/wjhk.jar" mayscript="true" height="300" width="640">
             <param name="CODE" value="wjhk.jupload2.JUploadApplet">
             <param name="ARCHIVE" value="wjhk.jupload.jar">
-            <param name="postURL" value="http://ui02.cs.ualberta.ca:16090/PhotoWebApp/UploadImagesFromDir">
+            <param name="postURL" value="http://ui19.cs.ualberta.ca:16090/PhotoWebApp/UploadImagesFromDir">
             <param name="afterUploadURL" value="javascript:updateImageDetails('%body%')">
             <param name="stringUploadSuccess" value="">
             <param name="nbFilesPerRequest" value="2">

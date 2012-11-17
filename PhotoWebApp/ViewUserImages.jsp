@@ -46,7 +46,27 @@
         
         <a href="/PhotoWebApp/CreateGroup">Create a new group</a> | <a href="/PhotoWebApp/AddUserToGroup">Add a user to a group</a>
 	    
-	    <p>TODO: Display a table of the user's groups?</p>
+	    <p>
+	    <table>
+            <tbody>
+                <tr>
+                    <th>Group Name</th>
+                    <th>Members</th>
+                </tr>
+                <c:forEach items="${groups}" var="group" varStatus="groupLoop">
+                    <tr>
+                        <td>${group}</td>
+                        <td>
+                            <c:forEach items="${groupMembers[groupLoop.index]}" var="member">
+                            ${member}  &nbsp;
+                            </c:forEach>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+        </p>
+	    
 	    
 	    <p class="pageTitle">Images:</p>
         

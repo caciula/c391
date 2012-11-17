@@ -41,7 +41,7 @@ public class UploadImagesFromDir extends HttpServlet {
         HttpSession session = request.getSession();
         if (session.getAttribute("username") == null) {
             request.setAttribute("errorMessage", "You must be logged in to view this screen.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         }
@@ -66,7 +66,7 @@ public class UploadImagesFromDir extends HttpServlet {
         } catch(Exception ex) {
             System.out.println("An error occured while obtaining all the groups: " + ex);
             request.setAttribute("errorMessage", "An error occured while obtaining all the groups.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         }
@@ -126,7 +126,6 @@ public class UploadImagesFromDir extends HttpServlet {
                         imageIdsString = Streams.asString(stream);
                     }
                 } else{
-                    System.out.println("Uploading Image");
                     img = ImageIO.read(stream);
                     thumbNail = shrink(img, 10);
                     ResultSet rset1 = DBConnection.executeQuery(connection, "SELECT pic_id_sequence.nextval from dual");

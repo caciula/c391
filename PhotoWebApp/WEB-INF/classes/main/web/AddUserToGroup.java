@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import main.util.DBConnection;
+import main.util.SQLQueries;
 
 public class AddUserToGroup extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -101,7 +102,7 @@ public class AddUserToGroup extends HttpServlet {
 		HttpSession session = request.getSession();
 		Connection connection = DBConnection.createConnection();
 		
-		PreparedStatement query = connection.prepareStatement("select group_id, group_name from groups where user_name = ?");
+		PreparedStatement query = connection.prepareStatement(SQLQueries.GET_USER_GROUPS);
 		query.setString(1, (String) session.getAttribute("username"));
 		
 		ResultSet resultSet = query.executeQuery();

@@ -10,7 +10,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 
 /**
- * Backing servlet for the View Image screen (viewImage.jsp)
+ * Backing servlet for the View Image screen (ViewImage.jsp)
  * 
  *  @author Tim Phillips
  */
@@ -57,7 +57,7 @@ public class ViewImage extends HttpServlet {
                 }
                 
                 // Ensure that the user is allowed to view this image.
-                if (permission == 1 || ownerName.equals(userName) || ownerName.equals("admin")) {
+                if (permission == 1 || ownerName.equals(userName) || userName.equals("admin")) {
                     // The image is public - the user has permission to view it.
                 } else if (permission == 2) {
                     // The image is private - the user cannot view it if they're not the owner.
@@ -88,6 +88,19 @@ public class ViewImage extends HttpServlet {
                 errorMessage = "No result found for the provided photo id.";
             }
             
+            // Check if the user has viewed this image before
+            PreparedStatement getImageViewedByUser = connection.prepareStatement(SQLQueries.GET_IMAGE_VIEWED_BY_USER);
+            getImageViewedByUser.setString(1, userName);
+            getImageViewedByUser.setString(2, picId);
+            ResultSet userHasViewedImage = getImageViewedByUser.executeQuery();
+            // if the user has not already viewed the image, add an entry to the image views
+            if (!userHasViewedImage.next()) {
+                PreparedStatement insertImageView = connection.prepareStatement(SQLQueries.INSERT_IMAGE_VIEW);
+                insertImageView.setString(1, picId);
+                insertImageView.setString(2, userName);
+                insertImageView.execute();
+                DBConnection.executeQuery(connection, "commit");
+            }
             connection.close();
             
         } catch(Exception ex) {
@@ -99,7 +112,7 @@ public class ViewImage extends HttpServlet {
         // If an error occurred: redirect to the error page
         if (!errorMessage.isEmpty()) {
             request.setAttribute("errorMessage", errorMessage);
-            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         }

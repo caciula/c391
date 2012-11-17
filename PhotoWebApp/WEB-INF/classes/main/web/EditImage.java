@@ -21,7 +21,7 @@ public class EditImage extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
-     *  GET command for editImage.jsp
+     *  GET command for EditImage.jsp
      *  Obtains the image details for the user to edit.
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -73,6 +73,18 @@ public class EditImage extends HttpServlet {
             }
             
             // Get the groups for the 'Access' drop down
+            
+            // Get the groups the user is a member of
+            ArrayList<Integer> userGroups = new ArrayList<Integer>();
+            PreparedStatement getUsersGroups = connection.prepareStatement(SQLQueries.GET_GROUPS_BY_USER_ID);
+            getUsersGroups.setString(1, username);
+            ResultSet allUsersGroups = getUsersGroups.executeQuery();
+            while (allUsersGroups.next()) {
+                userGroups.add(allUsersGroups.getInt("group_id"));
+                System.out.println("Adding : " + allUsersGroups.getInt("group_id"));
+            }
+             
+
             ArrayList<String[]> groups = new ArrayList<String[]>();
             PreparedStatement getAllGroups = connection.prepareStatement(SQLQueries.GET_ALL_GROUPS);
             ResultSet allGroups = getAllGroups.executeQuery();
@@ -105,13 +117,13 @@ public class EditImage extends HttpServlet {
             }
         }
 		
-        // Redirect to editImage.jsp
+        // Redirect to EditImage.jsp
         RequestDispatcher dispatcher = request.getRequestDispatcher("/EditImage.jsp");
         dispatcher.forward(request, response);
     }
 
     /**
-     *  POST command for editImage.jsp
+     *  POST command for EditImage.jsp
      *  Saves updates to the image details.
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -142,6 +154,7 @@ public class EditImage extends HttpServlet {
             preparedStatement.setString(5, request.getParameter("access"));
             preparedStatement.setString(6, picId);
             preparedStatement.executeUpdate();
+            DBConnection.executeQuery(connection, "commit");
         } catch (Exception ex) {
             // Handle error
             System.out.println("An error occurred while updating a photo: " + ex);

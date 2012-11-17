@@ -31,8 +31,21 @@
             <li><p><a href="/PhotoWebApp/Search">Search</a></p></li>
         </ul> 
         
-        <p>Also need to display the top 5 images here?</p>
+        <p class="pageTitle">Top Images</p>
 
+        <table border="1" cellpadding="15px" cellspacing="0px">
+            <tbody>
+                <tr>
+                        <c:forEach items="${topImages}" var="image">
+                    <th>
+				            <a href="/PhotoWebApp/ViewImage?${image[1]}"><img src ="/PhotoWebApp/GetThumbnailImage?${image[1]}"></a>
+				            Views: ${image[0]}
+                    </th>
+                        </c:forEach>
+                </tr>
+            </tbody>
+        </table>
+        
     </div>
 </body>
 </html>

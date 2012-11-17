@@ -75,6 +75,14 @@ CREATE TABLE images (
    FOREIGN KEY(permitted) REFERENCES groups
 );
 
+CREATE TABLE image_views (
+    photo_id   int,
+    user_name  varchar(24),
+    FOREIGN KEY(photo_id) REFERENCES images,
+    FOREIGN KEY(user_name) REFERENCES users,
+    UNIQUE (photo_id, user_name)
+);
+
 CREATE SEQUENCE pic_id_sequence;
 
 CREATE INDEX description_index on images(description) INDEXTYPE IS CTXSYS.CONTEXT PARAMETERS ('SYNC ( ON COMMIT)');

@@ -96,6 +96,15 @@
         <url-pattern>/UploadImagesFromDir</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>Home</servlet-name>
+        <servlet-class>main.web.Home</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Home</servlet-name>
+        <url-pattern>/Home</url-pattern>
+    </servlet-mapping>
+
     <!-- Servlets to obtain specific page resources -->
     <servlet>
         <servlet-name>GetFullImage</servlet-name>

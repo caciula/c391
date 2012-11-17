@@ -2,9 +2,6 @@ package main.util;
 
 import main.util.DBConnection;
 import main.util.SQLQueries;
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.sql.*;
 
 
@@ -18,17 +15,17 @@ public class Filter{
             PreparedStatement findImage = myConn.prepareStatement(SQLQueries.GET_IMAGE_BY_ID);
            	findImage.setString(1, picture_Id);
             ResultSet result = findImage.executeQuery();
-            String Owner;
+            String owner;
             int permission;
             if (result.next()) {
           		owner = result.getString("owner_name");
                 permission =  result.getInt("permitted");
-			}else{
+			} else{
 				//No image found for id
 				return false;
 			}
 			
-			 // Determine if the user may view the image
+			// Determine if the user may view the image
             if (permission == 1 || owner.equals(currentUser) || currentUser.equals("admin")) {
                     return true;
             } else if (permission == 2) {

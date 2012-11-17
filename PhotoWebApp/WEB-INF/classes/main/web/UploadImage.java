@@ -60,7 +60,7 @@ public class UploadImage extends HttpServlet {
         HttpSession session = request.getSession();
         if (session.getAttribute("username") == null) {
             request.setAttribute("errorMessage", "You must be logged in to view this screen.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         }
@@ -84,7 +84,7 @@ public class UploadImage extends HttpServlet {
         } catch(Exception ex) {
             System.out.println("An error occured while obtaining all the groups: " + ex);
             request.setAttribute("errorMessage", "An error occured while obtaining all the groups.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         }

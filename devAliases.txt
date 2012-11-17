@@ -43,6 +43,10 @@ alias updateSQLQueriesClass="\cp ~/workspace/PhotoWebApp/build/classes/main/util
 alias updateSQLQueriesJava="\cp ~/workspace/PhotoWebApp/src/main/util/SQLQueries.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/util/SQLQueries.java"
 alias updateSQLQueries="updateSQLQueriesClass;updateSQLQueriesJava"
 
+alias updateFilterClass="\cp ~/workspace/PhotoWebApp/build/classes/main/util/Filter.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/util/Filter.class"
+alias updateFilterJava="\cp ~/workspace/PhotoWebApp/src/main/util/Filter.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/util/Filter.java"
+alias updateFilter="updateFilterClass;updateFilterJava"
+
 alias updateAddUserToGroupClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/AddUserToGroup.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/AddUserToGroup.class"
 alias updateAddUserToGroupJava="\cp ~/workspace/PhotoWebApp/src/main/web/AddUserToGroup.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/AddUserToGroup.java"
 alias updateAddUserToGroup="updateAddUserToGroupClass;updateAddUserToGroupJava"
@@ -55,4 +59,8 @@ alias updateSearchClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/Sear
 alias updateSearchJava="\cp ~/workspace/PhotoWebApp/src/main/web/Search.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/Search.java"
 alias updateSearch="updateSearchClass;updateSearchJava"
 
-alias updatePhotoWebApp="updateDBConnection;updateLogin;updateUploadImage;updateViewImage; updateViewUserImages; updateEditImage; updateGetFullImage; updateGetThumbnailImage; updateSQLQueries; updateRegister;updateUploadImagesFromDir;updateAddUserToGroup;updateCreateGroup;updateSearch;"
+alias updateHomeClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/Home.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/Home.class"
+alias updateHomeJava="\cp ~/workspace/PhotoWebApp/src/main/web/Home.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/Home.java"
+alias updateHome="updateHomeJava;updateHomeClass"
+
+alias updatePhotoWebApp="updateDBConnection;updateLogin;updateUploadImage;updateViewImage; updateViewUserImages; updateEditImage; updateGetFullImage; updateGetThumbnailImage;updateSQLQueries; updateRegister;updateUploadImagesFromDir;updateAddUserToGroup;updateCreateGroup;updateSearch;updateHome;updateFilter;"

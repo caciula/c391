@@ -36,7 +36,7 @@ public class ViewUserImages extends HttpServlet {
         // Ensure that the user can only see their own profile
         if (!userName.equals(loggedInUser)) {
             request.setAttribute("errorMessage", "You cannot view another user's profile.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         }
@@ -54,7 +54,7 @@ public class ViewUserImages extends HttpServlet {
             }
             request.setAttribute("imageIds", imageIds);
             
-            // Obtain the user's name from the database
+            // Obtain the user from the database
             PreparedStatement getUserQuery = connection.prepareStatement(SQLQueries.GET_PERSON_BY_USER_NAME);
             getUserQuery.setString(1, userName);
             ResultSet userResult = getUserQuery.executeQuery();
@@ -66,10 +66,37 @@ public class ViewUserImages extends HttpServlet {
                 request.setAttribute("address", userResult.getString("address"));
             }
             
+            // Obtain the user's groups from the database
+            PreparedStatement getUserGroups = connection.prepareStatement(SQLQueries.GET_USER_GROUPS);
+            getUserGroups.setString(1, userName);
+            ResultSet userGroups = getUserGroups.executeQuery();
+            @SuppressWarnings("rawtypes")
+            ArrayList<ArrayList> allGroupMembers = new ArrayList<ArrayList>();
+            ArrayList<String> groups = new ArrayList<String>();
+
+            while (userGroups.next()) {
+                groups.add(userGroups.getString("group_name"));
+
+                // Obtain the members of the group from the database
+                PreparedStatement getGroupMembers = connection.prepareStatement(SQLQueries.GET_MEMBERS_BY_GROUP_ID);
+                getGroupMembers.setInt(1, userGroups.getInt("group_id"));
+                ResultSet groupMembersResult = getGroupMembers.executeQuery();
+                ArrayList<String> groupMembers = new ArrayList<String>();
+                while (groupMembersResult.next()) {
+                    groupMembers.add(groupMembersResult.getString("friend_id"));
+                    System.out.println("Member: " + groupMembersResult.getString("friend_id"));
+                }
+                allGroupMembers.add(groupMembers);
+                System.out.println("Group: " + userGroups.getInt("group_id"));
+                
+            }
+            request.setAttribute("groups", groups);
+            request.setAttribute("groupMembers", allGroupMembers);
+            
         } catch( Exception ex ) {
             System.out.println("An error occured while obtaining a user's (username:" + userName + ") images: " + ex);
             request.setAttribute("errorMessage", "An error occured while obtaining the user's images.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         } finally {
@@ -79,7 +106,7 @@ public class ViewUserImages extends HttpServlet {
             } catch (SQLException ex) {
                 System.out.println("An error occured while obtaining a user's (username:" + userName + ") images: " + ex);
                 request.setAttribute("errorMessage", "An error occured while obtaining the user's images.");
-                request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+                request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
                 request.getRequestDispatcher("/Error.jsp").forward(request, response);
                 return;
             }
