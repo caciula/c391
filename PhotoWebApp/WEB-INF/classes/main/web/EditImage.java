@@ -2,6 +2,7 @@ package main.web;
 
 import main.util.DBConnection;
 import main.util.SQLQueries;
+import main.util.Filter;
 
 import java.io.*;
 import javax.servlet.*;
@@ -9,11 +10,10 @@ import javax.servlet.http.*;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Backing servlet for the Edit Image screen (editImage.jsp)
+ * Backing servlet for the Edit Image screen (EditImage.jsp)
  * 
  *  @author Tim Phillips
  */
@@ -71,30 +71,8 @@ public class EditImage extends HttpServlet {
                 request.getRequestDispatcher("/Error.jsp").forward(request, response);
                 return;
             }
-            
-            // Get the groups for the 'Access' drop down
-            
-            // Get the groups the user is a member of
-            ArrayList<Integer> userGroups = new ArrayList<Integer>();
-            PreparedStatement getUsersGroups = connection.prepareStatement(SQLQueries.GET_GROUPS_BY_USER_ID);
-            getUsersGroups.setString(1, username);
-            ResultSet allUsersGroups = getUsersGroups.executeQuery();
-            while (allUsersGroups.next()) {
-                userGroups.add(allUsersGroups.getInt("group_id"));
-                System.out.println("Adding : " + allUsersGroups.getInt("group_id"));
-            }
-             
 
-            ArrayList<String[]> groups = new ArrayList<String[]>();
-            PreparedStatement getAllGroups = connection.prepareStatement(SQLQueries.GET_ALL_GROUPS);
-            ResultSet allGroups = getAllGroups.executeQuery();
-            while (allGroups.next()) {
-                String[] group = new String[2];
-                group[0] = allGroups.getString("group_name");
-                group[1] = Integer.toString((allGroups.getInt("group_id")));
-                groups.add(group);
-            }
-            request.setAttribute("groups", groups);
+            request.setAttribute("groups", Filter.getAllowedGroups(username));
             
         } catch( Exception ex ) {
             // Handle error

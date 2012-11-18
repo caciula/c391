@@ -27,7 +27,7 @@ public class GetFullImage extends HttpServlet {
 
         Connection connection = null;
         try {
-         // Obtain the full image from the database
+            // Obtain the full image from the database
             connection = DBConnection.createConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.GET_PHOTO_ONLY_BY_ID);
             preparedStatement.setString(1, picId);
@@ -41,17 +41,14 @@ public class GetFullImage extends HttpServlet {
                 }
                 input.close();
             }
-            else {
-                // TODO: handle exception
-            }
         } catch( Exception ex ) {
-            // TODO: handle exception
+            System.out.println("An error occurred while obtaining a photo with id:" + picId);
         } finally {
             // Close the connection
             try {
                 connection.close();
             } catch ( SQLException ex) {
-                // TODO: handle exception
+                System.out.println("An error occurred while obtaining a photo with id:" + picId);
             }
         }
     }

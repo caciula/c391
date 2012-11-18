@@ -15,19 +15,29 @@ import javax.servlet.http.HttpSession;
 import main.util.DBConnection;
 import main.util.SQLQueries;
 
+/**
+ *  Backing servlet for the Add User To Group screen (AddUserToGroup.jsp)
+ * 
+ *  @author Gabriel Caciula
+ */
 public class AddUserToGroup extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+     
+    /**
+     *  GET command for AddUserToGroup.jsp
+     */	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ArrayList<String[]> groups;
 		
         HttpSession session = request.getSession();
+        // Ensure that there is a user logged in
         if (session.getAttribute("username") == null) {
             request.setAttribute("errorMessage", "You must be logged in to view this screen.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/Login.jsp");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         } else {
+            // Obtain all of the groups the current user has created
             try {
                 groups = getListOfGroups(request);
                 request.setAttribute("groups", groups);
@@ -42,7 +52,11 @@ public class AddUserToGroup extends HttpServlet {
 		
         request.getRequestDispatcher("/AddUserToGroup.jsp").forward(request, response);
     }
-
+    
+    /**
+     *  POST command for AddUserToGroup.jsp
+     *  Adds the input user to the group in context.
+     */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int inputGroupID = Integer.parseInt(request.getParameter("groups"));
 		String inputUsername = request.getParameter("username");
@@ -98,6 +112,10 @@ public class AddUserToGroup extends HttpServlet {
 		}
 	}
 	
+    /**
+     *  Helper method to obtain the groups the current user has created.
+     *  @return ArrayList<String[]> - an array containing an element of [group_name,group_id]
+     */
 	private ArrayList<String[]> getListOfGroups(HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 		Connection connection = DBConnection.createConnection();

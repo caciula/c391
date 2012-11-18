@@ -21,7 +21,7 @@ package main.web;
  *
  ***/
 import main.util.DBConnection;
-import main.util.SQLQueries;
+import main.util.Filter;
 
 import java.io.*;
 
@@ -29,7 +29,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 import oracle.sql.*;
 import oracle.jdbc.*;
@@ -43,7 +42,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 
 /**
- * Backing servlet for the Upload Image screen (uploadImage.jsp)
+ * Backing servlet for the Upload Image screen (UploadImage.jsp)
  * 
  *  @author Tim Phillips
  */
@@ -51,7 +50,7 @@ public class UploadImage extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
-     *  GET command for uploadImage.jsp
+     *  GET command for UploadImage.jsp
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -64,26 +63,13 @@ public class UploadImage extends HttpServlet {
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         }
- 
-        Connection connection = null;
+        
+        // Obtain the groups to display in the permission drop down
         try {
-            connection = DBConnection.createConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.GET_ALL_GROUPS);
-            ResultSet allGroups = preparedStatement.executeQuery();
-            ArrayList<String[]> groups = new ArrayList<String[]>();
-            
-            while (allGroups.next()) {
-                String[] group = new String[2];
-                group[0] = allGroups.getString("group_name");
-                group[1] = Integer.toString((allGroups.getInt("group_id")));
-                groups.add(group);
-            }
-            
-            request.setAttribute("groups", groups);
-            connection.close();
+            request.setAttribute("groups", Filter.getAllowedGroups((String)session.getAttribute("username")));
         } catch(Exception ex) {
-            System.out.println("An error occured while obtaining all the groups: " + ex);
-            request.setAttribute("errorMessage", "An error occured while obtaining all the groups.");
+            System.out.println("An error occurred while obtaining the groups a user is allowed to use:" + ex);
+            request.setAttribute("errorMessage", "An error occurred while obtaining the groups a user is allowed to use.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;

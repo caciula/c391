@@ -5,7 +5,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
     <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
-    <title>View User (${userFirstName} ${userLastName} - ${userName})</title> 
+    <title>View User (${userFirstName} ${userLastName} - ${username})</title> 
 </head>
 
 <body> 
@@ -21,7 +21,7 @@
             <tbody>
             <tr>
                 <th>Username: </th>
-                <td>${userName}</td>
+                <td>${username}</td>
             </tr>
             <tr>
                 <th>Name: </th>

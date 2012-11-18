@@ -8,8 +8,7 @@
     <title>Home</title> 
 </head>
 
-<body> 
-
+<body>
     <jsp:include page="resources/includes/header.jsp" />
     
     <div class="content">
@@ -19,7 +18,7 @@
 	    
         <p>Welcome to PhotoWeb!</p>
         
-        <ul> 
+        <ul>
             <c:if test='${username != null && username != ""}'>
                 <li>
                 You are already logged in as ${username}.
@@ -33,19 +32,16 @@
         
         <p class="pageTitle">Top Images</p>
 
-        <table border="1" cellpadding="15px" cellspacing="0px">
+        <table border="1" cellpadding="15px" cellspacing="0px" >
             <tbody>
                 <tr>
-                        <c:forEach items="${topImages}" var="image">
-                    <th>
-				            <a href="/PhotoWebApp/ViewImage?${image[1]}"><img src ="/PhotoWebApp/GetThumbnailImage?${image[1]}"></a>
-				            Views: ${image[0]}
-                    </th>
-                        </c:forEach>
+                    <c:forEach items="${topImages}" var="image">
+                    <a href="/PhotoWebApp/ViewImage?${image[1]}"><img src ="/PhotoWebApp/GetThumbnailImage?${image[1]}" width="50px"></a>
+                    Views: ${image[0]}
+                    </c:forEach>
                 </tr>
             </tbody>
         </table>
-        
     </div>
 </body>
 </html>

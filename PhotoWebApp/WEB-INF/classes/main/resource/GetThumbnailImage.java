@@ -42,17 +42,14 @@ public class GetThumbnailImage extends HttpServlet {
                 }
                 input.close();
             }
-            else {
-                // TODO: handle exception
-            }
         } catch( Exception ex ) {
-            // TODO: handle exception
+            System.out.println("An error occurred while obtaining a thumbnail for photo with id:" + picId);
         } finally {
             // Close the connection
             try {
                 connection.close();
             } catch ( SQLException ex) {
-                // TODO: handle exception
+                System.out.println("An error occurred while obtaining a thumbnail for photo with id:" + picId);
             }
         }
     }

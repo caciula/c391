@@ -18,14 +18,13 @@ public class ViewImage extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
-     *  GET command for viewImage.jsp
+     *  GET command for ViewImage.jsp
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         
         HttpSession session = request.getSession();
         String userName = (String) session.getAttribute("username");
-        request.setAttribute("loggedInUser", userName);
         
         // Obtain the image id from the user's QueryString
         String picId  = request.getQueryString();
@@ -82,24 +81,25 @@ public class ViewImage extends HttpServlet {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy k:mm");
                     request.setAttribute("date", formatter.format(rset.getTimestamp("timing")));
                 }
-            }
-            else {
+            } else {
                 // Handle no result
                 errorMessage = "No result found for the provided photo id.";
             }
             
-            // Check if the user has viewed this image before
-            PreparedStatement getImageViewedByUser = connection.prepareStatement(SQLQueries.GET_IMAGE_VIEWED_BY_USER);
-            getImageViewedByUser.setString(1, userName);
-            getImageViewedByUser.setString(2, picId);
-            ResultSet userHasViewedImage = getImageViewedByUser.executeQuery();
-            // if the user has not already viewed the image, add an entry to the image views
-            if (!userHasViewedImage.next()) {
-                PreparedStatement insertImageView = connection.prepareStatement(SQLQueries.INSERT_IMAGE_VIEW);
-                insertImageView.setString(1, picId);
-                insertImageView.setString(2, userName);
-                insertImageView.execute();
-                DBConnection.executeQuery(connection, "commit");
+            if (errorMessage.isEmpty()) {
+                // Check if the user has viewed this image before
+                PreparedStatement getImageViewedByUser = connection.prepareStatement(SQLQueries.GET_IMAGE_VIEWED_BY_USER);
+                getImageViewedByUser.setString(1, userName);
+                getImageViewedByUser.setString(2, picId);
+                ResultSet userHasViewedImage = getImageViewedByUser.executeQuery();
+                // if the user has not already viewed the image, add an entry to the image views
+                if (!userHasViewedImage.next()) {
+                    PreparedStatement insertImageView = connection.prepareStatement(SQLQueries.INSERT_IMAGE_VIEW);
+                    insertImageView.setString(1, picId);
+                    insertImageView.setString(2, userName);
+                    insertImageView.execute();
+                    DBConnection.executeQuery(connection, "commit");
+                }
             }
             connection.close();
             

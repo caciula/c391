@@ -12,9 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import main.util.DBConnection;
 
+/**
+ *  Backing servlet for the Register screen (Register.jsp)
+ * 
+ *  @author Gabriel Caciula
+ */
 public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+    /**
+     *  GET command for Login.jsp
+     */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("username", "");
 		request.setAttribute("password", "");
@@ -26,6 +34,9 @@ public class Register extends HttpServlet {
 		request.getRequestDispatcher("/Register.jsp").forward(request, response);
 	}
 
+    /**
+     *  POST command for Login.jsp
+     */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String inputUsername = (request.getParameter("username")).trim();
         String inputPassword = (request.getParameter("password")).trim();

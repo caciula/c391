@@ -1,6 +1,6 @@
 package main.web;
 import main.util.DBConnection;
-import main.util.SQLQueries;
+import main.util.Filter;
 
 import java.io.*;
 
@@ -8,9 +8,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 import oracle.sql.*;
 import oracle.jdbc.*;
@@ -32,7 +29,8 @@ public class UploadImagesFromDir extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
-     *  GET command for uploadImage.jsp
+     *  GET command for UploadImagesFromDir.jsp
+     *  Ensures that the user can access the screen, and obtains the groups for the "Access" drop down.
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -47,25 +45,11 @@ public class UploadImagesFromDir extends HttpServlet {
         }
         
         // Obtain the groups to display in the permission drop down
-        Connection connection = null;
         try {
-            connection = DBConnection.createConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.GET_ALL_GROUPS);
-            ResultSet allGroups = preparedStatement.executeQuery();
-            ArrayList<String[]> groups = new ArrayList<String[]>();
-            
-            while (allGroups.next()) {
-                String[] group = new String[2];
-                group[0] = allGroups.getString("group_name");
-                group[1] = Integer.toString((allGroups.getInt("group_id")));
-                groups.add(group);
-            }
-            
-            request.setAttribute("groups", groups);
-            connection.close();
+            request.setAttribute("groups", Filter.getAllowedGroups((String)session.getAttribute("username")));
         } catch(Exception ex) {
-            System.out.println("An error occured while obtaining all the groups: " + ex);
-            request.setAttribute("errorMessage", "An error occured while obtaining all the groups.");
+            System.out.println("An error occurred while obtaining the groups a user is allowed to use:" + ex);
+            request.setAttribute("errorMessage", "An error occurred while obtaining the groups a user is allowed to use.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
@@ -76,8 +60,8 @@ public class UploadImagesFromDir extends HttpServlet {
     }
     
     /**
-     *  Called when the "Upload" button is clicked on the applet
-     *  Uploads all images in the selected directory.
+     *  Called when the "Upload" button is clicked on the applet.
+     *  Uploads all images in the selected directory, one at a time.
      */
     public void doPost(HttpServletRequest request,HttpServletResponse response)
         throws ServletException, IOException {
@@ -94,13 +78,9 @@ public class UploadImagesFromDir extends HttpServlet {
         String date = null;
         String time = null;
         String access = null;
-        String updateImageDetails = "false";
-        String imageIdsString = null;
-        ArrayList<Integer> imageIds = new ArrayList<Integer>();
         
         Connection connection = null;
         try{
-
             connection = DBConnection.createConnection();
             ServletFileUpload upload = new ServletFileUpload();
             FileItemIterator iter = upload.getItemIterator(request);
@@ -120,93 +100,54 @@ public class UploadImagesFromDir extends HttpServlet {
                         date = Streams.asString(stream);
                     } else if (item.getFieldName().equals("time")){
                         time = Streams.asString(stream);
-                    } else if (item.getFieldName().equals("updateDetails")){
-                        updateImageDetails = Streams.asString(stream);
-                    } else if (item.getFieldName().equals("imageIds")){
-                        imageIdsString = Streams.asString(stream);
                     }
                 } else{
                     img = ImageIO.read(stream);
                     thumbNail = shrink(img, 10);
-                    ResultSet rset1 = DBConnection.executeQuery(connection, "SELECT pic_id_sequence.nextval from dual");
-                    rset1.next();
-                    photoId = rset1.getInt(1);
-                    DBConnection.executeQuery(connection, "INSERT INTO images VALUES(" + photoId +
-                           ",'" + username + "',null,null,null,null,null,empty_blob(), empty_blob())");
-                    String cmd = "SELECT * FROM images WHERE photo_id = " + photoId + " FOR UPDATE";
-         
-                    ResultSet rset = DBConnection.executeQuery(connection, cmd);
-                    rset.next();
-                    BLOB fullBlob = ((OracleResultSet)rset).getBLOB(9);
-                    BLOB thumbNailBlob = ((OracleResultSet)rset).getBLOB(8);
-                    @SuppressWarnings("deprecation")
-                    OutputStream fullOutstream = fullBlob.getBinaryOutputStream();
-                    @SuppressWarnings("deprecation")
-                    OutputStream thumbnailOutstream = thumbNailBlob.getBinaryOutputStream();
-                    ImageIO.write(img, "jpg", fullOutstream);
-                    ImageIO.write(thumbNail, "jpg", thumbnailOutstream);
-                   
-                    fullOutstream.close();
-                    thumbnailOutstream.close();     
-                    DBConnection.executeQuery(connection, "commit");
-                    imageIds.add(photoId);
                 }
-
             }
+            
+            // Ensure that the date and the time have been entered correctly
+            String dateTime = null;
+            if (!date.equals("") && time.equals("")) {
+                dateTime = "TO_DATE('" + date + "12:00"+ "', 'DD/MM/YYYY HH24:MI')";
+            } else if (!date.equals("") && !time.equals("")) {
+                dateTime = "TO_DATE('" + date + time + "', 'DD/MM/YYYY HH24:MI')";
+            }
+            
+            ResultSet rset1 = DBConnection.executeQuery(connection, "SELECT pic_id_sequence.nextval from dual");
+            rset1.next();
+            photoId = rset1.getInt(1);
+            DBConnection.executeQuery(connection, "INSERT INTO images VALUES(" + photoId + ",'" + username + "'," + access + ",'"
+                    + subject +"','" + place + "'," + dateTime + ",'" + 
+                    description + "',empty_blob(), empty_blob())");
+            String cmd = "SELECT * FROM images WHERE photo_id = " + photoId + " FOR UPDATE";
+            ResultSet rset = DBConnection.executeQuery(connection, cmd);
+            rset.next();
+            BLOB fullBlob = ((OracleResultSet)rset).getBLOB(9);
+            BLOB thumbNailBlob = ((OracleResultSet)rset).getBLOB(8);
+            @SuppressWarnings("deprecation")
+            OutputStream fullOutstream = fullBlob.getBinaryOutputStream();
+            @SuppressWarnings("deprecation")
+            OutputStream thumbnailOutstream = thumbNailBlob.getBinaryOutputStream();
+            ImageIO.write(img, "jpg", fullOutstream);
+            ImageIO.write(thumbNail, "jpg", thumbnailOutstream);
+           
+            fullOutstream.close();
+            thumbnailOutstream.close();
+            
             DBConnection.executeQuery(connection, "commit");
             connection.close();
         } catch(Exception e){
             System.out.println("An error occured while uploading a photo: " + e);
             request.setAttribute("errorMessage", "An unexpected error occured while uploading the images. Please ensure all fields have been entered correctly.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImage");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImagesFromDir");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         }
-        
-        if (updateImageDetails.equals("true")) {
-
-            Connection updateConnection = null;
-            try{
-                String[] imageIdsArray = imageIdsString.split("\\s");
-                for(String imageId : imageIdsArray) {
-                    updateConnection = DBConnection.createConnection();
-                    PreparedStatement preparedStatement = updateConnection.prepareStatement(SQLQueries.UPDATE_IMG_DETAILS_BY_ID);
-                    preparedStatement.setString(1, subject);
-                    preparedStatement.setString(2, place);
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy k:mm");
-                    if (!date.equals("")) {
-                        if (time.equals("")) {
-                            time = "12:00";
-                        }
-                        String inputDateTime = date + " " + time;
-                        Date dateTime = formatter.parse(inputDateTime);
-                        preparedStatement.setTimestamp(3, new Timestamp(dateTime.getTime()));
-                    } else {
-                        preparedStatement.setTimestamp(3, null);
-                    }
-                    preparedStatement.setString(4, description);
-                    preparedStatement.setString(5, access);
-                    preparedStatement.setString(6, imageId);
-                    preparedStatement.executeUpdate();
-                    DBConnection.executeQuery(updateConnection, "commit");
-                    updateConnection.close();
-                }
-            } catch (Exception e) {
-                System.out.println("An error occured while uploading a photo: " + e);
-                request.setAttribute("errorMessage", "An unexpected error occured while uploading the images. Please ensure all fields have been entered correctly.");
-                request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImage");
-                request.getRequestDispatcher("/Error.jsp").forward(request, response);
-                return;
-            }
-
-            response.sendRedirect("/PhotoWebApp/ViewUserImages?" + username);
-        } else {
-            response.setContentType("text/plain");
-            PrintWriter out = response.getWriter();
-            for(Integer imageId : imageIds) {
-                out.println(imageId + " ");
-            }
-        }
+        response.setContentType("text/plain");
+        PrintWriter out = response.getWriter();
+        out.println("SUCCESS");
     }
 
     /* Shrink image by a factor of n, and return the shrinked image */

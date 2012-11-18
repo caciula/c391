@@ -14,7 +14,7 @@ import main.util.DBConnection;
 import main.util.SQLQueries;
 
 /**
- * Backing servlet for the View User Images screen (viewUserImages.jsp)
+ * Backing servlet for the View User Images screen (ViewUserImages.jsp)
  * 
  *  @author Tim Phillips
  */
@@ -84,10 +84,8 @@ public class ViewUserImages extends HttpServlet {
                 ArrayList<String> groupMembers = new ArrayList<String>();
                 while (groupMembersResult.next()) {
                     groupMembers.add(groupMembersResult.getString("friend_id"));
-                    System.out.println("Member: " + groupMembersResult.getString("friend_id"));
                 }
                 allGroupMembers.add(groupMembers);
-                System.out.println("Group: " + userGroups.getInt("group_id"));
                 
             }
             request.setAttribute("groups", groups);
@@ -113,7 +111,6 @@ public class ViewUserImages extends HttpServlet {
         }
 		
         // Redirect to ViewUserImages.jsp
-        request.setAttribute("userName", userName);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/ViewUserImages.jsp");
         dispatcher.forward(request, response);
     }

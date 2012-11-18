@@ -13,13 +13,25 @@ import javax.servlet.http.HttpSession;
 
 import main.util.DBConnection;
 
+/**
+ *  Backing servlet for the Login screen (Login.jsp)
+ * 
+ *  @author Gabriel Caciula
+ */
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+    /**
+     *  GET command for Login.jsp
+     */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/Login.jsp").forward(request, response);
 	}
 	
+    /**
+     *  POST command for Login.jsp
+     *  Logs the user in based on the input parameters
+     */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String inputUsername = (request.getParameter("username")).trim();
         String inputPassword = (request.getParameter("password")).trim();

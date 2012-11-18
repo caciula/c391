@@ -13,11 +13,20 @@ import javax.servlet.http.HttpSession;
 
 import main.util.DBConnection;
 
+/**
+ *  Backing servlet for the Create Group screen (CreateGroup.jsp)
+ * 
+ *  @author Gabriel Caciula
+ */
 public class CreateGroup extends HttpServlet {
 	private static final long serialVersionUID = 1L;
      
+    /**
+     *  GET command for CreateGroup.jsp
+     */ 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		// Ensure that there is a user logged in
 		if (session.getAttribute("username") == null) {
             request.setAttribute("errorMessage", "You must be logged in to view this screen.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/Login.jsp");
@@ -27,6 +36,9 @@ public class CreateGroup extends HttpServlet {
 		}
 	}
 
+    /**
+     *  POST command for CreateGroup.jsp
+     */ 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String inputGroupname = (request.getParameter("groupname")).trim();
 		
