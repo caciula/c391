@@ -44,7 +44,7 @@
 
         <p class="pageTitle">Groups:</p>
         
-        <a href="/PhotoWebApp/CreateGroup">Create a new group</a> | <a href="/PhotoWebApp/AddUserToGroup">Add a user to a group</a>
+        <a href="/PhotoWebApp/GroupManagement">Create/delete groups</a> | <a href="/PhotoWebApp/UserManagement">Add/remove users to/from groups</a>
 	    
 	    <p>
 	    <table>

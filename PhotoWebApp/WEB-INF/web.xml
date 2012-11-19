@@ -61,23 +61,23 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>CreateGroup</servlet-name>
-        <servlet-class>main.web.CreateGroup</servlet-class>
+        <servlet-name>GroupManagement</servlet-name>
+        <servlet-class>main.web.GroupManagement</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>CreateGroup</servlet-name>
-        <url-pattern>/CreateGroup</url-pattern>
+        <servlet-name>GroupManagement</servlet-name>
+        <url-pattern>/GroupManagement</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>AddUserToGroup</servlet-name>
-        <servlet-class>main.web.AddUserToGroup</servlet-class>
+        <servlet-name>UserManagement</servlet-name>
+        <servlet-class>main.web.UserManagement</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>AddUserToGroup</servlet-name>
-        <url-pattern>/AddUserToGroup</url-pattern>
+        <servlet-name>UserManagement</servlet-name>
+        <url-pattern>/UserManagement</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>Search</servlet-name>
         <servlet-class>main.web.Search</servlet-class>
