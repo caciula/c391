@@ -26,4 +26,6 @@ public class SQLQueries {
     public static final String GET_THUMBNAIL_ONLY_BY_ID = "select thumbnail from images where photo_id=?";
     public static final String UPDATE_IMG_DETAILS_BY_ID = "update images set subject=?, place=?, timing=?, description=?, permitted=? where photo_id=?";
     public static final String INSERT_IMAGE_VIEW = "insert into image_views values(?,?)";
+    public static final String REMOVE_IMAGE_VIEWS_BY_ID = "delete from image_views where photo_id=?";
+    public static final String REMOVE_IMAGE_BY_ID = "delete from images where photo_id=?";
 }
