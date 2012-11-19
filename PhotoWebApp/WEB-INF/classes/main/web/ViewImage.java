@@ -86,7 +86,7 @@ public class ViewImage extends HttpServlet {
                 errorMessage = "No result found for the provided photo id.";
             }
             
-            if (errorMessage.isEmpty()) {
+            if (errorMessage.isEmpty() && userName != null) {
                 // Check if the user has viewed this image before
                 PreparedStatement getImageViewedByUser = connection.prepareStatement(SQLQueries.GET_IMAGE_VIEWED_BY_USER);
                 getImageViewedByUser.setString(1, userName);
