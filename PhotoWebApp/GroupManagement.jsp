@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Create Group</title>
+    <title>Group Management</title>
     <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
 </head>
 
@@ -11,11 +11,11 @@
     
     <div class="content">
         
-        <p class="pageTitle">Create Group</p>
+        <p class="pageTitle">Group Management</p>
         
         <hr>
         
-        <form name="CreateGroup" action="CreateGroup" method="post">
+        <form name="GroupManagement" action="GroupManagement" method="post">
               <table>
                 <tbody>
                 <tr>
@@ -25,7 +25,9 @@
                 <tr>
                     <th></th>
                     <td>
-                        <input type="submit" value="Submit" >
+                        <input type="submit" name="submit" value="Create">
+                        <input type="submit" name="submit" value="Delete">
+
                         <input type="button" value="Cancel" onclick="location.href='ViewUserImages?${username}'">
                     </td>
                 </tr>

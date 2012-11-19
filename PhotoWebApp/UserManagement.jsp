@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Add User To Group</title>
+  <title>User Management</title>
   <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
 </head>
 
@@ -12,11 +12,11 @@
     
         <div class="content">
         
-	        <p class="pageTitle">Add User To Group</p>
+	        <p class="pageTitle">User Management</p>
 	        
 	        <hr>
 	        
-			<form name="AddUserToGroup" action="AddUserToGroup" method="post">
+			<form name="UserManagement" action="UserManagement" method="post">
 			    <table>
 	                <tbody>
 	                <tr>
@@ -38,7 +38,8 @@
 	                <tr>
 	                    <th></th>
 	                    <td>
-	                        <input type="submit" value="Submit" >
+	                        <input type="submit" name="submit" value="Add">
+                                <input type="submit" name="submit" value="Remove">
 	                        <input type="button" value="Cancel" onclick="location.href='ViewUserImages?${username}'">
 	                    </td>
 	                </tr>
