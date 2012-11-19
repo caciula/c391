@@ -42,13 +42,13 @@ public class GetFullImage extends HttpServlet {
                 input.close();
             }
         } catch( Exception ex ) {
-            System.out.println("An error occurred while obtaining a photo with id:" + picId);
+            System.out.println("An error occurred while obtaining a photo with id:" + picId + ": " + ex);
         } finally {
             // Close the connection
             try {
                 connection.close();
             } catch ( SQLException ex) {
-                System.out.println("An error occurred while obtaining a photo with id:" + picId);
+                System.out.println("An error occurred while obtaining a photo with id:" + picId + ": " + ex);
             }
         }
     }

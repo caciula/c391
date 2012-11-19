@@ -51,6 +51,7 @@ public class Home extends HttpServlet {
                     count++;
                 }
             }
+            connection.close();
             
         } catch (Exception e) {
             System.out.println("An error occurred while obtaining the Top Images: " + e);

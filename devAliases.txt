@@ -31,6 +31,10 @@ alias updateEditImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/E
 alias updateEditImageJava="\cp ~/workspace/PhotoWebApp/src/main/web/EditImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/EditImage.java"
 alias updateEditImage="updateEditImageClass;updateEditImageJava"
 
+alias updateRemoveImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/RemoveImage.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/RemoveImage.class"
+alias updateRemoveImageJava="\cp ~/workspace/PhotoWebApp/src/main/web/RemoveImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/RemoveImage.java"
+alias updateRemoveImage="updateRemoveImageClass;updateRemoveImageJava"
+
 alias updateGetFullImageClass="\cp ~/workspace/PhotoWebApp/build/classes/main/resource/GetFullImage.class ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/resource/GetFullImage.class"
 alias updateGetFullImageJava="\cp ~/workspace/PhotoWebApp/src/main/resource/GetFullImage.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/resource/GetFullImage.java"
 alias updateGetFullImage="updateGetFullImageClass;updateGetFullImageJava"
@@ -63,4 +67,4 @@ alias updateHomeClass="\cp ~/workspace/PhotoWebApp/build/classes/main/web/Home.c
 alias updateHomeJava="\cp ~/workspace/PhotoWebApp/src/main/web/Home.java ~/catalina/webapps/PhotoWebApp/WEB-INF/classes/main/web/Home.java"
 alias updateHome="updateHomeJava;updateHomeClass"
 
-alias updatePhotoWebApp="updateDBConnection;updateLogin;updateUploadImage;updateViewImage; updateViewUserImages; updateEditImage; updateGetFullImage; updateGetThumbnailImage;updateSQLQueries; updateRegister;updateUploadImagesFromDir;updateAddUserToGroup;updateCreateGroup;updateSearch;updateHome;updateFilter;"
+alias updatePhotoWebApp="updateDBConnection;updateLogin;updateUploadImage;updateViewImage; updateViewUserImages; updateEditImage; updateGetFullImage; updateGetThumbnailImage;updateSQLQueries; updateRegister;updateUploadImagesFromDir;updateAddUserToGroup;updateCreateGroup;updateSearch;updateHome;updateFilter;updateRemoveImage;"
