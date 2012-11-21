@@ -86,6 +86,15 @@
         <servlet-name>Search</servlet-name>
         <url-pattern>/Search</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>DataAnalysis</servlet-name>
+        <servlet-class>main.web.DataAnalysis</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DataAnalysis</servlet-name>
+        <url-pattern>/DataAnalysis</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>UploadImagesFromDir</servlet-name>
