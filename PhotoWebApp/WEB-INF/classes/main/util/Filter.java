@@ -34,6 +34,14 @@ public class Filter{
 				// No image found for id
 				return false;
 			}
+            
+            if (currentUser == null) {
+                if (permission == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 			
 			// Determine if the user may view the image
             if (permission == 1 || owner.equals(currentUser) || currentUser.equals("admin")) {
@@ -53,12 +61,12 @@ public class Filter{
             }
            
         } catch(Exception ex) {
-            System.err.println("Exception occured while determining if a photo is viewable: " + ex.getMessage());
+            System.err.println("Exception occured while determining if a photo with id " + picture_Id + " is viewable: " + ex.getMessage());
         } finally {
         	try {
         	    myConn.close();
         	} catch (Exception ex) {
-                System.err.println("Exception occured while determining if a photo is viewable: " + ex.getMessage());
+                System.err.println("Exception occured while determining if a photo with id " + picture_Id + " is viewable: " + ex.getMessage());
         	}
         }        
       return false;

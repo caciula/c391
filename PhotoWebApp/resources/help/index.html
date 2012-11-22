@@ -1,1 +1,128 @@
-Placeholder for user documentation.
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Help</title> 
+    <style>
+    div {margin-left:20px;}
+</style>
+</head>
+
+<body style="padding: 20px; width: 900px;">
+
+<a name="top"><center><h1>PhotoWeb Help</h1></center>
+
+<hr>
+
+<h2>Table Of Contents</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#instal">Installation Guide</a></li>
+<li><a href="#appHelp">Application Help</a>
+    <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#myProfile">My Profile</a></li>
+    <li><a href="#viewImage">View Image</a></li>
+    <li><a href="#editImage">Edit Image</a></li>
+    <li><a href="#uploadImage">Upload Single Image</a></li>
+    <li><a href="#uploadImages">Upload Multiple Images</a></li>
+    </ul>
+</li>
+</ul>
+
+<hr>
+
+<a name="intro"><h2>Introduction</h3>
+PhotoWeb is a web-based database application system that provides services for storing, sharing and searching for photos. Features of the system include:
+<ul >
+<li>Managing your profile - including creating groups of friends to share your photos with.</li>
+<li>Uploading and storing photos, with descriptive information and access privileges.</li>
+<li>Searching for photos based on keywords and date range.</li>
+<li>Generating and displaying a data analysis report.</li>
+</ul>
+
+<hr>
+
+<a name="install"><h2>Installation Guide</h3>
+
+TO DO
+
+<hr>
+
+<a name="appHelp"><h2>Application Help</h3>
+
+<a name="home"><h3>Home</h3>
+
+<div>
+    <b>URL:</b> /Home <br>
+    <b>Screenshot:</b> To do once screen is finalized
+    <p>
+    
+    The Home screen is the welcome screen for the application. The screen displays the following links:
+    <ul >
+    <li>If the user is currently logged into the system, a link to navigate to the user's <a href="#myProfile">profile</a>.</li>
+    <li>A link to navigate to the Login screen.</li>
+    <li>A link to navigate to the Register screen.</li>
+    <li>A link to navigate to the Search screen.</li>
+    </ul>
+    
+    <p/>
+    In addition, this screen displays the top 5 images in the system. The top images are determined by the number of distinct users who have viewed the image. If there is a tie, all tied images are displayed. 
+</div>
+
+<a name="viewImage"><h3>View Image</h3>
+
+<div>
+    <b>URL:</b> /ViewImage?{photoId} <br>
+    <b>Screenshot:</b> To do once screen is finalized
+    <p/>
+    
+    
+    The View Image screen displays information about an image. 
+    The screen is only accessible under the following conditions:
+    <ul >
+    <li>The current user is the owner of the image.</li>
+    <li>The current user is a member of a group that the image belongs too.</li>
+    <li>The image is public.</li>
+    </ul>
+    
+    If present, the screen displays information about the photo's subject, place, date, time, description and security access.
+    
+    If the user that is currently logged in is the owner of the image:
+    <ul >
+    <li>A link is displayed to navigate to the <a href="#editImage">Edit Image</a> screen, where the user can update the descriptive information about the image.</li>
+    <li>A link is displayed to remove the image. Clicking this link will remove the image from the system.</li>
+    <li>A link is displayed to navigate to the user's profile page.</li>
+    </ul>
+</div>
+
+<a name="editImage"><h3>Edit Image</h3>
+<div>
+    <b>URL:</b> /EditImage?{photoId}<br>
+    <b>Screenshot:</b> To do once screen is finalized
+    <p>
+    
+    The Edit Image screen allows a user to update the descriptive and security information about an image. 
+    The screen is only accessible when the current user is the owner of the image. The image is displayed, along with input fields for Subject, Place, Date, Time, Description, and Access. The fields are populated with the image's current information.
+    <p/>
+    The Access drop down contains the following groups:
+    <ul >
+    <li>Groups that the user is a member of.</li>
+    <li>Groups that the user has created themselves.</li>
+    <li>Public and Private groups.</li>
+    </ul>
+    
+    <p/>
+    
+    Clicking on [Save] will update the photo's information based on the user's input and redirect to the <a href="#viewImage">View Image</a> screen.
+    <p/>
+    Clicking on [Cancel] will redirect to the <a href="#viewImage">View Image</a> screen without updating the image's information.
+    
+    </ul>
+</div>
+
+<p>
+<a href="#top"> Go to top.</a>
+
+</body>
+</html>

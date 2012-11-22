@@ -126,10 +126,8 @@ public class UploadImagesFromDir extends HttpServlet {
             rset.next();
             BLOB fullBlob = ((OracleResultSet)rset).getBLOB(9);
             BLOB thumbNailBlob = ((OracleResultSet)rset).getBLOB(8);
-            @SuppressWarnings("deprecation")
-            OutputStream fullOutstream = fullBlob.getBinaryOutputStream();
-            @SuppressWarnings("deprecation")
-            OutputStream thumbnailOutstream = thumbNailBlob.getBinaryOutputStream();
+            OutputStream fullOutstream = fullBlob.setBinaryStream(0);
+            OutputStream thumbnailOutstream = thumbNailBlob.setBinaryStream(0);
             ImageIO.write(img, "jpg", fullOutstream);
             ImageIO.write(thumbNail, "jpg", thumbnailOutstream);
            
@@ -137,13 +135,28 @@ public class UploadImagesFromDir extends HttpServlet {
             thumbnailOutstream.close();
             
             DBConnection.executeQuery(connection, "commit");
-            connection.close();
         } catch(Exception e){
+            try {
+                connection.rollback();
+            } catch (Exception rollbackEx) {
+                System.out.println("An error occured while rolling back the transaction: " + rollbackEx);
+            }
             System.out.println("An error occured while uploading a photo: " + e);
             request.setAttribute("errorMessage", "An unexpected error occured while uploading the images. Please ensure all fields have been entered correctly.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImagesFromDir");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
+        } finally {
+            // Close the connection
+            try {
+                connection.close();
+            } catch (Exception ex) {
+                System.out.println("An error occured while uploading photo: " + ex);
+                request.setAttribute("errorMessage", "An unexpected error occured while uploading the images. Please ensure all fields have been entered correctly.");
+                request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImage");
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
+                return;
+            }
         }
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();

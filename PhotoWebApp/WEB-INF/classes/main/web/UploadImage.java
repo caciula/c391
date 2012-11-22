@@ -157,20 +157,23 @@ public class UploadImage extends HttpServlet {
             rset.next();
             BLOB fullBlob = ((OracleResultSet)rset).getBLOB(9);
             BLOB thumbNailBlob = ((OracleResultSet)rset).getBLOB(8);
-            @SuppressWarnings("deprecation")
-            OutputStream fullOutstream = fullBlob.getBinaryOutputStream();
-            @SuppressWarnings("deprecation")
-            OutputStream thumbnailOutstream = thumbNailBlob.getBinaryOutputStream();
+            OutputStream fullOutstream = fullBlob.setBinaryStream(0);
             ImageIO.write(img, "jpg", fullOutstream);
-            ImageIO.write(thumbNail, "jpg", thumbnailOutstream);
-            
             fullOutstream.close();
+
+            OutputStream thumbnailOutstream = thumbNailBlob.setBinaryStream(0);
+            ImageIO.write(thumbNail, "jpg", thumbnailOutstream);
             thumbnailOutstream.close();
   
             DBConnection.executeQuery(connection, "commit");
             // Redirect to the ViewImage servlet to view the uploaded image
             response.sendRedirect("/PhotoWebApp/ViewImage?" + photoId);
         } catch(Exception ex) {
+            try {
+                connection.rollback();
+            } catch (Exception rollbackEx) {
+                System.out.println("An error occured while rolling back the transaction: " + rollbackEx);
+            }
             System.out.println("An error occured while uploading a photo: " + ex);
             request.setAttribute("errorMessage", "An error occured while uploading the file. Please ensure a .jpg or .gif file is selected and " +
             		"all fields have been entered correctly.");
