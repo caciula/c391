@@ -5,6 +5,11 @@
  http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
  version="2.4">
 
+    <!-- Default welcome screen -->
+    <welcome-file-list>
+        <welcome-file>Home</welcome-file>
+    </welcome-file-list>
+
     <!-- Backing servlets for jsp/html pages and actions -->
     <servlet>
         <servlet-name>UploadImage</servlet-name>
@@ -141,7 +146,6 @@
         <servlet-name>GetThumbnailImage</servlet-name>
         <url-pattern>/GetThumbnailImage</url-pattern>
     </servlet-mapping>
-    
     
 
 </web-app>

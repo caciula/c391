@@ -28,6 +28,11 @@
             <li><p><a href="/PhotoWebApp/Login">Log In</a></p></li>
             <li><p><a href="/PhotoWebApp/Register">Register</a></p></li>
             <li><p><a href="/PhotoWebApp/Search">Search</a></p></li>
+            <c:if test='${username == "admin"}'>
+                <li>
+                <a href="/PhotoWebApp/DataAnalysis">Generate Data Analysis</a>
+                </li>
+            </c:if>
         </ul> 
         
         <p class="pageTitle">Top Images</p>

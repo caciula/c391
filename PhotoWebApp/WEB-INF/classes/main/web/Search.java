@@ -43,9 +43,9 @@ public class Search extends HttpServlet {
          if(sort.equals("Rank")){
                          query += " ORDER BY ((6*SCORE(1))+(3*SCORE(2))+SCORE(3)) DESC";
          }else if(sort.equals("New")){
-                         query += " ORDER BY timing DESC";
+                         query += " ORDER BY timing DESC NULLS LAST";
          }else if(sort.equals("Old")){
-                         query += " ORDER BY timing ASC";
+                         query += " ORDER BY timing ASC NULLS LAST";
          }
 
          Connection myConn = null;

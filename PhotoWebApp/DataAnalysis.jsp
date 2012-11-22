@@ -13,7 +13,7 @@
 
     <div class="content">
     
-        <p class="pageTitle">Search</p>
+        <p class="pageTitle">Data Analysis</p>
         
         <hr/>
 
