@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import main.util.DBConnection;
 
 /**
- *  Backing servlet for the Create Group screen (CreateGroup.jsp)
+ *  Backing servlet for the Group Management screen (GroupManagement.jsp)
  * 
  *  @author Gabriel Caciula
  */
@@ -22,11 +22,12 @@ public class GroupManagement extends HttpServlet {
 	private static final long serialVersionUID = 1L;
      
     /**
-     *  GET command for CreateGroup.jsp
+     *  GET command for GroupManagement.jsp
      */ 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		// Ensure that there is a user logged in
+		
+		//ensures that there is a user logged in
 		if (session.getAttribute("username") == null) {
             request.setAttribute("errorMessage", "You must be logged in to view this screen.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/Login.jsp");
@@ -37,7 +38,10 @@ public class GroupManagement extends HttpServlet {
 	}
 
     /**
-     *  POST command for CreateGroup.jsp
+     *  POST command for GroupManagement.jsp
+     *  
+     *  Either creates or deletes the specified group, depending on which button is pressed. If a group is deleted, all users belonging
+     *  to that group are also removed from it
      */ 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String button = request.getParameter("submit");
@@ -60,6 +64,7 @@ public class GroupManagement extends HttpServlet {
         		try {
 		        	Connection connection = DBConnection.createConnection();
 		        	
+		        	//checks to see if the current user has already created a group with the same name
 		        	PreparedStatement query11 = connection.prepareStatement("select count(*) from groups where user_name = ? and group_name = ?");
 		        	query11.setString(1, username);
 		        	query11.setString(2, inputGroupname);
@@ -70,6 +75,7 @@ public class GroupManagement extends HttpServlet {
 						if (resultSet11.getInt(1) == 1) {
 						    errorMessage = "Multiple groups with the same name cannot be created by the same user.";
 						} else {
+							//we want to find the largest group id, so we can create a new group with a larger id (by 1)
 							PreparedStatement query21 = connection.prepareStatement("select max(group_id) from groups");
 							
 							ResultSet resultSet21 = query21.executeQuery();
@@ -78,6 +84,7 @@ public class GroupManagement extends HttpServlet {
 								int groupID = resultSet21.getInt(1);
 								groupID++;
 								
+								//creates the group
 								PreparedStatement query31 = connection.prepareStatement("insert into groups values (?, ?, ?, ?)");
 								query31.setInt(1, groupID);
 								query31.setString(2, username);
@@ -100,6 +107,7 @@ public class GroupManagement extends HttpServlet {
         		try {
 	        		Connection connection = DBConnection.createConnection();
 	        		
+	        		//checks to see if the current user is the owner of the group being deleted
 	        		PreparedStatement query12 = connection.prepareStatement("select count(*) from groups where user_name = ? and group_name = ?");
 	        		query12.setString(1, username);
 		        	query12.setString(2, inputGroupname);
@@ -108,6 +116,7 @@ public class GroupManagement extends HttpServlet {
 		        	
 		        	if (resultSet12 != null && resultSet12.next()) {
 		        		if (resultSet12.getInt(1) == 1) {
+		        			//finds the group id of the group being deleted
 		        			PreparedStatement query22 = connection.prepareStatement("select group_id from groups where user_name = ? and group_name = ?");
 		        			query22.setString(1, username);
 				        	query22.setString(2, inputGroupname);
@@ -117,10 +126,12 @@ public class GroupManagement extends HttpServlet {
 		        			if (resultSet22 != null && resultSet22.next()) {
 		        				int groupID = resultSet22.getInt(1);
 		        				
+		        				//deletes all users from the group
 		        				PreparedStatement query32 = connection.prepareStatement("delete from group_lists where group_id = ?");
 		        				query32.setInt(1, groupID);
 		        				query32.executeUpdate();
 		        				
+		        				//finally deletes the group itself
 		        				PreparedStatement query42 = connection.prepareStatement("delete from groups where group_id = ?");
 		        				query42.setInt(1, groupID);
 		        				query42.executeUpdate();

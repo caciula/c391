@@ -63,8 +63,64 @@ public class DataAnalysis extends HttpServlet {
          String fromDate = request.getParameter("fromDate");
          String toDate = request.getParameter("toDate");
          
-         String query = user +" "+ subject +" "+ fromDate +" "+ toDate;
-         request.setAttribute("yourQuery", query);
+         String query = "SELECT owner_name, subject, COUNT(*) FROM images";
+         if(!user.equals("All")){
+        	 query += " WHERE owner_name = ? ";
+         }
+         if(!subject.equals("All") && user.equals("All")){
+        	 query += " WHERE subject = ? ";
+         }else if(!subject.equals("All") && !user.equals("All")){
+        	 query += " AND subject = ? ";
+         }
+         
+         if(!fromDate.isEmpty() && subject.equals("All") && user.equals("All")){
+        	 query += " WHERE timing >=  TO_DATE( ?, 'DD/MM/YYYY HH24:MI:SS')";
+         }else if(!fromDate.isEmpty()){
+        	 query += " AND timing >= TO_DATE( ?, 'DD/MM/YYYY HH24:MI:SS')";
+         }
+         if(!toDate.isEmpty() && fromDate.isEmpty() && subject.equals("All") && user.equals("All")){
+        	 query += " WHERE timing <= ? ";
+         }else if(!toDate.isEmpty()){
+        	 query += " AND timing <=  ? ";
+         }
+         
+         query += " GROUP BY owner_name, subject";
+         Connection myConn = null;
+         try{
+        	 	myConn = DBConnection.createConnection();
+        	 	
+        	 	PreparedStatement getReport = myConn.prepareStatement(query);
+        	 	int n = 1;
+        	    if(!user.equals("All")){
+        	    	getReport.setString(n, user);
+        	    	n++;
+                }
+        	    if(!subject.equals("All")){
+               	 	getReport.setString(n, subject);
+               	 	n++;
+                }
+        	    if(!fromDate.isEmpty()){
+               	 	getReport.setString(n, fromDate);
+               	 	n++;
+                }
+        	    if (!toDate.isEmpty()){
+        	    	getReport.setString(n, toDate);
+        	    	n++;
+        	    }
+        	    
+        	 	ResultSet report = getReport.executeQuery();
+        	 	//TODO determine best way to display report
+        	 	report.close();
+         } catch(Exception ex) {
+                 System.err.println("Exception: " + ex.getMessage());
+         } finally {
+             try {
+                 myConn.close();
+             } catch (Exception ex) {
+            	 System.err.println("Exception: " + ex.getMessage());
+             }
+         }
+         
          request.getRequestDispatcher("/DataAnalysisResults.jsp").forward(request, response);
     }   
 }

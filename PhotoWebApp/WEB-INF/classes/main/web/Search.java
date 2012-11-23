@@ -33,19 +33,23 @@ public class Search extends HttpServlet {
         	 query += " WHERE CONTAINS(subject, ?, 1) > 0 OR CONTAINS(place, ?, 2) > 0 OR CONTAINS(description, ?, 3) > 0 ";
          }
          
-         if(!fromDate.isEmpty()){
-                 query += " AND when >=  ? ";
+         if(!fromDate.isEmpty() && keywords.isEmpty()){
+        	 query += " WHERE timing >=  TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
+         }else if(!fromDate.isEmpty() && !keywords.isEmpty()){
+        	 query += " AND timing >= TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
          }
-         if(!toDate.isEmpty()){
-                 query += " AND when <=  ? ";
+         if(!toDate.isEmpty() && keywords.isEmpty() && fromDate.isEmpty()){
+        	 query += " WHERE timing <= TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
+         }else if(!toDate.isEmpty()){
+        	 query += " AND timing <=  TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
          }
 
          if(sort.equals("Rank")){
                          query += " ORDER BY ((6*SCORE(1))+(3*SCORE(2))+SCORE(3)) DESC";
          }else if(sort.equals("New")){
-                         query += " ORDER BY timing DESC NULLS LAST";
+                         query += " ORDER BY CASE WHEN timing IS NULL THEN 1 ELSE 0 END, timing DESC";
          }else if(sort.equals("Old")){
-                         query += " ORDER BY timing ASC NULLS LAST";
+                         query += " ORDER BY CASE WHEN timing IS NULL THEN 1 ELSE 0 END, timing ASC";
          }
 
          Connection myConn = null;

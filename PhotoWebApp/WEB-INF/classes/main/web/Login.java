@@ -30,6 +30,7 @@ public class Login extends HttpServlet {
 	
     /**
      *  POST command for Login.jsp
+     *  
      *  Logs the user in based on the input parameters
      */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,6 +45,7 @@ public class Login extends HttpServlet {
 			try {
 				Connection connection = DBConnection.createConnection();
 				
+				//checks to see if the username/password combination exists
 				PreparedStatement query = connection.prepareStatement("select count(*) from users where user_name = ? and password = ?");
 				query.setString(1, inputUsername);
 				query.setString(2, inputPassword);

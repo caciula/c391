@@ -16,7 +16,7 @@ import main.util.DBConnection;
 import main.util.SQLQueries;
 
 /**
- *  Backing servlet for the Add User To Group screen (AddUserToGroup.jsp)
+ *  Backing servlet for the User Management screen (UserManagement.jsp)
  * 
  *  @author Gabriel Caciula
  */
@@ -24,20 +24,20 @@ public class UserManagement extends HttpServlet {
 	private static final long serialVersionUID = 1L;
      
     /**
-     *  GET command for AddUserToGroup.jsp
+     *  GET command for UserManagement.jsp
      */	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ArrayList<String[]> groups;
-		
         HttpSession session = request.getSession();
-        // Ensure that there is a user logged in
+        
+        //ensures that there is a user logged in
         if (session.getAttribute("username") == null) {
             request.setAttribute("errorMessage", "You must be logged in to view this screen.");
             request.setAttribute("errorBackLink", "/PhotoWebApp/Login.jsp");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
             return;
         } else {
-            // Obtain all of the groups the current user has created
+            //obtain all of the groups the current user has created
             try {
                 groups = getListOfGroups(request);
                 request.setAttribute("groups", groups);
@@ -54,8 +54,9 @@ public class UserManagement extends HttpServlet {
     }
     
     /**
-     *  POST command for AddUserToGroup.jsp
-     *  Adds the input user to the group in context.
+     *  POST command for UserManagement.jsp
+     *  
+     *  Either adds or removes a user to/from a group, depending on which button is pressed
      */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String button = request.getParameter("submit");
@@ -79,6 +80,7 @@ public class UserManagement extends HttpServlet {
 				try {
 					Connection connection = DBConnection.createConnection();
 					
+					//checks to see if the user is valid (is registered, is not the current user)
 					PreparedStatement query11 = connection.prepareStatement("select count(*) from users where user_name = ? and user_name != ?");
 					query11.setString(1, inputUsername);
 					query11.setString(2, username);
@@ -87,6 +89,7 @@ public class UserManagement extends HttpServlet {
 					
 					if (resultSet11 != null && resultSet11.next()) {
 						if (resultSet11.getInt(1) == 1) {
+							//checks to see if the user isn't already a part of the group
 							PreparedStatement query21 = connection.prepareStatement("select count(*) from group_lists where group_id = ? and friend_id = ?");
 							query21.setInt(1, inputGroupID);
 							query21.setString(2, inputUsername);
@@ -97,6 +100,7 @@ public class UserManagement extends HttpServlet {
 								if (resultSet21.getInt(1) == 1) {
 									errorMessage = "The user is already a part of the group";
 								} else {
+									//adds the user to the group
 									PreparedStatement query31 = connection.prepareStatement("insert into group_lists values(?, ?, ?, ?)");
 									query31.setInt(1, inputGroupID);
 									query31.setString(2, inputUsername);
@@ -122,6 +126,7 @@ public class UserManagement extends HttpServlet {
 				try {
 					Connection connection = DBConnection.createConnection();
 					
+					//checks to see if the user is a member of the group
 					PreparedStatement query12 = connection.prepareStatement("select count(*) from group_lists where group_id = ? and friend_id = ?");
 					query12.setInt(1, inputGroupID);
 					query12.setString(2, inputUsername);
@@ -130,6 +135,7 @@ public class UserManagement extends HttpServlet {
 					
 					if (resultSet12 != null && resultSet12.next()) {
 						if (resultSet12.getInt(1) == 1) {
+							//removes the user from the group
 							PreparedStatement query22 = connection.prepareStatement("delete from group_lists where group_id = ? and friend_id = ?");
 							query22.setInt(1, inputGroupID);
 							query22.setString(2, inputUsername);
@@ -157,13 +163,15 @@ public class UserManagement extends HttpServlet {
 	}
 	
     /**
-     *  Helper method to obtain the groups the current user has created.
-     *  @return ArrayList<String[]> - an array containing an element of [group_name,group_id]
+     * Returns a list of all groups the current user is an owner of
+     * 
+     * @return A list of all groups that the user is an owner of
      */
 	private ArrayList<String[]> getListOfGroups(HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 		Connection connection = DBConnection.createConnection();
 		
+		//gets a list of groups that the user created
 		PreparedStatement query = connection.prepareStatement(SQLQueries.GET_USER_GROUPS);
 		query.setString(1, (String) session.getAttribute("username"));
 		
