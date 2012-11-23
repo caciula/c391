@@ -8,6 +8,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import oracle.sql.*;
 import oracle.jdbc.*;
@@ -84,6 +86,7 @@ public class UploadImagesFromDir extends HttpServlet {
             connection = DBConnection.createConnection();
             ServletFileUpload upload = new ServletFileUpload();
             FileItemIterator iter = upload.getItemIterator(request);
+            // Obtain the image info and the raw image file
             while (iter.hasNext()) {
                 FileItemStream item = iter.next();
                 InputStream stream = item.openStream();
@@ -107,22 +110,32 @@ public class UploadImagesFromDir extends HttpServlet {
                 }
             }
             
-            // Ensure that the date and the time have been entered correctly
-            String dateTime = null;
-            if (!date.equals("") && time.equals("")) {
-                dateTime = "TO_DATE('" + date + "12:00"+ "', 'DD/MM/YYYY HH24:MI')";
-            } else if (!date.equals("") && !time.equals("")) {
-                dateTime = "TO_DATE('" + date + time + "', 'DD/MM/YYYY HH24:MI')";
-            }
-            
-            ResultSet rset1 = DBConnection.executeQuery(connection, "SELECT pic_id_sequence.nextval from dual");
+            // Get the next id for the photo
+            Statement statement = connection.createStatement();
+            ResultSet rset1 = statement.executeQuery("SELECT pic_id_sequence.nextval from dual");
             rset1.next();
             photoId = rset1.getInt(1);
-            DBConnection.executeQuery(connection, "INSERT INTO images VALUES(" + photoId + ",'" + username + "'," + access + ",'"
-                    + subject +"','" + place + "'," + dateTime + ",'" + 
-                    description + "',empty_blob(), empty_blob())");
-            String cmd = "SELECT * FROM images WHERE photo_id = " + photoId + " FOR UPDATE";
-            ResultSet rset = DBConnection.executeQuery(connection, cmd);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO images VALUES(?,?,?,?,?,?,?,empty_blob(),empty_blob())");
+            preparedStatement.setInt(1, photoId);
+            preparedStatement.setString(2, username);
+            preparedStatement.setString(3, access);
+            preparedStatement.setString(4, subject);
+            preparedStatement.setString(5, place);
+            // If the date is entered, but the time is not, set the time to noon by default
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy k:mm");
+            if (date != null && !date.equals("")) {
+                if (time == null || time.equals("")) {
+                    time = "12:00";
+                }
+                Date dateTime = formatter.parse(date + " " + time);
+                preparedStatement.setTimestamp(6, new Timestamp(dateTime.getTime()));
+            } else {
+                preparedStatement.setTimestamp(6, null);
+            }
+            preparedStatement.setString(7, description);
+            preparedStatement.execute();
+            Statement updateStatement = connection.createStatement();
+            ResultSet rset = updateStatement.executeQuery("SELECT * FROM images WHERE photo_id = " + photoId + " FOR UPDATE");
             rset.next();
             BLOB fullBlob = ((OracleResultSet)rset).getBLOB(9);
             BLOB thumbNailBlob = ((OracleResultSet)rset).getBLOB(8);
@@ -134,7 +147,9 @@ public class UploadImagesFromDir extends HttpServlet {
             fullOutstream.close();
             thumbnailOutstream.close();
             
-            DBConnection.executeQuery(connection, "commit");
+            Statement commitStatement = connection.createStatement();
+            commitStatement.executeQuery("commit");
+            
         } catch(Exception e){
             try {
                 connection.rollback();

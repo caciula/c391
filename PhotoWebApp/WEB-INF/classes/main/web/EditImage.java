@@ -132,7 +132,9 @@ public class EditImage extends HttpServlet {
             preparedStatement.setString(5, request.getParameter("access"));
             preparedStatement.setString(6, picId);
             preparedStatement.executeUpdate();
-            DBConnection.executeQuery(connection, "commit");
+            
+            Statement statement = connection.createStatement();
+            statement.executeQuery("commit");
         } catch (Exception ex) {
             // Handle error
             System.out.println("An error occurred while updating a photo: " + ex);

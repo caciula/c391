@@ -98,7 +98,8 @@ public class ViewImage extends HttpServlet {
                     insertImageView.setString(1, picId);
                     insertImageView.setString(2, userName);
                     insertImageView.execute();
-                    DBConnection.executeQuery(connection, "commit");
+                    Statement commitStatement = connection.createStatement();
+                    commitStatement.executeQuery("commit");
                 }
             }
             connection.close();

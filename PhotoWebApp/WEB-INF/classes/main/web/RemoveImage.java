@@ -54,7 +54,8 @@ public class RemoveImage extends HttpServlet {
             deleteImage.setString(1, picId);
             deleteImage.execute();
             // Commit the changes
-            DBConnection.executeQuery(connection, "commit");
+            Statement statement = connection.createStatement();
+            statement.executeQuery("commit");
         } catch( Exception ex ) {
             // Handle error
             System.out.println("An error occurred while removing a photo:" + ex);

@@ -29,6 +29,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import oracle.sql.*;
 import oracle.jdbc.*;
@@ -132,28 +134,36 @@ public class UploadImage extends HttpServlet {
                 }
                 stream.close();
             }
-            
-            // Ensure that the date and the time have been entered correctly
-            String dateTime = null;
-            if (!date.equals("") && time.equals("")) {
-                dateTime = "TO_DATE('" + date + "12:00"+ "', 'DD/MM/YYYY HH24:MI')";
-            } else if (!date.equals("") && !time.equals("")) {
-                dateTime = "TO_DATE('" + date + time + "', 'DD/MM/YYYY HH24:MI')";
-            }
 
             // First, generate a unique photo_id using the SQL sequence
-            ResultSet rset1 = DBConnection.executeQuery(connection, "SELECT pic_id_sequence.nextval from dual");
+            Statement statement = connection.createStatement();
+            ResultSet rset1 = statement.executeQuery("SELECT pic_id_sequence.nextval from dual");
             rset1.next();
             photoId = rset1.getInt(1);
             
-            // Create the image record (with empty blobs for the image and thumbnail)
-            DBConnection.executeQuery(connection, "INSERT INTO images VALUES(" + photoId + ",'" + userName + "'," + access + ",'"
-                    + subject +"','" + place + "'," + dateTime + ",'" + 
-                    description + "',empty_blob(), empty_blob())");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO images VALUES(?,?,?,?,?,?,?,empty_blob(),empty_blob())");
+            preparedStatement.setInt(1, photoId);
+            preparedStatement.setString(2, userName);
+            preparedStatement.setString(3, access);
+            preparedStatement.setString(4, subject);
+            preparedStatement.setString(5, place);
+            // If the date is entered, but the time is not, set the time to noon by default
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy k:mm");
+            if (date != null && !date.equals("")) {
+                if (time == null || time.equals("")) {
+                    time = "12:00";
+                }
+                Date dateTime = formatter.parse(date + " " + time);
+                preparedStatement.setTimestamp(6, new Timestamp(dateTime.getTime()));
+            } else {
+                preparedStatement.setTimestamp(6, null);
+            }
+            preparedStatement.setString(7, description);
+            preparedStatement.execute();
 
             // Write both the full image and the thumbnail image
-            String cmd = "SELECT * FROM images WHERE photo_id = " + photoId + " FOR UPDATE";
-            ResultSet rset = DBConnection.executeQuery(connection, cmd);
+            Statement updateStatement = connection.createStatement();
+            ResultSet rset = updateStatement.executeQuery("SELECT * FROM images WHERE photo_id = " + photoId + " FOR UPDATE");
             rset.next();
             BLOB fullBlob = ((OracleResultSet)rset).getBLOB(9);
             BLOB thumbNailBlob = ((OracleResultSet)rset).getBLOB(8);
@@ -165,7 +175,9 @@ public class UploadImage extends HttpServlet {
             ImageIO.write(thumbNail, "jpg", thumbnailOutstream);
             thumbnailOutstream.close();
   
-            DBConnection.executeQuery(connection, "commit");
+            Statement commitStatement = connection.createStatement();
+            commitStatement.executeQuery("commit");
+            
             // Redirect to the ViewImage servlet to view the uploaded image
             response.sendRedirect("/PhotoWebApp/ViewImage?" + photoId);
         } catch(Exception ex) {

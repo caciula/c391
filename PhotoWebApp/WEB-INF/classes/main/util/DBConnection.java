@@ -19,8 +19,4 @@ public class DBConnection {
         return connection;
 	}
 	
-    public static ResultSet executeQuery(Connection connection, String query) throws SQLException {
-         Statement statement = connection.createStatement();
-         return statement.executeQuery(query);
-    }
 }
