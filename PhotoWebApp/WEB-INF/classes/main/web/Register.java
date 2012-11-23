@@ -21,7 +21,7 @@ public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
-     *  GET command for Login.jsp
+     *  GET command for Register.jsp
      */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("username", "");
@@ -35,7 +35,10 @@ public class Register extends HttpServlet {
 	}
 
     /**
-     *  POST command for Login.jsp
+     *  POST command for Register.jsp
+     *  
+     *  Checks the input from the user and verifies that it is correct (username doesn't exist, email doesn't exist) before adding
+     *  the user to the database
      */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String inputUsername = (request.getParameter("username")).trim();
@@ -57,9 +60,11 @@ public class Register extends HttpServlet {
 	        try {
 	        	Connection connection = DBConnection.createConnection();
 	        	
+	        	//checks to see if the username is already in use
 	        	PreparedStatement query1 = connection.prepareStatement("select count(*) from users where user_name = ?");
 	        	query1.setString(1, inputUsername);
 	        	
+	        	//checks to see if the email is already in use
 	        	PreparedStatement query2 = connection.prepareStatement("select count(*) from persons where email = ?");
 	        	query2.setString(1, inputEmail);
 	        	
@@ -74,11 +79,13 @@ public class Register extends HttpServlet {
 							if (resultSet2.getInt(1) == 1) {
 							    errorMessage = "Email already exists. Please try again.";
 							} else {
+								//creates a user
 								PreparedStatement query3 = connection.prepareStatement("insert into users values(?, ?, ?)");
 								query3.setString(1, inputUsername);
 								query3.setString(2, inputPassword);
 								query3.setDate(3, sqlDate);
 								
+								//updates that user's personal information
 								PreparedStatement query4 = connection.prepareStatement("insert into persons values(?, ?, ?, ?, ?, ?)");
 								query4.setString(1, inputUsername);
 								query4.setString(2, inputFirstname);
