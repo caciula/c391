@@ -30,7 +30,7 @@ public class Search extends HttpServlet {
          String query = "SELECT * FROM images";
       
          if(!keywords.isEmpty()){
-        	 query += " WHERE CONTAINS(subject, ?, 1) > 0 OR CONTAINS(place, ?, 2) > 0 OR CONTAINS(description, ?, 3) > 0 ";
+        	 query += " WHERE (CONTAINS(subject, ?, 1) > 0 OR CONTAINS(place, ?, 2) > 0 OR CONTAINS(description, ?, 3) > 0 )";
          }
          
          if(!fromDate.isEmpty() && keywords.isEmpty()){
