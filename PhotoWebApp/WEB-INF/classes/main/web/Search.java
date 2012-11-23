@@ -47,7 +47,7 @@ public class Search extends HttpServlet {
          if(sort.equals("Rank")){
                          query += " ORDER BY ((6*SCORE(1))+(3*SCORE(2))+SCORE(3)) DESC";
          }else if(sort.equals("New")){
-                         query += " ORDER BY CASE WHEN timing IS NULL THEN 1 ELSE 0 END, timing DESC;
+                         query += " ORDER BY CASE WHEN timing IS NULL THEN 1 ELSE 0 END, timing DESC";
          }else if(sort.equals("Old")){
                          query += " ORDER BY CASE WHEN timing IS NULL THEN 1 ELSE 0 END, timing ASC";
          }
