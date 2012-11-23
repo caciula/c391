@@ -4,7 +4,16 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
     <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
-    <title>Search</title> 
+    <title>Data Analysis</title> 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
+    <script type="text/javascript">
+         $(function(){
+              $("#toDate").datepicker({dateFormat:"dd/mm/yy"});
+              $("#fromDate").datepicker({dateFormat:"dd/mm/yy"});
+         });
+    </script>
 </head>
 
 <body> 
@@ -20,7 +29,7 @@
 <form name="DataAnalysis" method="POST" action="DataAnalysis">
 <table>
 	<tr>
-		<th>Please specify your parameters</th>
+		<th colspan="2">Please specify your parameters</th>
 	</tr>
   <tr>
     <th>User: </th>
@@ -49,11 +58,11 @@
   
   <tr>
     <th>From Date: </th>
-    <td><input name="fromDate" type="textfield" size="30" ></input></td>
+    <td><input name="fromDate" type="textfield" id="fromDate" class="date-picker" maxlength="10" size="10"/> <span class="formHintText">(dd/MM/yyyy)</span></td>
   </tr>
   <tr>
     <th>To Date: </th>
-    <td><input name="toDate" type="textfield" size="30" ></input></td>
+    <td><input name="fromDate" type="textfield" id="fromDate" class="date-picker" maxlength="10" size="10"/> <span class="formHintText">(dd/MM/yyyy)</span></td>
   </tr>
   
   <tr>
