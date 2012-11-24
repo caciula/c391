@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 
 <head>
@@ -18,11 +19,20 @@
         
         <hr/>
         
-		
-				<div class="content">
-				<p class="yourQuery">${yourQuery}</p>
-				</div>
-
+		<%@ page import="main.util.ReportRow" %>
+		<c:forEach items="${reportRows}" var="row">
+        	<tr>
+            	<td>
+                   <c:out value="${row.user}"/>
+            	</td>
+            	<td>
+                   	<c:out value="${row.subject}"/>
+            	</td>
+            	<td>
+                   	<c:out value="${row.total}"/>
+            	</td>
+        	</tr>
+		</c:forEach>
 			
 	
 	</div>

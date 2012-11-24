@@ -12,6 +12,7 @@ import javax.servlet.http.*;
 
 import main.util.DBConnection;
 import main.util.Filter;
+import main.util.ReportRow;
 
 public class DataAnalysis extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -109,8 +110,16 @@ public class DataAnalysis extends HttpServlet {
         	    }
         	    
         	 	ResultSet report = getReport.executeQuery();
-        	 	//TODO determine best way to display report
+        	 	ArrayList<ReportRow> rows = new ArrayList<ReportRow>();
+        	 	while (report.next()){
+        	 		ReportRow row = new ReportRow();
+        	 		row.setUser(report.getString(1));
+        	 		row.setSubject(report.getString(2));
+        	 		row.setTotal(Integer.toString(report.getInt(3)));
+        	 		rows.add(row);
+        	 	}
         	 	report.close();
+        	 	request.setAttribute("reportRows", rows);
          } catch(Exception ex) {
                  System.err.println("Exception: " + ex.getMessage());
          } finally {
