@@ -20,19 +20,30 @@
         <hr/>
         
 		<%@ page import="main.util.ReportRow" %>
-		<c:forEach items="${reportRows}" var="row">
-        	<tr>
-            	<td>
-                   <c:out value="${row.user}"/>
-            	</td>
-            	<td>
-                   	<c:out value="${row.subject}"/>
-            	</td>
-            	<td>
-                   	<c:out value="${row.total}"/>
-            	</td>
+		<table>
+			<thead>
+			<tr>
+            	<th>User Name</th>
+            	<th>Subject</th>
+            	<th>Total</th>
         	</tr>
-		</c:forEach>
+			</thead>
+			<tbody>
+				<c:forEach items="${reportRows}" var="row">
+        			<tr>
+            			<td>
+                   			<c:out value="${row.user}"/>
+            			</td>
+            			<td>
+                   			<c:out value="${row.subject}"/>
+            			</td>
+            			<td>
+                   			<c:out value="${row.total}"/>
+            			</td>
+        			</tr>
+        		</c:forEach>
+			</tbody>
+		</table>
 			
 	
 	</div>
