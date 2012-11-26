@@ -22,6 +22,7 @@ package main.web;
  ***/
 import main.util.DBConnection;
 import main.util.Filter;
+import main.util.SQLQueries;
 
 import java.io.*;
 
@@ -141,7 +142,8 @@ public class UploadImage extends HttpServlet {
             rset1.next();
             photoId = rset1.getInt(1);
             
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO images VALUES(?,?,?,?,?,?,?,empty_blob(),empty_blob())");
+            // Create a new image record with the provided image details
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.UPLOAD_IMAGE_DETAILS);
             preparedStatement.setInt(1, photoId);
             preparedStatement.setString(2, userName);
             preparedStatement.setString(3, access);
@@ -162,8 +164,9 @@ public class UploadImage extends HttpServlet {
             preparedStatement.execute();
 
             // Write both the full image and the thumbnail image
-            Statement updateStatement = connection.createStatement();
-            ResultSet rset = updateStatement.executeQuery("SELECT * FROM images WHERE photo_id = " + photoId + " FOR UPDATE");
+            PreparedStatement updateStatement = connection.prepareStatement(SQLQueries.SELECT_IMAGE_FOR_UPDATE);
+            updateStatement.setInt(1, photoId);
+            ResultSet rset = updateStatement.executeQuery();
             rset.next();
             BLOB fullBlob = ((OracleResultSet)rset).getBLOB(9);
             BLOB thumbNailBlob = ((OracleResultSet)rset).getBLOB(8);

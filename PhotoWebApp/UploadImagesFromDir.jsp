@@ -84,7 +84,7 @@
             <param name="CODE" value="wjhk.jupload2.JUploadApplet">
             <param name="ARCHIVE" value="wjhk.jupload.jar">
             <param name="postURL" value="/PhotoWebApp/UploadImagesFromDir">.
-            <param name="afterUploadURL" value="/PhotoWebApp/ViewUserImages?${username}">
+            <param name="afterUploadURL" value="/PhotoWebApp/ViewProfile?${username}">
             <param name="formdata" value="uploadImages">
             <param name="stringUploadSuccess" value="">
             Java 1.4 or higher plugin required.
