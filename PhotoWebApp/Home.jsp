@@ -22,7 +22,7 @@
             <c:if test='${username != null && username != ""}'>
                 <li>
                 You are already logged in as ${username}.
-                Click <a href="/PhotoWebApp/ViewUserImages?${username}">here</a> to view your profile, manage your groups, and upload images.
+                Click <a href="/PhotoWebApp/ViewProfile?${username}">here</a> to view your profile, manage your groups, and upload images.
                 </li>
             </c:if>
             <li><p><a href="/PhotoWebApp/Login">Log In</a></p></li>

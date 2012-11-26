@@ -31,7 +31,7 @@
 	    <p class="pageTitle">Upload Multiple Images</p>
 	    
 	    <p>
-        <a href="ViewUserImages?${username}">View My Profile</a> |
+        <a href="ViewProfile?${username}">View My Profile</a> |
         <a href="UploadImage">Upload Single Image</a>
         </p>
 	        

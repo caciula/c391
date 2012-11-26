@@ -28,7 +28,7 @@
                         <input type="submit" name="submit" value="Create">
                         <input type="submit" name="submit" value="Delete">
 
-                        <input type="button" value="Cancel" onclick="location.href='ViewUserImages?${username}'">
+                        <input type="button" value="Cancel" onclick="location.href='ViewProfile?${username}'">
                     </td>
                 </tr>
                 </tbody>

@@ -17,7 +17,7 @@
 
 	    <p>
 	        <c:if test='${ownerName==username}'>
-                <a href="ViewUserImages?${ownerName}">View My Profile</a> |
+                <a href="ViewProfile?${ownerName}">View My Profile</a> |
                 <a href="EditImage?${picId}">Edit Image</a> |
                 <a href="RemoveImage?${picId}">Remove Image</a>
 	        </c:if>

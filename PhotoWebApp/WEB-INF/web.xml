@@ -30,12 +30,12 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>ViewUserImages</servlet-name>
-        <servlet-class>main.web.ViewUserImages</servlet-class>
+        <servlet-name>ViewProfile</servlet-name>
+        <servlet-class>main.web.ViewProfile</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>ViewUserImages</servlet-name>
-        <url-pattern>/ViewUserImages</url-pattern>
+        <servlet-name>ViewProfile</servlet-name>
+        <url-pattern>/ViewProfile</url-pattern>
     </servlet-mapping>
 
     <servlet>

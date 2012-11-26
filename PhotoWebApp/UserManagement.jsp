@@ -40,7 +40,7 @@
 	                    <td>
 	                        <input type="submit" name="submit" value="Add">
                                 <input type="submit" name="submit" value="Remove">
-	                        <input type="button" value="Cancel" onclick="location.href='ViewUserImages?${username}'">
+	                        <input type="button" value="Cancel" onclick="location.href='ViewProfile?${username}'">
 	                    </td>
 	                </tr>
 	                </tbody>
