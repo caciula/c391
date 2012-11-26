@@ -211,7 +211,7 @@ public class UploadImage extends HttpServlet {
     }
 
     /* Shrink image by a factor of n, and return the shrinked image */
-    private static BufferedImage shrink(BufferedImage image, int n) {
+    public static BufferedImage shrink(BufferedImage image, int n) {
 
         int w = image.getWidth() / n;
         int h = image.getHeight() / n;

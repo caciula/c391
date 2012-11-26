@@ -24,7 +24,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 
 /**
- * Backing servlet for the Upload Multiple Images screen (uploadImagesFromDir.jsp)
+ * Backing servlet for the Upload Multiple Images screen (UploadImagesFromDir.jsp)
  * 
  *  @author Tim Phillips
  */
@@ -105,9 +105,9 @@ public class UploadImagesFromDir extends HttpServlet {
                     } else if (item.getFieldName().equals("time")){
                         time = Streams.asString(stream);
                     }
-                } else{
+                } else {
                     img = ImageIO.read(stream);
-                    thumbNail = shrink(img, 10);
+                    thumbNail = UploadImage.shrink(img, 10);
                 }
             }
             
@@ -182,21 +182,5 @@ public class UploadImagesFromDir extends HttpServlet {
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
         out.println("SUCCESS");
-    }
-
-    /* Shrink image by a factor of n, and return the shrinked image */
-    private static BufferedImage shrink(BufferedImage image, int n) {
-
-        int w = image.getWidth() / n;
-        int h = image.getHeight() / n;
-
-        BufferedImage shrunkImage = new BufferedImage(w, h, image.getType());
-
-        for (int y=0; y < h; ++y) {
-            for (int x=0; x < w; ++x) {
-                shrunkImage.setRGB(x, y, image.getRGB(x*n, y*n));
-            }
-        }
-        return shrunkImage;
     }
 }
