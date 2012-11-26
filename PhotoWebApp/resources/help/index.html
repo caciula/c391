@@ -64,12 +64,39 @@ TO DO
     <li>A link to navigate to the Login screen.</li>
     <li>A link to navigate to the Register screen.</li>
     <li>A link to navigate to the Search screen.</li>
-    <li>If the current user has a username of "admin", a link to navigate to the Data Analysis screen.</li>
+    <li>If the user has a username of "admin", a link to navigate to the Data Anaysis screen.</li>
     </ul>
     
     <p/>
     In addition, this screen displays the top 5 images in the system. The top images are determined by the number of distinct users who have viewed the image. If there is a tie, all tied images are displayed. 
 </div>
+
+<a name="myProfile"><h3>My Profile</h3>
+
+<div>
+    <b>URL:</b> /TO DO?{username} <br>
+    <b>Screenshot:</b> To do once screen is finalized
+    <p/>
+    
+    When a user is logged into the system, the My Profile page is the main screen from which they can perform many actions - such as managing their groups, viewing their images, and uploading new images. 
+    <p/>
+    The user's account information is displayed at the top of the screen - including Username, Name, Phone Number, Email, and Address.
+    <p/>
+    Below the account information, there is a section on <b>Group Management</b>. Groups are used to specify what users can view your uploaded images. When uploading photos, it is possible to restrict the security of an image so that only a group of users can view the image. This section of the screen displays links to:
+    <ul >
+        <li>Create or remove a group. </li>
+        <li>Add or delete members from a group.</li>
+    </ul>
+    In addition, the groups that the user has already created are displayed in a table. The group name is displays on the left column of the table, while all of the members of the groups are displayed in the subsequent columns. 
+    <p/>
+    Below the Group Management section, there is another section for <b>Image Management</b>. Links are displayed to navigate to screens to:
+    <ul >
+        <li>Upload a <a href="#uploadImage">single image</a>.</li>
+        <li>Upload <a href="#uploadImages">multiple images at once</a>.</li>
+    </ul>    
+    All of the images that the user has uploaded are also displayed with thumbnails. The thumbnails are sorted so that the most recent images are first in the list. Cicking on a thumbnail will navigate to the <a href="#viewImage">View Image</a> screen for the image, where the user can view the full image, remove the image, or edit the image information. 
+</div>
+
 
 <a name="viewImage"><h3>View Image</h3>
 
@@ -113,13 +140,64 @@ TO DO
     <li>Public and Private groups.</li>
     </ul>
     
-    <p/>
+    The following links are displayed at the top of the screen:
+    <ul >
+    <li>A link is displayed to navigate to the user's profile page.</li>
+    <li>A link is displayed to return to the <a href="#viewImage">View Image</a> screen.</li>
+    <li>A link is displayed to remove the image. Clicking this link will remove the image from the system.</li>
+    </ul>
     
-    Clicking on [Save] will update the photo's information based on the user's input and redirect to the <a href="#viewImage">View Image</a> screen.
+    Clicking on [Save] will update the photo's information based on the user's input and redirect to the <a href="#viewImage">View Image</a> screen. If a Date is entered, but a Time is not, then the photo is saved with a default time of 12:00. A photo must have a Date if a Time is entered, or an error will be displayed when the update occurs.
     <p/>
     Clicking on [Cancel] will redirect to the <a href="#viewImage">View Image</a> screen without updating the image's information.
     
     </ul>
+</div>
+
+<a name="uploadImage"><h3>Upload Single Image</h3>
+<div>
+    <b>URL:</b> /UploadImage<br>
+    <b>Screenshot:</b> To do once screen is finalized
+    <p>
+    
+    The Upload Single Image screen allows a user to upload an image to their account. The screen is only accessible if the user is logged into the system. Input fields are displayed for the file path (opens a standard file-picker dialog), Subject, Place, Date, Time, Description, and Access. The Access field indicates what users will be able to view the image. Like the Edit Screen, the Access drop down contains the following groups:<ul >
+    <li>Groups that the user is a member of.</li>
+    <li>Groups that the user has created themselves.</li>
+    <li>Public and Private groups.</li>
+    </ul>
+    
+    By default, the "Private" setting is selected. If the user selects "Public" then the image will be available to all users. If the user selects "Private" then the image will only be viewable by the uploader. If the user selects a specific group, then the image will only be viewable by the members of that group. 
+    <p />
+    If a Date is entered, but a Time is not, then the photo is saved with a default time of 12:00. A photo must have a Date if a Time is entered, or an error will be displayed when the upload occurs. 
+    
+    <p/>
+    
+    Clicking on [Upload] will upload the photo to the database, along with the additional image information. If there are any errors during the upload (such as an invalid image file, or an incorrect date), the user is shown an error message. If the file uploads successfully, the user is redirectd to the <a href="#viewImage">View Image</a> screen to view the upload image. 
+    <p/>
+</div>
+
+<a name="uploadImages"><h3>Upload Multiple Image</h3>
+<div>
+    <b>URL:</b> /UploadImagesFromDir<br>
+    <b>Screenshot:</b> To do once screen is finalized
+    <p>
+    
+    The Upload Multiple Images screen is similar to the <a href="#uploadImage">Upload Single Image</a> screen, except that the user can select many images to upload at once. The screen is only accessible if the user is logged into the system. Input fields are displayed for the Subject, Place, Date, Time, Description, and Access. The values from these input fields will be saved to all the images that are uploaded. The Access field indicates what users will be able to view the images. The Access drop down contains the following groups:<ul >
+    <li>Groups that the user is a member of.</li>
+    <li>Groups that the user has created themselves.</li>
+    <li>Public and Private groups.</li>
+    </ul>
+    
+    If the user selects "Public" then the images will be available to all users. If the user selects "Private" then the images will only be viewable by the uploader. If the user selects a specific group, then the images will only be viewable by the members of that group. 
+    <p />
+    
+    Below the input fields, an applet is displayed for the user to select a directory. Clicking "Browse" on the applet opens a dialog which allows the user to either select multiple images, or an entire directory. The select files are displayed in the applet. Files can be manually removed by clicking [Remove]
+    <p />
+    If a Date is entered, but a Time is not, then the photo is saved with a default time of 12:00. A photo must have a date if a time is entered, or an error will be displayed when the upload occurs.
+    
+    <p/>
+    Clicking on [Upload] on the Applet will upload all the photos to the database, along with the additional image information. A progress bar shows the progress of the update. <b> Note that it may take some time to upload all of the images once "Upload" is clicked</b>. Be patient, and do not click "Upload" again. If the selected directory contains files that are not images, those files will not be uploaded. If there are any errors during the upload (such as an invalid image file, or an incorrect date), the user is shown an error message. If the files are uploaded successfully, the user is redirectd to the <a href="#myProfile">User Profile</a> screen to view the upload images. 
+    <p/>
 </div>
 
 <p>
@@ -127,3 +205,4 @@ TO DO
 
 </body>
 </html>
+
