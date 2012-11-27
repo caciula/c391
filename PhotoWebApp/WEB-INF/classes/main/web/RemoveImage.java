@@ -77,7 +77,7 @@ public class RemoveImage extends HttpServlet {
             }
         }
         
-        response.sendRedirect("/PhotoWebApp/ViewUserImages?" + username);
+        response.sendRedirect("/PhotoWebApp/ViewProfile?" + username);
     }
 
 

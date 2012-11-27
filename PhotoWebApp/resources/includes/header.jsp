@@ -4,7 +4,7 @@
     <a href="Home" class="headerTitle">PhotoWeb</a>
     <span class="headerAlignRight">
         <c:if test='${username != null && username != ""}'>
-            You are logged in as <a href="/PhotoWebApp/ViewUserImages?${username}">${username}</a> |
+            You are logged in as <a href="/PhotoWebApp/ViewProfile?${username}">${username}</a> | <a href="/PhotoWebApp/Logout">Logout</a> |
         </c:if>
         <a href="resources/help/index.html" target="_blank">Help</a>
     </span>

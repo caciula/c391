@@ -1,6 +1,7 @@
 package main.web;
 import main.util.DBConnection;
 import main.util.Filter;
+import main.util.SQLQueries;
 
 import java.io.*;
 
@@ -23,7 +24,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 
 /**
- * Backing servlet for the Upload Multiple Images screen (uploadImagesFromDir.jsp)
+ * Backing servlet for the Upload Multiple Images screen (UploadImagesFromDir.jsp)
  * 
  *  @author Tim Phillips
  */
@@ -104,18 +105,20 @@ public class UploadImagesFromDir extends HttpServlet {
                     } else if (item.getFieldName().equals("time")){
                         time = Streams.asString(stream);
                     }
-                } else{
+                } else {
                     img = ImageIO.read(stream);
-                    thumbNail = shrink(img, 10);
+                    thumbNail = UploadImage.shrink(img, 10);
                 }
             }
             
-            // Get the next id for the photo
+            // First, generate a unique photo_id using the SQL sequence
             Statement statement = connection.createStatement();
             ResultSet rset1 = statement.executeQuery("SELECT pic_id_sequence.nextval from dual");
             rset1.next();
             photoId = rset1.getInt(1);
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO images VALUES(?,?,?,?,?,?,?,empty_blob(),empty_blob())");
+            
+            // Create a new image record with the provided image details
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.UPLOAD_IMAGE_DETAILS);
             preparedStatement.setInt(1, photoId);
             preparedStatement.setString(2, username);
             preparedStatement.setString(3, access);
@@ -134,8 +137,11 @@ public class UploadImagesFromDir extends HttpServlet {
             }
             preparedStatement.setString(7, description);
             preparedStatement.execute();
-            Statement updateStatement = connection.createStatement();
-            ResultSet rset = updateStatement.executeQuery("SELECT * FROM images WHERE photo_id = " + photoId + " FOR UPDATE");
+            
+            // Write both the full image and the thumbnail image
+            PreparedStatement updateStatement = connection.prepareStatement(SQLQueries.SELECT_IMAGE_FOR_UPDATE);
+            updateStatement.setInt(1, photoId);
+            ResultSet rset = updateStatement.executeQuery();
             rset.next();
             BLOB fullBlob = ((OracleResultSet)rset).getBLOB(9);
             BLOB thumbNailBlob = ((OracleResultSet)rset).getBLOB(8);
@@ -176,21 +182,5 @@ public class UploadImagesFromDir extends HttpServlet {
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
         out.println("SUCCESS");
-    }
-
-    /* Shrink image by a factor of n, and return the shrinked image */
-    private static BufferedImage shrink(BufferedImage image, int n) {
-
-        int w = image.getWidth() / n;
-        int h = image.getHeight() / n;
-
-        BufferedImage shrunkImage = new BufferedImage(w, h, image.getType());
-
-        for (int y=0; y < h; ++y) {
-            for (int x=0; x < w; ++x) {
-                shrunkImage.setRGB(x, y, image.getRGB(x*n, y*n));
-            }
-        }
-        return shrunkImage;
     }
 }

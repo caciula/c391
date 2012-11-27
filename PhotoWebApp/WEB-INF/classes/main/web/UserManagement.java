@@ -154,7 +154,7 @@ public class UserManagement extends HttpServlet {
 		}
 		
 		if (errorMessage.isEmpty()) {
-			response.sendRedirect("/PhotoWebApp/ViewUserImages?" + username);
+			response.sendRedirect("/PhotoWebApp/ViewProfile?" + username);
 		} else {
 			request.setAttribute("errorMessage", errorMessage);
             request.setAttribute("errorBackLink", "/PhotoWebApp/UserManagement");

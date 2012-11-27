@@ -1,5 +1,5 @@
 /*
- *  File name:  setup.sql
+ *  File name:  setup_2012f.sql
  *  Function:   to create the intial database schema for the CMPUT 391 project,
  *              Fall, 2012
  *  Author:     Prof. Li-Yan Yuan
@@ -71,7 +71,7 @@ CREATE TABLE images (
 
 
 /*
- *  Added SQL statements:
+ *  Additional SQL statements used:
  */
 
 DROP INDEX description_index;

@@ -14,11 +14,11 @@ import main.util.DBConnection;
 import main.util.SQLQueries;
 
 /**
- * Backing servlet for the View User Images screen (ViewUserImages.jsp)
+ * Backing servlet for the View Profile screen (ViewProfile.jsp)
  * 
  *  @author Tim Phillips
  */
-public class ViewUserImages extends HttpServlet {
+public class ViewProfile extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -110,8 +110,8 @@ public class ViewUserImages extends HttpServlet {
             }
         }
 		
-        // Redirect to ViewUserImages.jsp
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/ViewUserImages.jsp");
+        // Redirect to ViewProfile.jsp
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/ViewProfile.jsp");
         dispatcher.forward(request, response);
     }
 }

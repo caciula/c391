@@ -28,4 +28,6 @@ public class SQLQueries {
     public static final String INSERT_IMAGE_VIEW = "insert into image_views values(?,?)";
     public static final String REMOVE_IMAGE_VIEWS_BY_ID = "delete from image_views where photo_id=?";
     public static final String REMOVE_IMAGE_BY_ID = "delete from images where photo_id=?";
+    public static final String UPLOAD_IMAGE_DETAILS = "insert into images values(?,?,?,?,?,?,?,empty_blob(),empty_blob())";
+    public static final String SELECT_IMAGE_FOR_UPDATE = "select * from images where photo_id = ? FOR UPDATE";
 }
