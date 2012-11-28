@@ -63,29 +63,56 @@ public class DataAnalysis extends HttpServlet {
     	 String subject = request.getParameter("subject");
          String fromDate = request.getParameter("fromDate");
          String toDate = request.getParameter("toDate");
+         String drillDown = request.getParameter("drillDown");
+         if(drillDown == null){
+        	 drillDown = "None";
+         }
+                  
+         String select = "SELECT ";
+         String from = "FROM images i";
+         String where = "";
+         String group = "";
          
-         String query = "SELECT owner_name, subject, COUNT(*) FROM images";
          if(!user.equals("All")){
-        	 query += " WHERE owner_name = ? ";
+        	 select += "i.subject,";
+        	 where += " WHERE i.owner_name = ? ";
+        	 if(!subject.equals("All")){
+        		 where += " AND i.subject = ? ";
+        	 }
+        	 group += " GROUP BY i.subject";
+         }else if(!subject.equals("All")){
+        	 select += "i.owner_name,";
+        	 where += " WHERE i.subject = ? ";
+        	 group += " GROUP BY i.owner_name";
+         }			
+         
+         if(drillDown.equals("Yearly")){
+        	 select += " t.year, COUNT(*) ";
+        	 from += ", time_dim t ";
+        	 where += " AND i.timing = t.time ";
+        	 group += ", t.year";
+    	 }else if(drillDown.equals("Monthly")){
+    		 select += " t.month, COUNT(*) ";
+    		 from += ", time_dim t ";
+    		 where += " AND i.timing = t.time ";
+    		 group += ", t.month";
+    	 }else if(drillDown.equals("Weekly")){
+    		 select += " t.week, COUNT(*) ";
+    		 from += ", time_dim t ";
+    		 where += " AND i.timing = t.time ";
+    		 group += ", t.week";
+    	 }else{
+    		 select += " COUNT(*) ";
+    	 }
+         
+         if(!fromDate.isEmpty()){
+        	 where += " AND i.timing >=  TO_DATE( ?, 'DD/MM/YYYY HH24:MI:SS') ";
          }
-         if(!subject.equals("All") && user.equals("All")){
-        	 query += " WHERE subject = ? ";
-         }else if(!subject.equals("All") && !user.equals("All")){
-        	 query += " AND subject = ? ";
+         if(!toDate.isEmpty()){
+        	 where += " AND i.timing <= TO_DATE( ?, 'DD/MM/YYYY HH24:MI:SS') ";
          }
          
-         if(!fromDate.isEmpty() && subject.equals("All") && user.equals("All")){
-        	 query += " WHERE timing >=  TO_DATE( ?, 'DD/MM/YYYY HH24:MI:SS')";
-         }else if(!fromDate.isEmpty()){
-        	 query += " AND timing >= TO_DATE( ?, 'DD/MM/YYYY HH24:MI:SS')";
-         }
-         if(!toDate.isEmpty() && fromDate.isEmpty() && subject.equals("All") && user.equals("All")){
-        	 query += " WHERE timing <= ? ";
-         }else if(!toDate.isEmpty()){
-        	 query += " AND timing <=  ? ";
-         }
-         
-         query += " GROUP BY owner_name, subject";
+         String query = select + from + where + group;
          Connection myConn = null;
          try{
         	 	myConn = DBConnection.createConnection();
@@ -97,7 +124,11 @@ public class DataAnalysis extends HttpServlet {
         	    	n++;
                 }
         	    if(!subject.equals("All")){
-               	 	getReport.setString(n, subject);
+        	    	if(subject.isEmpty()){
+        	    		getReport.setString(n, null);
+        	    	 }else{
+        	    		 getReport.setString(n, subject);
+        	    	 }
                	 	n++;
                 }
         	    if(!fromDate.isEmpty()){
@@ -113,12 +144,32 @@ public class DataAnalysis extends HttpServlet {
         	 	ArrayList<ReportRow> rows = new ArrayList<ReportRow>();
         	 	while (report.next()){
         	 		ReportRow row = new ReportRow();
-        	 		row.setUser(report.getString(1));
-        	 		row.setSubject(report.getString(2));
-        	 		row.setTotal(Integer.toString(report.getInt(3)));
+        	 		if(drillDown.equals("None")){
+        	 			row.setCol3(report.getString(1));
+        	 			row.setCol4(Integer.toString(report.getInt(2)));
+        	 		}else{
+        	 			row.setCol2(report.getString(2));
+        	 			row.setCol3(report.getString(1));
+        	 			row.setCol4(Integer.toString(report.getInt(3)));
+        	 		}
         	 		rows.add(row);
         	 	}
         	 	report.close();
+        	 	if(!user.equals("All") && drillDown.equals("None")){
+        	 		request.setAttribute("head1", "User");
+               	 	request.setAttribute("head3", "Subject");
+               	 	rows.get(0).setCol1(user);
+    	 		}else if(!subject.equals("All")) {
+    	 			request.setAttribute("head1", "Subject");
+               	 	request.setAttribute("head3", "User");
+               	 	rows.get(0).setCol1(subject);
+    	 		}
+    	 		request.setAttribute("head2", "Time");
+           	 	request.setAttribute("head4", "Total");
+    	 		
+         		if(drillDown.equals("None")){
+         			rows.get(0).setCol2(fromDate + " ~ " + toDate);
+    	 		}
         	 	request.setAttribute("reportRows", rows);
          } catch(Exception ex) {
                  System.err.println("Exception: " + ex.getMessage());
@@ -129,7 +180,6 @@ public class DataAnalysis extends HttpServlet {
             	 System.err.println("Exception: " + ex.getMessage());
              }
          }
-         
          request.getRequestDispatcher("/DataAnalysisResults.jsp").forward(request, response);
     }   
 }

@@ -18,21 +18,64 @@
         <p><a href="/PhotoWebApp/DataAnalysis">Generate New Report</a></p>
         
         <hr/>
+        <table>
+        <tr>
+        	<form name="DataAnalysis" method="POST" action="DataAnalysis">
+			<td>
+				<input type="radio" name="drillDown" value="None" checked> None
+			</td>
+			<td>
+				<input type="radio" name="drillDown" value="Yearly"> Yearly
+			</td>
+			<td>
+				<input type="radio" name="drillDown" value="Monthly"> Monthly
+			</td>
+			<td>
+				<input type="radio" name="drillDown" value="Weekly"> Weekly
+			</td>
+			
+			<input type="hidden" name="user" value="${param.user}"/>
+   			<input type="hidden" name="subject" value="${param.subject}"/>
+   			<input type="hidden" name="fromDate" value="${param.fromDate}"/>
+   			<input type="hidden" name="toDate" value="${param.toDate}"/>
+   			
+			<td ALIGN=CENTER COLSPAN="2">
+			<input type="submit" name=".submit" value="Rollup/Drilldown">
+			</td>
+		<tr>
+        </table>
+        
         
 		<%@ page import="main.util.ReportRow" %>
-		<c:forEach items="${reportRows}" var="row">
-        	<tr>
-            	<td>
-                   <c:out value="${row.user}"/>
-            	</td>
-            	<td>
-                   	<c:out value="${row.subject}"/>
-            	</td>
-            	<td>
-                   	<c:out value="${row.total}"/>
-            	</td>
+		<table>
+			<thead>
+			<tr>
+            	<th>${head1}</th>
+            	<th>${head2}</th>
+            	<th>${head3}</th>
+            	<th>${head4}</th>
         	</tr>
-		</c:forEach>
+			</thead>
+			<tbody>
+				<c:forEach items="${reportRows}" var="row">
+        			<tr>
+            			<td>
+                   			<c:out value="${row.col1}"/>
+            			</td>
+            			<td>
+                   			<c:out value="${row.col2}"/>
+            			</td>
+            			<td>
+                   			<c:out value="${row.col3}"/>
+            			</td>
+            			<td>
+                   			<c:out value="${row.col4}"/>
+            			</td>
+            			
+        			</tr>
+        		</c:forEach>
+			</tbody>
+		</table>
 			
 	
 	</div>

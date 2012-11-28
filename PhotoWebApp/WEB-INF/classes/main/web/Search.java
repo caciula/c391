@@ -26,34 +26,40 @@ public class Search extends HttpServlet {
          String fromDate = request.getParameter("fromDate");
          String toDate = request.getParameter("toDate");
          String sort = request.getParameter("SortBy");
-
-         String query = "SELECT * FROM images";
-      
-         if(!keywords.isEmpty()){
-        	 query += " WHERE (CONTAINS(subject, ?, 1) > 0 OR CONTAINS(place, ?, 2) > 0 OR CONTAINS(description, ?, 3) > 0 )";
-         }
          
-         if(!fromDate.isEmpty() && keywords.isEmpty()){
-        	 query += " WHERE timing >=  TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
-         }else if(!fromDate.isEmpty() && !keywords.isEmpty()){
-        	 query += " AND timing >= TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
-         }
-         if(!toDate.isEmpty() && keywords.isEmpty() && fromDate.isEmpty()){
-        	 query += " WHERE timing <= TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
-         }else if(!toDate.isEmpty()){
-        	 query += " AND timing <=  TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
-         }
+         if (keywords.isEmpty() && sort.equals("Rank")) {
+ 	    	request.setAttribute("errorMessage", "For rank search you must provide keyword(s)");
+ 	    	request.setAttribute("errorBackLink", "/PhotoWebApp/Search");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
+     	}else{
 
-         if(sort.equals("Rank")){
+     		String query = "SELECT * FROM images";
+      
+         	if(!keywords.isEmpty()){
+        	 	query += " WHERE (CONTAINS(subject, ?, 1) > 0 OR CONTAINS(place, ?, 2) > 0 OR CONTAINS(description, ?, 3) > 0 )";
+         	}
+         
+         	if(!fromDate.isEmpty() && keywords.isEmpty()){
+        	 	query += " WHERE timing >=  TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
+         	}else if(!fromDate.isEmpty() && !keywords.isEmpty()){
+        	 	query += " AND timing >= TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
+         	}
+         	if(!toDate.isEmpty() && keywords.isEmpty() && fromDate.isEmpty()){
+        	 	query += " WHERE timing <= TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
+         	}else if(!toDate.isEmpty()){
+        	 	query += " AND timing <=  TO_DATE( ? , 'DD/MM/YYYY HH24:MI:SS')";
+         	}
+
+         	if(sort.equals("Rank")){
                          query += " ORDER BY ((6*SCORE(1))+(3*SCORE(2))+SCORE(3)) DESC";
-         }else if(sort.equals("New")){
+         	}else if(sort.equals("New")){
                          query += " ORDER BY CASE WHEN timing IS NULL THEN 1 ELSE 0 END, timing DESC";
-         }else if(sort.equals("Old")){
+         	}else if(sort.equals("Old")){
                          query += " ORDER BY CASE WHEN timing IS NULL THEN 1 ELSE 0 END, timing ASC";
-         }
+         	}
 
-         Connection myConn = null;
-         try{
+         	Connection myConn = null;
+         	try{
         	 	myConn = DBConnection.createConnection();
         	 	ArrayList<String> matchingIds = new ArrayList<String>();
         	 	PreparedStatement myQuery = myConn.prepareStatement(query);
@@ -85,15 +91,16 @@ public class Search extends HttpServlet {
         	 	}
         	 	request.setAttribute("matchingIds", matchingIds);
                 myQuery.close();
-         } catch(Exception ex) {
-                 System.err.println("Exception: " + ex.getMessage());
-         } finally {
+         	} catch(Exception ex) {
+         		System.err.println("Exception: " + ex.getMessage());
+         	} finally {
              try {
                  myConn.close();
              } catch (Exception ex) {
             	 System.err.println("Exception: " + ex.getMessage());
              }
-         }
-         request.getRequestDispatcher("/SearchResults.jsp").forward(request, response);
+         	}
+         	request.getRequestDispatcher("/SearchResults.jsp").forward(request, response);
+     	}
     }
 }
