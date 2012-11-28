@@ -20,6 +20,17 @@ public class DataAnalysis extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Connection myConn = null;
         try{
+            
+            // Check to make sure that only "admin" can access this screen.
+            HttpSession session = request.getSession();
+            String username = (String) session.getAttribute("username");
+            if (!username.equals("admin")) {
+                request.setAttribute("errorMessage", "You must be an administrator to view this screen.");
+                request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
+                return;
+            }
+            
        	 	myConn = DBConnection.createConnection();
        	 	ArrayList<String> users = new ArrayList<String>();
        	 	ArrayList<String> subjects = new ArrayList<String>();
