@@ -93,6 +93,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>AccountManagement</servlet-name>
+        <servlet-class>main.web.AccountManagement</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountManagement</servlet-name>
+        <url-pattern>/AccountManagement</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>Search</servlet-name>
         <servlet-class>main.web.Search</servlet-class>
     </servlet>
