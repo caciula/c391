@@ -2,6 +2,7 @@ package main.web;
 
 import main.util.DBConnection;
 import main.util.SQLQueries;
+import main.util.Filter;
 
 import java.io.*;
 import javax.servlet.*;
@@ -56,25 +57,8 @@ public class ViewImage extends HttpServlet {
                 }
                 
                 // Ensure that the user is allowed to view this image.
-                if (permission == 1 || ownerName.equals(userName) || userName.equals("admin")) {
-                    // The image is public - the user has permission to view it.
-                } else if (permission == 2) {
-                    // The image is private - the user cannot view it if they're not the owner.
+                if (!Filter.isViewable(userName, picId)) {
                     errorMessage = "You do not have permission to view this image.";
-                } else {
-                    PreparedStatement getMembersStatement = connection.prepareStatement(SQLQueries.GET_MEMBERS_BY_GROUP_ID);
-                    getMembersStatement.setInt(1, permission);
-                    ResultSet membersResult = getMembersStatement.executeQuery();
-                    boolean allowedToSeeImage = false;
-                    while(membersResult.next()) {
-                        if (membersResult.getString("friend_id").equals(userName)) {
-                            allowedToSeeImage = true;
-                            break;
-                        }
-                    }
-                    if (allowedToSeeImage == false) {
-                        errorMessage = "You do not have permission to view this image.";
-                    }
                 }
                 
                 if (rset.getDate("timing") != null) {

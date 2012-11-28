@@ -158,7 +158,14 @@ public class UploadImage extends HttpServlet {
                 Date dateTime = formatter.parse(date + " " + time);
                 preparedStatement.setTimestamp(6, new Timestamp(dateTime.getTime()));
             } else {
-                preparedStatement.setTimestamp(6, null);
+                if (time == null || time.equals("")) {
+                    preparedStatement.setTimestamp(6, null);
+                } else {
+                    request.setAttribute("errorMessage", "A date must be entered when a time is specified. Please try again.");
+                    request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImage");
+                    request.getRequestDispatcher("/Error.jsp").forward(request, response);
+                    return;
+                }
             }
             preparedStatement.setString(7, description);
             preparedStatement.execute();

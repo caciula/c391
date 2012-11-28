@@ -26,8 +26,50 @@ Clicking on a thumbnail image navigates to the View Image screen for that image.
 
 If the user does not have permission to view the image, then they are redirected to the error screen. Otherwise the user can continue and view the image. If the owner of the image is viewing the image, then links are displayed to navigate to the Edit Image screen. There is also a link to remove the image. Removing the image will delete the image from the system by first removing all of the image’s entries in the image_views table (DELETE FROM image_views WHERE photo_id=?), and then by removing the image itself (DELETE FROM images WHERE photo_id=?). 
 
-The final screen in the display module is the Edit Image screen. There is a check in the GET command to ensure that the current user is the owner of the image. The same SQL queries are used to obtain the image as described in the previous section on the View Image screen. The fields on this screen are similar to the Upload Image screens, except that they are prepopulated with the existing image information. One technique that we used to reduce the chance for input errors is to limit the maximum length of input fields based on the size of the column in the database.  For example, if the Subject field only has 128 characters in the database, then we would limit the input textfield to 128 characters on the screen. This eliminated a possible SQL exception if the user could enter more than 128 characters. 
+The third screen in the display module is the Edit Image screen. There is a check in the GET command to ensure that the current user is the owner of the image. The same SQL queries are used to obtain the image as described in the previous section on the View Image screen. The fields on this screen are similar to the Upload Image screens, except that they are prepopulated with the existing image information. One technique that we used to reduce the chance for input errors is to limit the maximum length of input fields based on the size of the column in the database.  For example, if the Subject field only has 128 characters in the database, then we would limit the input textfield to 128 characters on the screen. This eliminated a possible SQL exception if the user could enter more than 128 characters. 
 
 Updating the image’s information based on the user’s input is a simple operation (UPDATE images SET subject=?, place=?, timing=?, description=?, permitted=? WHERE photo_id=?).  The only tricky part is combining the Date and the Time fields into a single SQL Timestamp object. This was accomplished by using a SimpleDateFormatter to combine the String inputs into a Date object. The Date was then converted into a SQL Timestamp to be saved in the database. Once the image information has been updated, the user is redirected to the View Image screen to view the updated image. 
+
+A final component of the display module is displaying the top five images on the Home screen. A new database image_views table was created to store the unique views of an image:
+
+CREATE TABLE image_views (
+    photo_id   int,
+    user_name  varchar(24),
+    FOREIGN KEY(photo_id) REFERENCES images,
+    FOREIGN KEY(user_name) REFERENCES users,
+    UNIQUE (photo_id, user_name)
+);
+
+Whenever a user views an image on the View Image screen, a check is performed to see if this user has already viewed the image (SELECT * FROM image_views WHERE user_name=? AND photo_id=?). If the current user has not viewed the image before, a new record is added to the image_views table (INSERT into image_views values(?,?)). When a user navigates to the Home screen, the "Top Images" section displays the top five images with the most unique viewers. The top images are obtained with a SQL query on the image_views table (select count(user_name) as count, photo_id from image_views group by photo_id order by count DESC). Each image is checked to ensure that the current user is allowed to view the image based on the image's security setting. If there are multiple images that are tied then all the tied images are displayed. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

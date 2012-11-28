@@ -16,7 +16,10 @@
 	    <p class="pageTitle">My Profile</p>
         
         <hr>
-	    
+
+        <p class="pageTitle">Account:</p>
+        <a href="/PhotoWebApp/AccountManagement">Edit Account Information</a> 
+	    <p>
         <table>
             <tbody>
             <tr>
@@ -44,7 +47,7 @@
 
         <p class="pageTitle">Groups:</p>
         
-        <a href="/PhotoWebApp/GroupManagement">Create/delete groups</a> | <a href="/PhotoWebApp/UserManagement">Add/remove users to/from groups</a>
+        <a href="/PhotoWebApp/GroupManagement">Create/Delete Groups</a> | <a href="/PhotoWebApp/UserManagement">Add/Remove Users To/From Groups</a>
 	    
 	    <p>
 	    <table>

@@ -23,7 +23,6 @@
 			<tbody>
 				<tr>
 			    	<c:forEach items="${matchingIds}" var="foundId">
-			    	${foundId}
 			       	<a href="/PhotoWebApp/ViewImage?${foundId}"><img src ="/PhotoWebApp/GetThumbnailImage?${foundId}"></a>
 			    	</c:forEach>
 			    </tr>

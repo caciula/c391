@@ -68,6 +68,8 @@ public class UploadImagesFromDir extends HttpServlet {
      */
     public void doPost(HttpServletRequest request,HttpServletResponse response)
         throws ServletException, IOException {
+        response.setContentType("text/plain");
+        PrintWriter out = response.getWriter();
 
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");
@@ -133,7 +135,12 @@ public class UploadImagesFromDir extends HttpServlet {
                 Date dateTime = formatter.parse(date + " " + time);
                 preparedStatement.setTimestamp(6, new Timestamp(dateTime.getTime()));
             } else {
-                preparedStatement.setTimestamp(6, null);
+                if (time == null || time.equals("")) {
+                    preparedStatement.setTimestamp(6, null);
+                } else {
+                    out.println("ERROR: A date must be entered when a time is specified. Please try again.");
+                    return;
+                }
             }
             preparedStatement.setString(7, description);
             preparedStatement.execute();
@@ -162,10 +169,7 @@ public class UploadImagesFromDir extends HttpServlet {
             } catch (Exception rollbackEx) {
                 System.out.println("An error occured while rolling back the transaction: " + rollbackEx);
             }
-            System.out.println("An error occured while uploading a photo: " + e);
-            request.setAttribute("errorMessage", "An unexpected error occured while uploading the images. Please ensure all fields have been entered correctly.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImagesFromDir");
-            request.getRequestDispatcher("/Error.jsp").forward(request, response);
+            out.println("ERROR: An error occured while uploading photos. Please ensure that the fields are filled out correctly and only .gif or .jpg images are included.");
             return;
         } finally {
             // Close the connection
@@ -173,14 +177,9 @@ public class UploadImagesFromDir extends HttpServlet {
                 connection.close();
             } catch (Exception ex) {
                 System.out.println("An error occured while uploading photo: " + ex);
-                request.setAttribute("errorMessage", "An unexpected error occured while uploading the images. Please ensure all fields have been entered correctly.");
-                request.setAttribute("errorBackLink", "/PhotoWebApp/UploadImage");
-                request.getRequestDispatcher("/Error.jsp").forward(request, response);
-                return;
+                out.println("ERROR: An error occured while uploading photos. Please ensure that the fields are filled out correctly and only .gif or .jpg images are included.");
             }
         }
-        response.setContentType("text/plain");
-        PrintWriter out = response.getWriter();
         out.println("SUCCESS");
     }
 }

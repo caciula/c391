@@ -1,10 +1,12 @@
 package main.resource;
 
 import main.util.DBConnection;
+import main.util.Filter;
 import main.util.SQLQueries;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+
 import java.sql.*;
 
 /**
@@ -24,6 +26,16 @@ public class GetFullImage extends HttpServlet {
         //  Obtain the image id from the query string
         String picId = request.getQueryString();
         ServletOutputStream out = response.getOutputStream();
+        
+        // Obtain the current user from the session
+        HttpSession session = request.getSession();
+        String userName = (String) session.getAttribute("username");
+        
+        // Ensure that the user has permission to view the image
+        if (!Filter.isViewable(userName, picId)) {
+            out.print("You do not have permission to view this image");
+            return;
+        }
 
         Connection connection = null;
         try {

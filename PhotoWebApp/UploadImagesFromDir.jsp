@@ -86,7 +86,8 @@
             <param name="postURL" value="/PhotoWebApp/UploadImagesFromDir">.
             <param name="afterUploadURL" value="/PhotoWebApp/ViewProfile?${username}">
             <param name="formdata" value="uploadImages">
-            <param name="stringUploadSuccess" value="">
+            <param name="stringUploadSuccess" value="SUCCESS">
+            <param name="stringUploadError" value="^ERROR: (.*)$">
             Java 1.4 or higher plugin required.
         </applet>
 	    

@@ -45,7 +45,25 @@ PhotoWeb is a web-based database application system that provides services for s
 
 <a name="install"><h2>Installation Guide</h3>
 
-TO DO
+This guide assumes that a Tomcat server and Oracle database have been installed. See <a href="https://eclass.srv.ualberta.ca/pluginfile.php/618546/mod_page/content/11/install-tomcat_2_2.html" target="_blank">here</a> for information on how to instal Tomcat.
+<p/>
+Steps to install PhotoWeb:
+<ol>
+<li> Place PhotoWebApp.tgz in the webapps folder of your Tomcat installation. Extract the zipped folder.</li>
+<li> In your Oracle account, run the sql script located in PhotoWebApp/resources/sql/setup_2012f.sql</li>
+<li> Open DBConnection.java (located in PhotoWebApp/WEB-INF/classes/main/unti/DBConnection.java) and update the database connection information as needed. </li>
+<li> Run the makefile located in PhotoWebApp/makefile. Ensure the following dependencies are added to the terminal's CLASSPATH prior to running the makefile:
+    <ul >
+    <li>/oracle/jdbc/lib/ojdbc6.jar</li>
+    <li>/usr/local/catalina/lib/servlet-api.jar</li>
+    <li>/usr/share/java/db.jar</li>
+    <li>{TOMCAT}/catalina/webapps/PhotoWebApp/WEB-INF/lib/commons-fileupload-1.2.2.jar</li>
+    <li>{TOMCAT}/catalina/webapps/PhotoWebApp/WEB-INF/classes/</li>
+    </ul>
+</li>
+<li>Start your Tomcat server. </li>
+<li>The website will be accessible at http://ui???.cs.ualberta.ca:{port-number}/PhotoWebApp </li>
+</ol>
 
 <hr>
 
@@ -74,7 +92,7 @@ TO DO
 <a name="myProfile"><h3>My Profile</h3>
 
 <div>
-    <b>URL:</b> /TO DO?{username} <br>
+    <b>URL:</b> /ViewProfile?{username} <br>
     <b>Screenshot:</b> To do once screen is finalized
     <p/>
     
@@ -176,7 +194,7 @@ TO DO
     <p/>
 </div>
 
-<a name="uploadImages"><h3>Upload Multiple Image</h3>
+<a name="uploadImages"><h3>Upload Multiple Images</h3>
 <div>
     <b>URL:</b> /UploadImagesFromDir<br>
     <b>Screenshot:</b> To do once screen is finalized
