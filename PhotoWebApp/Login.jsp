@@ -15,8 +15,6 @@
         
         <hr>
         
-        <p class="successMessage">${successMessage}</p>
-    
         <form name="Login" action="Login" method="post">
             <table>
                 <tbody>

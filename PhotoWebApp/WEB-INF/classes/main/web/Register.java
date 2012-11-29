@@ -24,13 +24,6 @@ public class Register extends HttpServlet {
      *  GET command for Register.jsp
      */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setAttribute("username", "");
-		request.setAttribute("password", "");
-		request.setAttribute("firstname", "");
-		request.setAttribute("lastname", "");
-		request.setAttribute("address", "");
-		request.setAttribute("email", "");
-		request.setAttribute("phonenumber", "");
 		request.getRequestDispatcher("/Register.jsp").forward(request, response);
 	}
 
@@ -41,20 +34,20 @@ public class Register extends HttpServlet {
      *  the user to the database
      */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String inputUsername = (request.getParameter("username")).trim();
-        String inputPassword = (request.getParameter("password")).trim();
-        String inputFirstname = (request.getParameter("firstname")).trim();
-        String inputLastname = (request.getParameter("lastname")).trim();
-        String inputAddress = (request.getParameter("address")).trim();
-        String inputEmail = (request.getParameter("email")).trim();
-        String inputPhonenumber = (request.getParameter("phonenumber")).trim();
+		String username = (request.getParameter("username")).trim();
+        String password = (request.getParameter("password")).trim();
+        String firstname = (request.getParameter("firstname")).trim();
+        String lastname = (request.getParameter("lastname")).trim();
+        String address = (request.getParameter("address")).trim();
+        String email = (request.getParameter("email")).trim();
+        String phone = (request.getParameter("phone")).trim();
         
         java.util.Date utilDate = new java.util.Date();
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
         
         String errorMessage = "";
         
-        if (inputUsername.isEmpty()||inputPassword.isEmpty()||inputFirstname.isEmpty()||inputLastname.isEmpty()||inputAddress.isEmpty()||inputEmail.isEmpty()||inputPhonenumber.isEmpty()) {
+        if (username.isEmpty()||password.isEmpty()||firstname.isEmpty()||lastname.isEmpty()||address.isEmpty()||email.isEmpty()||phone.isEmpty()) {
             errorMessage = "One or more fields are empty.";
         } else {
 	        try {
@@ -62,37 +55,38 @@ public class Register extends HttpServlet {
 	        	
 	        	//checks to see if the username is already in use
 	        	PreparedStatement query1 = connection.prepareStatement("select count(*) from users where user_name = ?");
-	        	query1.setString(1, inputUsername);
-	        	
-	        	//checks to see if the email is already in use
-	        	PreparedStatement query2 = connection.prepareStatement("select count(*) from persons where email = ?");
-	        	query2.setString(1, inputEmail);
+	        	query1.setString(1, username);
 	        	
 				ResultSet resultSet1 = query1.executeQuery();
-				ResultSet resultSet2 = query2.executeQuery();
 				
 				if (resultSet1 != null && resultSet1.next()) {
 					if (resultSet1.getInt(1) == 1) {
 					    errorMessage = "User already exists. Please try again.";
 					} else {
+						//checks to see if the email is already in use
+						PreparedStatement query2 = connection.prepareStatement("select count(*) from persons where email = ?");
+						query2.setString(1, email);
+						
+						ResultSet resultSet2 = query2.executeQuery();
+						
 						if (resultSet2 != null && resultSet2.next()) {
 							if (resultSet2.getInt(1) == 1) {
 							    errorMessage = "Email already exists. Please try again.";
 							} else {
 								//creates a user
 								PreparedStatement query3 = connection.prepareStatement("insert into users values(?, ?, ?)");
-								query3.setString(1, inputUsername);
-								query3.setString(2, inputPassword);
+								query3.setString(1, username);
+								query3.setString(2, password);
 								query3.setDate(3, sqlDate);
 								
 								//updates that user's personal information
 								PreparedStatement query4 = connection.prepareStatement("insert into persons values(?, ?, ?, ?, ?, ?)");
-								query4.setString(1, inputUsername);
-								query4.setString(2, inputFirstname);
-								query4.setString(3, inputLastname);
-								query4.setString(4, inputAddress);
-								query4.setString(5, inputEmail);
-								query4.setString(6, inputPhonenumber);
+								query4.setString(1, username);
+								query4.setString(2, firstname);
+								query4.setString(3, lastname);
+								query4.setString(4, address);
+								query4.setString(5, email);
+								query4.setString(6, phone);
 								
 								query3.executeUpdate();
 								query4.executeUpdate();
@@ -110,8 +104,7 @@ public class Register extends HttpServlet {
         }
         
         if (errorMessage.isEmpty()) {
-            request.setAttribute("successMessage", "User successfully registered.");
-            request.getRequestDispatcher("/Login.jsp").forward(request, response);
+            response.sendRedirect("/PhotoWebApp/Login");
         } else {
             request.setAttribute("errorMessage", errorMessage);
             request.setAttribute("errorBackLink", "/PhotoWebApp/Register");

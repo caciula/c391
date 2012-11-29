@@ -25,28 +25,44 @@ public class UserManagement extends HttpServlet {
      
     /**
      *  GET command for UserManagement.jsp
+     *  
+     *  Displays a list of all groups the user created
      */	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ArrayList<String[]> groups;
         HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("username");
         
         //ensures that there is a user logged in
-        if (session.getAttribute("username") == null) {
+        if (username == null) {
             request.setAttribute("errorMessage", "You must be logged in to view this screen.");
-            request.setAttribute("errorBackLink", "/PhotoWebApp/Login.jsp");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Login");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
-            return;
         } else {
-            //obtain all of the groups the current user has created
             try {
-                groups = getListOfGroups(request);
+        		Connection connection = DBConnection.createConnection();
+        		
+        		//obtain the list of all groups that the user has created
+        		PreparedStatement query = connection.prepareStatement(SQLQueries.GET_USER_GROUPS);
+        		query.setString(1, (String) session.getAttribute("username"));
+        		
+        		ResultSet resultSet = query.executeQuery();
+        		
+        		ArrayList<String[]> groups = new ArrayList<String[]>();		
+        		while (resultSet != null && resultSet.next()) {
+        			String[] group = new String[2];
+        			group[0] = Integer.toString(resultSet.getInt("group_id"));
+        			group[1] = resultSet.getString("group_name");
+        			groups.add(group);
+        		}
+        		
+        		connection.close();
+        		
                 request.setAttribute("groups", groups);
             } catch (Exception e) {
-                System.out.println("An error occured while obtaining all the groups: " + e);
+                System.out.println("An error occured while obtaining all the groups to display: " + e);
                 request.setAttribute("errorMessage", "An error occured while obtaining all the groups to display.");
-                request.setAttribute("errorBackLink", "/PhotoWebApp/Home.jsp");
+                request.setAttribute("errorBackLink", "/PhotoWebApp/UserManagement");
                 request.getRequestDispatcher("/Error.jsp").forward(request, response);
-	            return;
             }
         }
 		
@@ -61,14 +77,14 @@ public class UserManagement extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String button = request.getParameter("submit");
 
-		int inputGroupID = Integer.parseInt(request.getParameter("groups"));
-		String inputUsername = request.getParameter("username");
+		int groupID = Integer.parseInt(request.getParameter("groups"));
+		String inputUsername = (request.getParameter("username")).trim();
 		
 		java.util.Date utilDate = new java.util.Date();
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 		
 		HttpSession session = request.getSession();
-		String username = (String) session.getAttribute("username");
+		String sessionUsername = (String) session.getAttribute("username");
 		
 		String errorMessage = "";
 		
@@ -83,7 +99,7 @@ public class UserManagement extends HttpServlet {
 					//checks to see if the user is valid (is registered, is not the current user)
 					PreparedStatement query11 = connection.prepareStatement("select count(*) from users where user_name = ? and user_name != ?");
 					query11.setString(1, inputUsername);
-					query11.setString(2, username);
+					query11.setString(2, sessionUsername);
 					
 					ResultSet resultSet11 = query11.executeQuery();
 					
@@ -91,7 +107,7 @@ public class UserManagement extends HttpServlet {
 						if (resultSet11.getInt(1) == 1) {
 							//checks to see if the user isn't already a part of the group
 							PreparedStatement query21 = connection.prepareStatement("select count(*) from group_lists where group_id = ? and friend_id = ?");
-							query21.setInt(1, inputGroupID);
+							query21.setInt(1, groupID);
 							query21.setString(2, inputUsername);
 							
 							ResultSet resultSet21 = query21.executeQuery();
@@ -102,7 +118,7 @@ public class UserManagement extends HttpServlet {
 								} else {
 									//adds the user to the group
 									PreparedStatement query31 = connection.prepareStatement("insert into group_lists values(?, ?, ?, ?)");
-									query31.setInt(1, inputGroupID);
+									query31.setInt(1, groupID);
 									query31.setString(2, inputUsername);
 									query31.setDate(3, sqlDate);
 									query31.setString(4, "");
@@ -128,7 +144,7 @@ public class UserManagement extends HttpServlet {
 					
 					//checks to see if the user is a member of the group
 					PreparedStatement query12 = connection.prepareStatement("select count(*) from group_lists where group_id = ? and friend_id = ?");
-					query12.setInt(1, inputGroupID);
+					query12.setInt(1, groupID);
 					query12.setString(2, inputUsername);
 					
 					ResultSet resultSet12 = query12.executeQuery();
@@ -137,7 +153,7 @@ public class UserManagement extends HttpServlet {
 						if (resultSet12.getInt(1) == 1) {
 							//removes the user from the group
 							PreparedStatement query22 = connection.prepareStatement("delete from group_lists where group_id = ? and friend_id = ?");
-							query22.setInt(1, inputGroupID);
+							query22.setInt(1, groupID);
 							query22.setString(2, inputUsername);
 							
 							query22.executeUpdate();
@@ -154,38 +170,11 @@ public class UserManagement extends HttpServlet {
 		}
 		
 		if (errorMessage.isEmpty()) {
-			response.sendRedirect("/PhotoWebApp/ViewProfile?" + username);
+			response.sendRedirect("/PhotoWebApp/ViewProfile?" + sessionUsername);
 		} else {
 			request.setAttribute("errorMessage", errorMessage);
             request.setAttribute("errorBackLink", "/PhotoWebApp/UserManagement");
 			request.getRequestDispatcher("/Error.jsp").forward(request, response);
 		}
-	}
-	
-    /**
-     * Returns a list of all groups the current user is an owner of
-     * 
-     * @return A list of all groups that the user is an owner of
-     */
-	private ArrayList<String[]> getListOfGroups(HttpServletRequest request) throws Exception {
-		HttpSession session = request.getSession();
-		Connection connection = DBConnection.createConnection();
-		
-		//gets a list of groups that the user created
-		PreparedStatement query = connection.prepareStatement(SQLQueries.GET_USER_GROUPS);
-		query.setString(1, (String) session.getAttribute("username"));
-		
-		ResultSet resultSet = query.executeQuery();
-		
-		ArrayList<String[]> groups = new ArrayList<String[]>();		
-		while (resultSet != null && resultSet.next()) {
-			String[] group = new String[2];
-			group[0] = Integer.toString(resultSet.getInt(1));
-			group[1] = resultSet.getString(2);
-			groups.add(group);
-		}
-		
-		connection.close();
-		return groups;
 	}
 }

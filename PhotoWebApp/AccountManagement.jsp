@@ -45,7 +45,7 @@
                 </tr>
                 <tr>
                     <th>Phone number: <span class="requiredField">*</span></th>
-                    <td><input type="text" maxlength="10" size="10" name="phonenumber" value="${phonenumber}"></td>
+                    <td><input type="text" maxlength="10" size="10" name="phone" value="${phone}"></td>
                 </tr>           
                 <tr>
                     <th></th>

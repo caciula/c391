@@ -33,27 +33,27 @@ public class Login extends HttpServlet {
      *  Logs the user in based on the input parameters
      */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	String inputUsername = (request.getParameter("username")).trim();
-        String inputPassword = (request.getParameter("password")).trim();
+    	String username = (request.getParameter("username")).trim();
+        String password = (request.getParameter("password")).trim();
         
     	String errorMessage = "";
     	
-    	if (inputUsername.isEmpty()||inputPassword.isEmpty()) {
+    	if (username.isEmpty()||password.isEmpty()) {
     		errorMessage = "One or more fields are empty.";
     	} else {
 			try {
 				Connection connection = DBConnection.createConnection();
 				
 				PreparedStatement query = connection.prepareStatement("select count(*) from users where user_name = ? and password = ?");
-				query.setString(1, inputUsername);
-				query.setString(2, inputPassword);
+				query.setString(1, username);
+				query.setString(2, password);
 				
 				ResultSet resultSet = query.executeQuery();
 				
 				if (resultSet != null && resultSet.next()) {
 					if (resultSet.getInt(1) == 1) {
 						HttpSession session = request.getSession();
-						session.setAttribute("username", inputUsername);
+						session.setAttribute("username", username);
 					} else {
 						errorMessage = "Invalid username or password.";
 					}
@@ -66,7 +66,7 @@ public class Login extends HttpServlet {
     	}
 	
     	if (errorMessage.isEmpty()) {
-    	    response.sendRedirect("ViewProfile?" + inputUsername);
+    	    response.sendRedirect("ViewProfile?" + username);
     	} else {
 	    	request.setAttribute("errorMessage", errorMessage);
 	    	request.setAttribute("errorBackLink", "/PhotoWebApp/Login");
