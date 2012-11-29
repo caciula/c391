@@ -57,7 +57,6 @@
 
     <br>
 
-    ${output}
     </div>
 
 </body>

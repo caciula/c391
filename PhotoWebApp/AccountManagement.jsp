@@ -60,7 +60,6 @@
 
     <br>
 
-    ${output}
     </div>
 
 </body>
