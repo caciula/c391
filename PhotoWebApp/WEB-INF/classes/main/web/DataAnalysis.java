@@ -16,7 +16,8 @@ import main.util.ReportRow;
 
 public class DataAnalysis extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
+    
+    //Populates the drop down menus for DataAnalysis.jsp
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Connection myConn = null;
         try{
@@ -30,7 +31,7 @@ public class DataAnalysis extends HttpServlet {
                 request.getRequestDispatcher("/Error.jsp").forward(request, response);
                 return;
             }
-            
+            // Find all possible users and subjects the administrator may wish to query with
        	 	myConn = DBConnection.createConnection();
        	 	ArrayList<String> users = new ArrayList<String>();
        	 	ArrayList<String> subjects = new ArrayList<String>();
@@ -68,6 +69,7 @@ public class DataAnalysis extends HttpServlet {
 		request.getRequestDispatcher("/DataAnalysis.jsp").forward(request, response);
 	}
     
+	//Generates the OLAP results displayed by DataAnalysisResults
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
     	 String user = request.getParameter("user");
@@ -75,55 +77,63 @@ public class DataAnalysis extends HttpServlet {
          String fromDate = request.getParameter("fromDate");
          String toDate = request.getParameter("toDate");
          String drillDown = request.getParameter("drillDown");
+         //If coming from DataAnalysis.jsp the first time drillDown will be null
          if(drillDown == null){
         	 drillDown = "None";
          }
-                  
-         String select = "SELECT ";
-         String from = "FROM images i";
+         
+         //Build the query based on the fields
+         String select = "SELECT owner_name, subject,";
+         String from = "FROM fact_table";
          String where = "";
-         String group = "";
+         String group = " GROUP BY owner_name, subject";
+         String order = " ORDER BY owner_name, subject";
          
-         if(!user.equals("All")){
-        	 select += "i.subject,";
-        	 where += " WHERE i.owner_name = ? ";
-        	 if(!subject.equals("All")){
-        		 where += " AND i.subject = ? ";
-        	 }
-        	 group += " GROUP BY i.subject";
-         }else if(!subject.equals("All")){
-        	 select += "i.owner_name,";
-        	 where += " WHERE i.subject = ? ";
-        	 group += " GROUP BY i.owner_name";
-         }			
-         
+         if(!user.equals("All") && subject.equals("All")){
+        	 where += " WHERE owner_name = ? ";
+         }else if(user.equals("All") && !subject.equals("All")){
+        	 where += " WHERE subject = ? ";
+         }else if(!user.equals("All") && !subject.equals("All")){
+        	 where += " WHERE owner_name = ? AND subject = ? ";
+         }
+                  
          if(drillDown.equals("Yearly")){
-        	 select += " t.year, COUNT(*) ";
-        	 from += ", time_dim t ";
-        	 where += " AND i.timing = t.time ";
-        	 group += ", t.year";
+        	 select += " year, COUNT(*) ";
+        	 group += ", year";
+        	 order += ", year";
     	 }else if(drillDown.equals("Monthly")){
-    		 select += " t.month, COUNT(*) ";
-    		 from += ", time_dim t ";
-    		 where += " AND i.timing = t.time ";
-    		 group += ", t.month";
+    		 select += " month, COUNT(*) ";
+
+    		 group += ", month";
+    		 order += ", month";
     	 }else if(drillDown.equals("Weekly")){
-    		 select += " t.week, COUNT(*) ";
-    		 from += ", time_dim t ";
-    		 where += " AND i.timing = t.time ";
-    		 group += ", t.week";
+    		 select += " week, COUNT(*) ";
+    		 group += ", week";
+    		 order += ", week";
     	 }else{
-    		 select += " COUNT(*) ";
+    		 select += " null, COUNT(*) ";
     	 }
          
          if(!fromDate.isEmpty()){
-        	 where += " AND i.timing >=  TO_DATE( ?, 'DD/MM/YYYY HH24:MI:SS') ";
+        	 if(user.equals("All") && subject.equals("All") && drillDown.equals("None")){
+        		 where += " WHERE ";
+        	 }else{
+        		 where += " AND ";
+        	 }
+        		 
+        	 where += " time >=  TO_DATE( ?, 'DD/MM/YYYY HH24:MI:SS') ";
          }
          if(!toDate.isEmpty()){
-        	 where += " AND i.timing <= TO_DATE( ?, 'DD/MM/YYYY HH24:MI:SS') ";
+        	 if(user.equals("All") && subject.equals("All") && fromDate.isEmpty() && drillDown.equals("None")){
+        		 where += " WHERE ";
+        	 }else{
+        		 where += " AND ";
+        	 }
+        	 where += " time <= TO_DATE( ?, 'DD/MM/YYYY HH24:MI:SS') ";
          }
          
-         String query = select + from + where + group;
+         //Assemble query and execute
+         String query = select + from + where + group + order;
          Connection myConn = null;
          try{
         	 	myConn = DBConnection.createConnection();
@@ -136,7 +146,7 @@ public class DataAnalysis extends HttpServlet {
                 }
         	    if(!subject.equals("All")){
         	    	if(subject.isEmpty()){
-        	    		getReport.setString(n, null);
+        	    		getReport.setString(n, "NULL");
         	    	 }else{
         	    		 getReport.setString(n, subject);
         	    	 }
@@ -155,25 +165,36 @@ public class DataAnalysis extends HttpServlet {
         	 	ArrayList<ReportRow> rows = new ArrayList<ReportRow>();
         	 	while (report.next()){
         	 		ReportRow row = new ReportRow();
-        	 		if(drillDown.equals("None")){
+        	 		if(user.equals("All") && subject.equals("All")){
+        	 			row.setCol1(report.getString(1));
+        	 			row.setCol3(report.getString(2));
+        	 		}else if(!subject.equals("All") && user.equals("All")){
         	 			row.setCol3(report.getString(1));
-        	 			row.setCol4(Integer.toString(report.getInt(2)));
-        	 		}else{
-        	 			row.setCol2(report.getString(2));
-        	 			row.setCol3(report.getString(1));
-        	 			row.setCol4(Integer.toString(report.getInt(3)));
+        	 		}else if(!user.equals("All") && subject.equals("All")){
+        	 			row.setCol3(report.getString(2));
         	 		}
+        	 		
+        	 		if(!drillDown.equals("None")){
+        	 			row.setCol2(report.getString(3));
+        	 		}
+        	 		row.setCol4(Integer.toString(report.getInt(4)));
         	 		rows.add(row);
         	 	}
         	 	report.close();
-        	 	if(!user.equals("All") && drillDown.equals("None")){
+        	 	if(!user.equals("All")){
         	 		request.setAttribute("head1", "User");
                	 	request.setAttribute("head3", "Subject");
                	 	rows.get(0).setCol1(user);
-    	 		}else if(!subject.equals("All")) {
+               	 	if(!subject.equals("All")){
+               	 	rows.get(0).setCol3(subject);
+               	 	}
+    	 		}else if(!subject.equals("All")){
     	 			request.setAttribute("head1", "Subject");
                	 	request.setAttribute("head3", "User");
                	 	rows.get(0).setCol1(subject);
+    	 		}else{
+    	 			request.setAttribute("head1", "User");
+               	 	request.setAttribute("head3", "Subject");
     	 		}
     	 		request.setAttribute("head2", "Time");
            	 	request.setAttribute("head4", "Total");

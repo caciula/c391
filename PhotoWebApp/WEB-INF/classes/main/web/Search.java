@@ -15,24 +15,27 @@ import main.util.Filter;
 
 public class Search extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
+    //Pass to Search.jsp
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/Search.jsp").forward(request, response);
 	}
     
+	//Find the results of the users query display in SearchResults.jsp
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+         
+    	//get parameters
     	 String keywords = request.getParameter("keywords");
          String fromDate = request.getParameter("fromDate");
          String toDate = request.getParameter("toDate");
          String sort = request.getParameter("SortBy");
          
+         //Check that a keyword is provided for rank search
          if (keywords.isEmpty() && sort.equals("Rank")) {
- 	    	request.setAttribute("errorMessage", "For rank search you must provide keyword(s)");
+ 	    	request.setAttribute("errorMessage", "For a relevance search you must provide keyword(s)");
  	    	request.setAttribute("errorBackLink", "/PhotoWebApp/Search");
             request.getRequestDispatcher("/Error.jsp").forward(request, response);
      	}else{
-
+     		//build query from parameters
      		String query = "SELECT * FROM images";
       
          	if(!keywords.isEmpty()){
@@ -57,7 +60,7 @@ public class Search extends HttpServlet {
          	}else if(sort.equals("Old")){
                          query += " ORDER BY CASE WHEN timing IS NULL THEN 1 ELSE 0 END, timing ASC";
          	}
-
+         	//execute query and send results to SearchResults.jsp
          	Connection myConn = null;
          	try{
         	 	myConn = DBConnection.createConnection();

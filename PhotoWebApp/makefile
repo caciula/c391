@@ -1,7 +1,7 @@
 JFLAGS = -g 
 JC = javac
 
-default: Home.class GroupManagement.class UserManagement.class EditImage.class ViewImage.class ViewProfile.class UploadImage.class UploadImagesFromDir.class Login.class Register.class Search.class DataAnalysis.class RemoveImage.class GetThumbnailImage.class GetFullImage.class Filter.class SQLQueries.class DBConnection.class
+default: Home.class GroupManagement.class UserManagement.class EditImage.class ViewImage.class ViewProfile.class UploadImage.class UploadImagesFromDir.class Login.class Register.class Search.class DataAnalysis.class RemoveImage.class GetThumbnailImage.class GetFullImage.class Filter.class SQLQueries.class DBConnection.class ReportRow.class
 
 Home.class: WEB-INF/classes/main/web/Home.java
 	${JC} ${JFLAGS} WEB-INF/classes/main/web/Home.java
@@ -56,3 +56,6 @@ SQLQueries.class: WEB-INF/classes/main/util/SQLQueries.java
 
 DBConnection.class: WEB-INF/classes/main/util/DBConnection.java
 	${JC} ${JFLAGS} WEB-INF/classes/main/util/DBConnection.java
+	
+ReportRow.class: WEB-INF/classes/main/util/ReportRow.java
+	${JC} ${JFLAGS} WEB-INF/classes/main/util/ReportRow.java
