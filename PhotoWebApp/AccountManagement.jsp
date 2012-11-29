@@ -49,7 +49,10 @@
                 </tr>           
                 <tr>
                     <th></th>
-                    <td><input type="submit" value="Submit"></td>
+                    <td>
+			<input type="submit" value="Submit">
+		        <input type="button" value="Cancel" onclick="location.href='ViewProfile?${username}'">
+		    </td>
                 </tr>
                 </tbody>
              </table>

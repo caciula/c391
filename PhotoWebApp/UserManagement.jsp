@@ -30,7 +30,7 @@
                        </td>
 	                </tr>
 	                <tr>
-                        <th>Username:</th>
+                        <th>Username: <span class="requiredField">*</span></th>
                         <td>
                             <input type="text" maxlength="24" name="username">
                         </td>
