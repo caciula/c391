@@ -78,6 +78,7 @@ DROP INDEX description_index;
 DROP INDEX subject_index;
 DROP INDEX place_index;
 DROP TABLE image_views;
+DROP VIEW fact_table;
 
 CREATE SEQUENCE pic_id_sequence;
 
@@ -95,4 +96,10 @@ CREATE TABLE image_views (
     FOREIGN KEY(user_name) REFERENCES users,
     UNIQUE (photo_id, user_name)
 );
+
+CREATE VIEW fact_table AS SELECT owner_name, subject, timing as time,
+concat(concat(to_char(trunc(timing, 'DAY')), ' ~ '), to_char(trunc(timing, 'DAY')+6)) as week,
+concat(concat(to_char(trunc(timing, 'MM')), ' ~ '), to_char(last_day(timing))) as month,
+concat(concat(to_char(trunc(timing, 'YYYY')), ' ~ '), to_char(trunc(timing, 'YYYY')+364)) as year from images;
+
 

@@ -26,6 +26,8 @@
     <li><a href="#editImage">Edit Image</a></li>
     <li><a href="#uploadImage">Upload Single Image</a></li>
     <li><a href="#uploadImages">Upload Multiple Images</a></li>
+    <li><a href="#Search">Search For Images</a></li>
+    <li><a href="#DataAnalysis">OLAP Data Analysis(Administrator Only)</a></li>
     </ul>
 </li>
 </ul>
@@ -216,6 +218,49 @@ Steps to install PhotoWeb:
     <p/>
     Clicking on [Upload] on the Applet will upload all the photos to the database, along with the additional image information. A progress bar shows the progress of the update. <b> Note that it may take some time to upload all of the images once "Upload" is clicked</b>. Be patient, and do not click "Upload" again. If the selected directory contains files that are not images, those files will not be uploaded. If there are any errors during the upload (such as an invalid image file, or an incorrect date), the user is shown an error message. If the files are uploaded successfully, the user is redirectd to the <a href="#myProfile">User Profile</a> screen to view the upload images. 
     <p/>
+</div>
+
+<a name="Search"><h3>Search The Photo Database</h3>
+<div>
+    <b>URL:</b> /Search<br>
+    <b>Screenshot:</b> To do once screen is finalized
+    <p>
+    
+    The Search page presents the user with the following fields:<ul >
+    <li>Keyword(s): One or more keywords for which the application will search the subject, place and description fields of each photo in the database.</li>
+    <li>From Date: The earliest date for which the user would like the photos Date field to match(Optional)</li>
+    <li>To Date: The latest date for which the user would like the photos Date field to match (Optional)</li>
+    <li>Sort By(Drop down menu): The method by which the user would like the results to be sorted by: Relevance (ranked by occurrences of the keywords), Oldest (ranked by time ascending), Newest (ranked by time descending)</li>
+    </ul>
+    
+    
+    
+    Pressing the search button with a valid query will move the user to the results screen. The results screen will display a list of thumbnails of the images matching the user's query.
+    <p />
+    
+    Note: a Relevance search may not be done if there are now keywords submitted, an error will be generated
+    <p />
+    
+    Note: Only images which may be viewed by the current user (based on the image's permissions) will be returned in the results.
+    <p />
+</div>
+
+<a name="DataAnalysis"><h3>OLAP Data Analysis(Administrator Only)</h3>
+<div>
+    <b>URL:</b> /DataAnalysis<br>
+    <b>Screenshot:</b> To do once screen is finalized
+    <p>
+    
+    The Data Analysis page presents the Administrator with the following fields:<ul >
+    <li>User: May select a report based on all users or one specific user</li>
+    <li>Subject: May select a report based on all subjects or one specific subject</li>
+    <li>From Date: The earliest date for which the user would like the photos Date field to match(Optional)</li>
+    <li>To Date: The latest date for which the user would like the photos Date field to match (Optional)</li>
+    </ul>
+    
+    Pressing the Generate Report button will move the Administrator to the results screen. The results screen will display an OLAP report matching the administrator's query.
+    <p />
+    
 </div>
 
 <p>
