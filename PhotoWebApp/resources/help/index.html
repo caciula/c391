@@ -52,9 +52,16 @@ This guide assumes that a Tomcat server and Oracle database have been installed.
 Steps to install PhotoWeb:
 <ol>
 <li> Place PhotoWebApp.tgz in the webapps folder of your Tomcat installation. Extract the zipped folder.</li>
-<li> In your Oracle account, run the sql script located in PhotoWebApp/resources/sql/setup_2012f.sql</li>
-<li> Open DBConnection.java (located in PhotoWebApp/WEB-INF/classes/main/unti/DBConnection.java) and update the database connection information as needed. </li>
-<li> Run the makefile located in PhotoWebApp/makefile. Ensure the following dependencies are added to the terminal's CLASSPATH prior to running the makefile:
+<li> In your Oracle account, run the sql script located in PhotoWebApp/resources/sql/setup_2012f.sql.<br> Also run additionalSQL.sql (located in the same directoy) for additional SQL commands not part of the given scheme.</li>
+<li> To configure the connection to the database, open config.properties (located in PhotoWebApp/WEB-INF/classes/main/config/). Complete the username, password, dbString, and dbDriver parameters.</li>
+<li> Start your Tomcat server. </li>
+<li> The website will be accessible at http://{computer-name}.cs.ualberta.ca:{port-number}/PhotoWebApp </li>
+
+</ol>
+
+<b>Advanced Install</b>
+<ul>
+<li> The above steps should be sufficient to run the application without needing to recompile the Java files. If, however, there is a need to recompile the application after modifying a Java file, there is a makefile in the /PhotoWebApp directory that will compile all Java files. Before running the makefile, ensure that the following paths have been added to the CLASSPATH: 
     <ul >
     <li>/oracle/jdbc/lib/ojdbc6.jar</li>
     <li>/usr/local/catalina/lib/servlet-api.jar</li>
@@ -63,10 +70,7 @@ Steps to install PhotoWeb:
     <li>{TOMCAT}/catalina/webapps/PhotoWebApp/WEB-INF/classes/</li>
     </ul>
 </li>
-<li>Start your Tomcat server. </li>
-<li>The website will be accessible at http://ui???.cs.ualberta.ca:{port-number}/PhotoWebApp </li>
-</ol>
-
+</ul>
 <hr>
 
 <a name="appHelp"><h2>Application Help</h3>
@@ -75,7 +79,7 @@ Steps to install PhotoWeb:
 
 <div>
     <b>URL:</b> /Home <br>
-    <b>Screenshot:</b> To do once screen is finalized
+    <b>Screenshot:</b><br><a href="screenshots/home.jpg" target="_blank"><img src="screenshots/home.jpg" width='500px'/></a>
     <p>
     
     The Home screen is the welcome screen for the application. The screen displays the following links:
@@ -95,7 +99,7 @@ Steps to install PhotoWeb:
 
 <div>
     <b>URL:</b> /ViewProfile?{username} <br>
-    <b>Screenshot:</b> To do once screen is finalized
+    <b>Screenshot:</b><br><a href="screenshots/viewProfile.jpg" target="_blank"><img src="screenshots/viewProfile.jpg" width='500px'/></a>
     <p/>
     
     When a user is logged into the system, the My Profile page is the main screen from which they can perform many actions - such as managing their groups, viewing their images, and uploading new images. 
@@ -122,7 +126,7 @@ Steps to install PhotoWeb:
 
 <div>
     <b>URL:</b> /ViewImage?{photoId} <br>
-    <b>Screenshot:</b> To do once screen is finalized
+    <b>Screenshot:</b><br><a href="screenshots/viewImage.jpg" target="_blank"><img src="screenshots/viewImage.jpg" width='500px'/></a>
     <p/>
     
     
@@ -147,7 +151,7 @@ Steps to install PhotoWeb:
 <a name="editImage"><h3>Edit Image</h3>
 <div>
     <b>URL:</b> /EditImage?{photoId}<br>
-    <b>Screenshot:</b> To do once screen is finalized
+    <b>Screenshot:</b><br><a href="screenshots/editImage.jpg" target="_blank"><img src="screenshots/editImage.jpg" width='500px'/></a>
     <p>
     
     The Edit Image screen allows a user to update the descriptive and security information about an image. 
@@ -177,7 +181,7 @@ Steps to install PhotoWeb:
 <a name="uploadImage"><h3>Upload Single Image</h3>
 <div>
     <b>URL:</b> /UploadImage<br>
-    <b>Screenshot:</b> To do once screen is finalized
+    <b>Screenshot:</b><br><a href="screenshots/uploadImage.jpg" target="_blank"><img src="screenshots/uploadImage.jpg" width='500px'/></a>
     <p>
     
     The Upload Single Image screen allows a user to upload an image to their account. The screen is only accessible if the user is logged into the system. Input fields are displayed for the file path (opens a standard file-picker dialog), Subject, Place, Date, Time, Description, and Access. The Access field indicates what users will be able to view the image. Like the Edit Screen, the Access drop down contains the following groups:<ul >
@@ -199,7 +203,7 @@ Steps to install PhotoWeb:
 <a name="uploadImages"><h3>Upload Multiple Images</h3>
 <div>
     <b>URL:</b> /UploadImagesFromDir<br>
-    <b>Screenshot:</b> To do once screen is finalized
+    <b>Screenshot:</b><br><a href="screenshots/uploadImagesFromDir.jpg" target="_blank"><img src="screenshots/uploadImagesFromDir.jpg" width='500px'/></a>
     <p>
     
     The Upload Multiple Images screen is similar to the <a href="#uploadImage">Upload Single Image</a> screen, except that the user can select many images to upload at once. The screen is only accessible if the user is logged into the system. Input fields are displayed for the Subject, Place, Date, Time, Description, and Access. The values from these input fields will be saved to all the images that are uploaded. The Access field indicates what users will be able to view the images. The Access drop down contains the following groups:<ul >
@@ -223,7 +227,7 @@ Steps to install PhotoWeb:
 <a name="Search"><h3>Search The Photo Database</h3>
 <div>
     <b>URL:</b> /Search<br>
-    <b>Screenshot:</b> To do once screen is finalized
+    <b>Screenshot:</b><br><a href="screenshots/search.jpg" target="_blank"><img src="screenshots/search.jpg" width='500px'/></a>
     <p>
     
     The Search page presents the user with the following fields:<ul >
@@ -248,7 +252,8 @@ Steps to install PhotoWeb:
 <a name="DataAnalysis"><h3>OLAP Data Analysis(Administrator Only)</h3>
 <div>
     <b>URL:</b> /DataAnalysis<br>
-    <b>Screenshot:</b> To do once screen is finalized
+    <b>Screenshot:</b><br><a href="screenshots/dataAnalysis01.jpg" target="_blank"><img src="screenshots/dataAnalysis01.jpg" width='500px'/></a>
+    <br><a href="screenshots/dataAnalysis02.jpg" target="_blank"><img src="screenshots/dataAnalysis02.jpg" width='500px'/></a>
     <p>
     
     The Data Analysis page presents the Administrator with the following fields:<ul >

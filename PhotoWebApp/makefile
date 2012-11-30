@@ -1,13 +1,16 @@
 JFLAGS = -g 
 JC = javac
 
-default: Home.class GroupManagement.class UserManagement.class EditImage.class ViewImage.class ViewProfile.class UploadImage.class UploadImagesFromDir.class Login.class Register.class Search.class DataAnalysis.class RemoveImage.class GetThumbnailImage.class GetFullImage.class Filter.class SQLQueries.class DBConnection.class ReportRow.class
+default: Home.class GroupManagement.class UserManagement.class EditImage.class ViewImage.class ViewProfile.class UploadImage.class UploadImagesFromDir.class Login.class Register.class Search.class DataAnalysis.class RemoveImage.class GetThumbnailImage.class GetFullImage.class Filter.class SQLQueries.class DBConnection.class ReportRow.class AccountManagement.class
 
 Home.class: WEB-INF/classes/main/web/Home.java
 	${JC} ${JFLAGS} WEB-INF/classes/main/web/Home.java
 
-GroupManagement.class: WEB-INF/classes/main/web/GroupManagement.java
-	${JC} ${JFLAGS} WEB-INF/classes/main/web/GroupManagement.java
+AccountManagement.class: WEB-INF/classes/main/web/AccountManagement.java
+	${JC} ${JFLAGS} WEB-INF/classes/main/web/AccountManagement.java
+
+GroupManagement.class: WEB-INF/classes/main/web/AccountManagement.java
+	${JC} ${JFLAGS} WEB-INF/classes/main/web/AccountManagement.java
 
 UserManagement.class: WEB-INF/classes/main/web/UserManagement.java
 	${JC} ${JFLAGS} WEB-INF/classes/main/web/UserManagement.java
