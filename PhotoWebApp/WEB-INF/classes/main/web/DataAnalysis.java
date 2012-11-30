@@ -93,7 +93,7 @@ public class DataAnalysis extends HttpServlet {
          String from = "FROM fact_table";
          String where = "";
          String group = " GROUP BY owner_name, subject";
-         String order = " ORDER BY owner_name, subject";
+         String order = " ORDER BY ";
          
          if(!user.equals("All") && subject.equals("All")){
         	 where += " WHERE owner_name = ? ";
@@ -110,20 +110,23 @@ public class DataAnalysis extends HttpServlet {
                  where += " WHERE owner_name = ? AND subject = ? ";
              }
          }
+         if(drillDown.equals("None")){
+        	 order += " owner_name, subject";
+         }
+        	 
          
          if(drillDown.equals("Yearly")){
-        	 select += " year, COUNT(*) ";
-        	 group += ", year";
-        	 order += ", year";
+        	 select += " year, COUNT(*), year_sort ";
+        	 group += ", year, year_sort";
+        	 order += " year_sort";
     	 }else if(drillDown.equals("Monthly")){
-    		 select += " month, COUNT(*) ";
-
-    		 group += ", month";
-    		 order += ", month";
+    		 select += " month, COUNT(*), month_sort ";
+    		 group += ", month, month_sort";
+    		 order += " month_sort";
     	 }else if(drillDown.equals("Weekly")){
-    		 select += " week, COUNT(*) ";
-    		 group += ", week";
-    		 order += ", week";
+    		 select += " week, COUNT(*), week_sort ";
+    		 group += ", week, week_sort";
+    		 order += " week_sort";
     	 }else{
     		 select += " null, COUNT(*) ";
     	 }
@@ -175,15 +178,13 @@ public class DataAnalysis extends HttpServlet {
         	    
         	 	ResultSet report = getReport.executeQuery();
         	 	ArrayList<ReportRow> rows = new ArrayList<ReportRow>();
-        	 	
-        	 	// No results: display an error
+        	    // No results: display an error
         	 	if (!report.isBeforeFirst() ) {    
-                    request.setAttribute("errorMessage", "There are no results for the given parameters. Please try again.");
-                    request.setAttribute("errorBackLink", "/PhotoWebApp/DataAnalysis");
-                    request.getRequestDispatcher("/Error.jsp").forward(request, response);
-                    return;
+        	 		request.setAttribute("errorMessage", "There are no results for the given parameters. Please try again.");
+        	 		request.setAttribute("errorBackLink", "/PhotoWebApp/DataAnalysis");
+        	 		request.getRequestDispatcher("/Error.jsp").forward(request, response);
+        	 		return;
         	 	}
-        	 	
         	 	while (report.next()){
         	 		ReportRow row = new ReportRow();
 
@@ -222,8 +223,8 @@ public class DataAnalysis extends HttpServlet {
     	 		}
     	 		request.setAttribute("head2", "Time");
            	 	request.setAttribute("head4", "Total");
-           	 	request.setAttribute("drillDown", drillDown);
-    	 		
+           	    request.setAttribute("drillDown", drillDown);
+           	    
          		if(drillDown.equals("None")){
          			rows.get(0).setCol2(fromDate + " ~ " + toDate);
     	 		}
