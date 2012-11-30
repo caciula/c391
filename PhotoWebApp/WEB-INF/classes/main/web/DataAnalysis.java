@@ -175,6 +175,15 @@ public class DataAnalysis extends HttpServlet {
         	    
         	 	ResultSet report = getReport.executeQuery();
         	 	ArrayList<ReportRow> rows = new ArrayList<ReportRow>();
+        	 	
+        	 	// No results: display an error
+        	 	if (!report.isBeforeFirst() ) {    
+                    request.setAttribute("errorMessage", "There are no results for the given parameters. Please try again.");
+                    request.setAttribute("errorBackLink", "/PhotoWebApp/DataAnalysis");
+                    request.getRequestDispatcher("/Error.jsp").forward(request, response);
+                    return;
+        	 	}
+        	 	
         	 	while (report.next()){
         	 		ReportRow row = new ReportRow();
 
@@ -213,6 +222,7 @@ public class DataAnalysis extends HttpServlet {
     	 		}
     	 		request.setAttribute("head2", "Time");
            	 	request.setAttribute("head4", "Total");
+           	 	request.setAttribute("drillDown", drillDown);
     	 		
          		if(drillDown.equals("None")){
          			rows.get(0).setCol2(fromDate + " ~ " + toDate);

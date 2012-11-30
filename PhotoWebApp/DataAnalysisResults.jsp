@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
     <link type="text/css" rel="stylesheet" href="/PhotoWebApp/resources/style/style.css"/>
-    <title>Search Results</title> 
+    <title>Data Analysis Results</title> 
 </head>
 
 <body> 
@@ -22,16 +22,16 @@
         <tr>
         	<form name="DataAnalysis" method="POST" action="DataAnalysis">
 			<td>
-				<input type="radio" name="drillDown" value="None" checked> None
+				<input type="radio" name="drillDown" value="None" <c:if test="${drillDown=='None'}">checked</c:if>> None
 			</td>
 			<td>
-				<input type="radio" name="drillDown" value="Yearly"> Yearly
+				<input type="radio" name="drillDown" value="Yearly" <c:if test="${drillDown=='Yearly'}">checked</c:if>> Yearly
 			</td>
 			<td>
-				<input type="radio" name="drillDown" value="Monthly"> Monthly
+				<input type="radio" name="drillDown" value="Monthly" <c:if test="${drillDown=='Monthly'}">checked</c:if>> Monthly
 			</td>
 			<td>
-				<input type="radio" name="drillDown" value="Weekly"> Weekly
+				<input type="radio" name="drillDown" value="Weekly" <c:if test="${drillDown=='Weekly'}">checked</c:if>> Weekly
 			</td>
 			
 			<input type="hidden" name="user" value="${param.user}"/>
