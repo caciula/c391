@@ -4,14 +4,12 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 
 import main.util.DBConnection;
-import main.util.Filter;
 import main.util.ReportRow;
 
 public class DataAnalysis extends HttpServlet {
@@ -25,7 +23,7 @@ public class DataAnalysis extends HttpServlet {
             // Check to make sure that only "admin" can access this screen.
             HttpSession session = request.getSession();
             String username = (String) session.getAttribute("username");
-            if (!username.equals("admin")) {
+            if (username == null || !username.equals("admin")) {
                 request.setAttribute("errorMessage", "You must be an administrator to view this screen.");
                 request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
                 request.getRequestDispatcher("/Error.jsp").forward(request, response);
@@ -57,12 +55,20 @@ public class DataAnalysis extends HttpServlet {
             userResults.close();
             subjectResults.close();
         } catch(Exception ex) {
-                System.err.println("Exception: " + ex.getMessage());
+            System.out.println("An error occured while loading the data analysis screen: " + ex);
+            request.setAttribute("errorMessage", "An error occured while loading the data analysis screen. Please try again.");
+            request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
+            request.getRequestDispatcher("/Error.jsp").forward(request, response);
+            return;
         } finally {
             try {
                 myConn.close();
             } catch (Exception ex) {
-           	 System.err.println("Exception: " + ex.getMessage());
+                System.out.println("An error occured while loading the data analysis screen: " + ex);
+                request.setAttribute("errorMessage", "An error occured while loading the data analysis screen. Please try again.");
+                request.setAttribute("errorBackLink", "/PhotoWebApp/Home");
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
+                return;
             }
         }
         
@@ -92,11 +98,19 @@ public class DataAnalysis extends HttpServlet {
          if(!user.equals("All") && subject.equals("All")){
         	 where += " WHERE owner_name = ? ";
          }else if(user.equals("All") && !subject.equals("All")){
-        	 where += " WHERE subject = ? ";
+             if(subject.isEmpty()){
+                 where += " WHERE subject IS NULL ";
+             } else {
+                 where += " WHERE subject = ? ";
+             }
          }else if(!user.equals("All") && !subject.equals("All")){
-        	 where += " WHERE owner_name = ? AND subject = ? ";
+             if(subject.isEmpty()){
+                 where += " WHERE owner_name = ? AND subject IS NULL ";
+             } else {
+                 where += " WHERE owner_name = ? AND subject = ? ";
+             }
          }
-                  
+         
          if(drillDown.equals("Yearly")){
         	 select += " year, COUNT(*) ";
         	 group += ", year";
@@ -145,11 +159,9 @@ public class DataAnalysis extends HttpServlet {
         	    	n++;
                 }
         	    if(!subject.equals("All")){
-        	    	if(subject.isEmpty()){
-        	    		getReport.setString(n, "NULL");
-        	    	 }else{
-        	    		 getReport.setString(n, subject);
-        	    	 }
+        	    	if(!subject.isEmpty()){
+        	    		getReport.setString(n, subject);
+        	    	}
                	 	n++;
                 }
         	    if(!fromDate.isEmpty()){
@@ -165,6 +177,7 @@ public class DataAnalysis extends HttpServlet {
         	 	ArrayList<ReportRow> rows = new ArrayList<ReportRow>();
         	 	while (report.next()){
         	 		ReportRow row = new ReportRow();
+
         	 		if(user.equals("All") && subject.equals("All")){
         	 			row.setCol1(report.getString(1));
         	 			row.setCol3(report.getString(2));
@@ -172,11 +185,13 @@ public class DataAnalysis extends HttpServlet {
         	 			row.setCol3(report.getString(1));
         	 		}else if(!user.equals("All") && subject.equals("All")){
         	 			row.setCol3(report.getString(2));
+        	 		}else if(!user.equals("All") && !subject.equals("All")){
         	 		}
         	 		
         	 		if(!drillDown.equals("None")){
         	 			row.setCol2(report.getString(3));
         	 		}
+        	 		
         	 		row.setCol4(Integer.toString(report.getInt(4)));
         	 		rows.add(row);
         	 	}
@@ -204,12 +219,20 @@ public class DataAnalysis extends HttpServlet {
     	 		}
         	 	request.setAttribute("reportRows", rows);
          } catch(Exception ex) {
-                 System.err.println("Exception: " + ex.getMessage());
+             System.out.println("An error occured while performing the data analysis: " + ex);
+             request.setAttribute("errorMessage", "An error occured while performing the data analysis. Please try again.");
+             request.setAttribute("errorBackLink", "/PhotoWebApp/DataAnalysis");
+             request.getRequestDispatcher("/Error.jsp").forward(request, response);
+             return;
          } finally {
              try {
                  myConn.close();
              } catch (Exception ex) {
-            	 System.err.println("Exception: " + ex.getMessage());
+                 System.out.println("An error occured while performing the data analysis: " + ex);
+                 request.setAttribute("errorMessage", "An error occured while performing the data analysis. Please try again.");
+                 request.setAttribute("errorBackLink", "/PhotoWebApp/DataAnalysis");
+                 request.getRequestDispatcher("/Error.jsp").forward(request, response);
+                 return;
              }
          }
          request.getRequestDispatcher("/DataAnalysisResults.jsp").forward(request, response);
