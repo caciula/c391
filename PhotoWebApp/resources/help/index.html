@@ -17,11 +17,16 @@
 <h2>Table Of Contents</h2>
 <ul>
 <li><a href="#intro">Introduction</a></li>
-<li><a href="#instal">Installation Guide</a></li>
+<li><a href="#install">Installation Guide</a></li>
 <li><a href="#appHelp">Application Help</a>
     <ul>
     <li><a href="#home">Home</a></li>
+    <li><a href="#login">Login</a></li>
+    <li><a href="#register">Registration</a></li>
     <li><a href="#myProfile">My Profile</a></li>
+    <li><a href="#accountManagement">Account Management</a></li>
+    <li><a href="#groupManagement">Group Management</a></li>
+    <li><a href="#userManagement">User Management</a></li>
     <li><a href="#viewImage">View Image</a></li>
     <li><a href="#editImage">Edit Image</a></li>
     <li><a href="#uploadImage">Upload Single Image</a></li>
@@ -95,6 +100,30 @@ Steps to install PhotoWeb:
     In addition, this screen displays the top 5 images in the system. The top images are determined by the number of distinct users who have viewed the image. If there is a tie, all tied images are displayed. 
 </div>
 
+<a name="login"><h3>Login</h3>
+
+<div>
+    <b>URL:</b> /Login <br>
+    <b>Screenshot:</b><br><a href="screenshots/login.jpg" target="_blank"><img src="screenshots/login.jpg" width='500px'/></a>
+    <p>
+    
+    The Login screen simply logs a user in and allows them to access the rest of the application. If a user doesn't have an account, then there is a link to the Register screen.
+    
+    <p/>
+</div>
+
+<a name="register"><h3>Registration</h3>
+
+<div>
+    <b>URL:</b> /Register <br>
+    <b>Screenshot:</b><br><a href="screenshots/register.jpg" target="_blank"><img src="screenshots/register.jpg" width='500px'/></a>
+    <p>
+    
+    This is the Registration screen, where a new user can create an account. They only need to make sure that their username and email is not already in use, and that there are no blank entries. Upon successfully registering for the website, they are sent to the Home screen.
+    
+    <p/>
+</div>
+
 <a name="myProfile"><h3>My Profile</h3>
 
 <div>
@@ -121,6 +150,41 @@ Steps to install PhotoWeb:
     All of the images that the user has uploaded are also displayed with thumbnails. The thumbnails are sorted so that the most recent images are first in the list. Cicking on a thumbnail will navigate to the <a href="#viewImage">View Image</a> screen for the image, where the user can view the full image, remove the image, or edit the image information. 
 </div>
 
+<a name="accountManagement"><h3>Account Management</h3>
+
+<div>
+    <b>URL:</b> /AccountManagement <br>
+    <b>Screenshot:</b><br><a href="screenshots/accountManagement.jpg" target="_blank"><img src="screenshots/accountManagement.jpg" width='500px'/></a>
+    <p>
+    
+    This is the Account Management screen, where a user can change their personal information. The only thing they can't change is their username. Furthermore, they also need to ensure that their new email is not in use by any other user, and that there are no blank entries.
+    
+    <p/>
+</div>
+
+<a name="groupManagement"><h3>Group Management</h3>
+
+<div>
+    <b>URL:</b> /GroupManagement <br>
+    <b>Screenshot:</b><br><a href="screenshots/groupManagement.jpg" target="_blank"><img src="screenshots/groupManagement.jpg" width='500px'/></a>
+    <p>
+    
+    This is the Group Management screen, where a user can create or delete a group. If they are deleting a group, they must make sure that they are the owner of that group. If they are creating a group, they must make sure that they haven't already created a group with the same name; multiple groups with the same name can exist, although they need to have different owners.
+    
+    <p/>
+</div>
+
+<a name="userManagement"><h3>User Management</h3>
+
+<div>
+    <b>URL:</b> /UserManagement <br>
+    <b>Screenshot:</b><br><a href="screenshots/userManagement.jpg" target="_blank"><img src="screenshots/userManagement.jpg" width='500px'/></a>
+    <p>
+    
+    This is the User Management screen, where a user can add or remove other users from groups they are the owner of. When a user first navigates to this page, the dropdown list will be populated with groups they own.
+    
+    <p/>
+</div>
 
 <a name="viewImage"><h3>View Image</h3>
 
